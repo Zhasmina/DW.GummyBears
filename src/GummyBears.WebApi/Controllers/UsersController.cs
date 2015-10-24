@@ -10,7 +10,7 @@ using System.Web.Http;
 namespace GummyBears.WebApi.Controllers
 {
     [System.Web.Http.RoutePrefix("v1/users")]
-    public class UsersController
+    public class UsersController : ApiController
     {
         private IDbContext _dbContext;
         public UsersController(IDbContext dbContext)
@@ -36,7 +36,5 @@ namespace GummyBears.WebApi.Controllers
         {
             return null;
         }
-
-
     }
 }
