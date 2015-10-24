@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GummyBears", "GummyBears\GummyBears.csproj", "{709738B5-E046-47AB-A443-414B16D519CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GummyBears.Repository", "GummyBears.Repository\GummyBears.Repository.csproj", "{DFE21073-B02D-46F3-B7DB-DD3CDCFA02BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GummyBears.WebApi", "GummyBears.WebApi\GummyBears.WebApi.csproj", "{87AD5906-FAE0-4ABB-B7F6-C98C84A74D9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GummyBears.Entities", "GummyBears.Entities\GummyBears.Entities.csproj", "{E26C6525-75B8-4BED-B545-31F3DB3840F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GummyBears.Common", "GummyBears.Common\GummyBears.Common.csproj", "{49C3C60D-1400-48E3-AF96-AA34BB96A322}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GummyBears.Contracts", "GummyBears.Contracts\GummyBears.Contracts.csproj", "{D6124233-DDE7-4DC9-8854-41D7AD564632}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GummyBears.Clients", "GummyBears.Clients\GummyBears.Clients.csproj", "{C51FCEE9-66D0-4596-9656-B6879F3D7EB0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{709738B5-E046-47AB-A443-414B16D519CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{709738B5-E046-47AB-A443-414B16D519CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{709738B5-E046-47AB-A443-414B16D519CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{709738B5-E046-47AB-A443-414B16D519CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFE21073-B02D-46F3-B7DB-DD3CDCFA02BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFE21073-B02D-46F3-B7DB-DD3CDCFA02BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFE21073-B02D-46F3-B7DB-DD3CDCFA02BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFE21073-B02D-46F3-B7DB-DD3CDCFA02BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87AD5906-FAE0-4ABB-B7F6-C98C84A74D9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87AD5906-FAE0-4ABB-B7F6-C98C84A74D9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87AD5906-FAE0-4ABB-B7F6-C98C84A74D9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87AD5906-FAE0-4ABB-B7F6-C98C84A74D9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E26C6525-75B8-4BED-B545-31F3DB3840F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E26C6525-75B8-4BED-B545-31F3DB3840F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E26C6525-75B8-4BED-B545-31F3DB3840F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E26C6525-75B8-4BED-B545-31F3DB3840F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49C3C60D-1400-48E3-AF96-AA34BB96A322}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49C3C60D-1400-48E3-AF96-AA34BB96A322}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49C3C60D-1400-48E3-AF96-AA34BB96A322}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49C3C60D-1400-48E3-AF96-AA34BB96A322}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6124233-DDE7-4DC9-8854-41D7AD564632}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6124233-DDE7-4DC9-8854-41D7AD564632}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6124233-DDE7-4DC9-8854-41D7AD564632}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6124233-DDE7-4DC9-8854-41D7AD564632}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C51FCEE9-66D0-4596-9656-B6879F3D7EB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C51FCEE9-66D0-4596-9656-B6879F3D7EB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C51FCEE9-66D0-4596-9656-B6879F3D7EB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C51FCEE9-66D0-4596-9656-B6879F3D7EB0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
