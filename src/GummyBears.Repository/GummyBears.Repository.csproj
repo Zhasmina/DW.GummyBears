@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthenticationRepository.cs" />
     <Compile Include="CreationRepository.cs" />
     <Compile Include="DappererSettings.cs" />
     <Compile Include="DbContext.cs" />
