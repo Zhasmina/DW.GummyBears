@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Http;
 using System.Threading.Tasks;
 using GummyBears.WebApi.Helpers;
+using System.Transactions;
 
 namespace GummyBears.WebApi.Controllers
 {
@@ -23,30 +24,56 @@ namespace GummyBears.WebApi.Controllers
         [HttpPost, Route("")]
         public async Task<IHttpActionResult> CreateUser(User user)
         {
-           UserEntity userByUserName = await _dbContext.UsersRepo.GetByUserName(user.UserName);
+            UserEntity userByUserName = await _dbContext.UsersRepo.GetByUserName(user.UserName);
 
-           if (userByUserName != null)
-           {
-               return BadRequest(string.Format("User with name '{0}' already exists.", user.UserName));
-           }
+            if (userByUserName != null)
+            {
+                return BadRequest(string.Format("User with name '{0}' already exists.", user.UserName));
+            }
 
-           UserEntity userByEmail = await _dbContext.UsersRepo.GetByEmail(user.Email);
+            UserEntity userByEmail = await _dbContext.UsersRepo.GetByEmail(user.Email);
 
-           if (userByEmail != null)
-           {
-               return BadRequest(string.Format("User with email '{0}' already exists.", user.Email)); 
-           }
+            if (userByEmail != null)
+            {
+                return BadRequest(string.Format("User with email '{0}' already exists.", user.Email));
+            }
 
-          UserEntity createdUser = await _dbContext.UsersRepo.CreateAsync(user.ToEntity());
+            UserEntity createdUser = await _dbContext.UsersRepo.CreateAsync(user.ToEntity());
 
             return Ok(createdUser.ToModel());
         }
 
         [HttpPut, Route("{userId:int}")]
 
-        public IHttpActionResult UpdateUser(int userId, [FromBody]User user)
+        public async Task<IHttpActionResult> UpdateUser(int userId, [FromBody]User user)
         {
-            return null;
+            if(user.Id != 0 && user.Id != userId)
+            {
+                return BadRequest("User id change is not allowed.");
+            }
+            else{
+            user.Id = userId;
+            }
+            using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+               UserEntity userEntity = await _dbContext.UsersRepo.GetSingleOrDefaultAsync(user.Id);
+
+                if(userEntity.UserName != user.UserName)
+                {
+                    return BadRequest("User name change is not allowed.");
+                }
+
+                if (userEntity.Email != user.Email)
+                {
+                    return BadRequest("Email change is not allowed.");
+                }
+
+                await _dbContext.UsersRepo.UpdateAsync(user.ToEntity());
+
+                transactionScope.Complete();
+            }
+
+            return Ok();
         }
 
         [HttpPost, Route("login")]
