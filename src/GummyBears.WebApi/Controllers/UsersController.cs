@@ -10,7 +10,7 @@ using System.Web.Http;
 namespace GummyBears.WebApi.Controllers
 {
     [System.Web.Http.RoutePrefix("v1/users")]
-    public class UsersController : ApiController
+    public class UsersController : BaseController
     {
         private IDbContext _dbContext;
         public UsersController(IDbContext dbContext)
@@ -21,6 +21,7 @@ namespace GummyBears.WebApi.Controllers
         [HttpPost, Route("")]
         public IHttpActionResult CreateUser(User user)
         {
+           // _dbContext.UsersRepo.CreateAsync()
             return null;
         }
 
