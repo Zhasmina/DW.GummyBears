@@ -22,6 +22,7 @@ namespace GummyBears.Repository
             GroupsUsersRepo = new GroupUsersRepository(queryBuilder, sqlDbFactory);
             GroupCreationsRepo = new GroupCreationsRepository(queryBuilder, sqlDbFactory);
             GroupMessagesRepo = new GroupMessagesRepository(queryBuilder, sqlDbFactory);
+            AuthenticationRepo = new AuthenticationRepository(queryBuilder, sqlDbFactory);
         }
 
         public UsersRepository UsersRepo
@@ -55,6 +56,12 @@ namespace GummyBears.Repository
         }
 
         public GroupMessagesRepository GroupMessagesRepo
+        {
+            get;
+            private set;
+        }
+
+        public AuthenticationRepository AuthenticationRepo
         {
             get;
             private set;

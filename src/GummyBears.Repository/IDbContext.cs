@@ -8,5 +8,19 @@ namespace GummyBears.Repository
 {
     public interface IDbContext
     {
+        UsersRepository UsersRepo { get; }
+
+        CreationsRepository CreationsRepo { get; }
+
+        GroupsRepository GroupsRepo { get; }
+
+        GroupUsersRepository GroupsUsersRepo { get; }
+
+        GroupCreationsRepository GroupCreationsRepo { get; }
+
+        GroupMessagesRepository GroupMessagesRepo { get; }
+
+        AuthenticationRepository AuthenticationRepo { get; }
+
     }
 }

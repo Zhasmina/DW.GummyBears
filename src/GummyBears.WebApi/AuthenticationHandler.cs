@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -38,12 +39,22 @@ namespace GummyBears.WebApi
 
                 }
 
-                AuthenticationEntity authentication = await _dbContext..GetSingleOrDefaultAsync(token);
-                if (authentication.LastSeen.Add(_tokenLifespan) >= DateTime.UtcNow)
+                AuthenticationEntity authentication = await _dbContext.AuthenticationRepo.GetSingleOrDefaultAsync(token);
+                if (authentication != null && authentication.LastSeen.Add(_tokenLifespan) >= DateTime.UtcNow)
                 {
                     authentication.LastSeen = DateTime.UtcNow;
-                    await _authenticationRepository.UpdateAsync(authentication);
-                    UsersRepository
+                    await _dbContext.AuthenticationRepo.UpdateAsync(authentication);
+                    UserEntity user = _dbContext.UsersRepo.GetSingleOrDefault(authentication.UserId);
+                    
+                    if (user != null)
+                    {
+                        Thread.CurrentPrincipal = new SimplePrincipal(user.Id.ToString(), user.Role);
+
+                    }
+                    else
+                    {
+                        return await GenerateResponseMessage(HttpStatusCode.Forbidden, "Token of non-existent user");
+                    }
                 }
                 else
                 {

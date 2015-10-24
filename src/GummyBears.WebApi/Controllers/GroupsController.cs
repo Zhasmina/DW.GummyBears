@@ -7,7 +7,7 @@ using System.Web.Http;
 namespace GummyBears.WebApi.Controllers
 {
     [RoutePrefix("groups")]
-    public class GroupsController : ApiController
+    public class GroupsController : BaseController
     {
     }
 }
