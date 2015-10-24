@@ -1,4 +1,5 @@
-﻿using GummyBears.Repository;
+﻿using GummyBears.Contracts;
+using GummyBears.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,9 +19,24 @@ namespace GummyBears.WebApi.Controllers
         }
 
         [HttpPost, Route("")]
-        public IHttpActionResult CreateUser()
+        public IHttpActionResult CreateUser(User user)
         {
             return null;
         }
+
+        [HttpPut, Route("{userId:int}")]
+
+        public IHttpActionResult UpdateUser(User user)
+        {
+            return null;
+        }
+
+        [HttpPost, Route("login")]
+        public IHttpActionResult Login()
+        {
+            return null;
+        }
+
+
     }
 }
