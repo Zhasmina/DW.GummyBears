@@ -17,6 +17,7 @@ namespace GummyBears.WebApi.Controllers
         public CredentialsController(IDbContext dbContext, ITokenGenerator tokenGenerator)
         {
             _dbContext = dbContext;
+            _tokenGenerator = tokenGenerator;
         }
 
         [HttpPost]
@@ -37,7 +38,7 @@ namespace GummyBears.WebApi.Controllers
             string token = _tokenGenerator.GenerateToken();
             await _dbContext.AuthenticationRepo.CreateAsync(new AuthenticationEntity()
             {
-                Id = token,
+                Token = token,
                 LastSeen = DateTime.UtcNow,
                 UserId = user.Id
             });
