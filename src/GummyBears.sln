@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GummyBears", "GummyBears\GummyBears.csproj", "{709738B5-E046-47AB-A443-414B16D519CE}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GummyBears.Repository", "GummyBears.Repository\GummyBears.Repository.csproj", "{DFE21073-B02D-46F3-B7DB-DD3CDCFA02BA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GummyBears.WebApi", "GummyBears.WebApi\GummyBears.WebApi.csproj", "{87AD5906-FAE0-4ABB-B7F6-C98C84A74D9D}"
@@ -23,10 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{709738B5-E046-47AB-A443-414B16D519CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{709738B5-E046-47AB-A443-414B16D519CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{709738B5-E046-47AB-A443-414B16D519CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{709738B5-E046-47AB-A443-414B16D519CE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DFE21073-B02D-46F3-B7DB-DD3CDCFA02BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DFE21073-B02D-46F3-B7DB-DD3CDCFA02BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFE21073-B02D-46F3-B7DB-DD3CDCFA02BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
