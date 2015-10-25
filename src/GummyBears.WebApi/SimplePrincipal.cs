@@ -14,7 +14,8 @@ namespace GummyBears.WebApi
 
         public SimplePrincipal(string username, string role)
         {
-            Identity = new SimpleIdentity(username);           
+            Identity = new SimpleIdentity(username);
+            _role = role;
         }
 
         public bool IsInRole(string role)

@@ -63,7 +63,7 @@ namespace GummyBears.WebApi
             }
             catch
             {
-                return await GenerateResponseMessage(HttpStatusCode.InternalServerError, "Error encountered while attempting to process authorization token");
+                return GenerateResponseMessage(HttpStatusCode.InternalServerError, "Error encountered while attempting to process authorization token").Result;
             }
             
             return await base.SendAsync(request, cancellationToken);
