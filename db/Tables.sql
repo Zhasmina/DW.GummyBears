@@ -18,3 +18,8 @@ CREATE TABLE [dbo].[Users]
 )
 
 GO
+
+CREATE TABLE [dbo].[Authentications](
+	[Token] [nvarchar](150) NOT NULL PRIMARY KEY,
+	[UserId] [int] NOT NULL  FOREIGN KEY REFERENCES Users(Id),
+	[LastSeen] [datetime] NOT NULL)

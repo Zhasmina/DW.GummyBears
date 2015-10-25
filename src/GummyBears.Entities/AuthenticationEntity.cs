@@ -11,7 +11,7 @@ namespace GummyBears.Entities
     public class AuthenticationEntity : IIdentifier<string>
     {
         [Column("Token", IsPrimary = true, AutoIncrement = false)]
-        public string Id { get; set; }
+        public string Token { get; set; }
 
         [Column("UserId")]
         public int UserId { get; set; }
@@ -21,12 +21,12 @@ namespace GummyBears.Entities
 
         public string GetIdentity()
         {
-            return Id;
+            return Token;
         }
 
         public void SetIdentity(string identity)
         {
-            Id = identity;
+            Token = identity;
         }
     }
 }

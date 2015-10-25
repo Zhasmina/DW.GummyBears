@@ -4,10 +4,20 @@ using System.Linq;
 using System.Web;
 using System.Net;
 using System.Web.Http;
+using System.Net.Http;
 
 namespace GummyBears.WebApi.Controllers
 {
     public class BaseController : ApiController 
     {
+        protected void ThrowHttpResponseException(HttpStatusCode statusCode, string message)
+        {
+            var response = new HttpResponseMessage(statusCode)
+            {
+                Content = new StringContent(message)
+            };
+
+            throw new HttpResponseException(response);
+        }
     }
 }

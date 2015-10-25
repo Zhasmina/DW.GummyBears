@@ -16,8 +16,6 @@ namespace GummyBears.WebApi
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
             GlobalConfiguration.Configure(DependencyInjection.ConfigureContainer);
 
             var dbContext = (IDbContext)GlobalConfiguration.Configuration.DependencyResolver.GetService(typeof(IDbContext));
