@@ -24,32 +24,20 @@ namespace GummyBears.WebApi.Controllers
         }
 
         [HttpPost, Route("")]
-        public async Task<User> CreateUser(User user)
+        public async Task<UserProfile> CreateUser(User user)
         {
             UserEntity userByUserName = await _dbContext.UsersRepo.GetByUserName(user.UserName);
 
             if (userByUserName != null)
             {
-                var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent(string.Format("User with name '{0}' already exists.", user.UserName)),
-                    ReasonPhrase = string.Format("User with name '{0}' already exists.", user.UserName)
-                };
-
-                throw new HttpResponseException(responseMessage);
+                ThrowHttpResponseException(HttpStatusCode.BadRequest, string.Format("User with name '{0}' already exists.", user.UserName));
             }
 
             UserEntity userByEmail = await _dbContext.UsersRepo.GetByEmail(user.Email);
 
             if (userByEmail != null)
             {
-                var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent(string.Format("User with name '{0}' already exists.", user.UserName)),
-                    ReasonPhrase = string.Format("User with name '{0}' already exists.", user.UserName)
-                };
-
-                throw new HttpResponseException(responseMessage);
+                ThrowHttpResponseException(HttpStatusCode.BadRequest, string.Format("User with email '{0}' already exists.", user.Email));
             }
 
             UserEntity createdUser = await _dbContext.UsersRepo.CreateAsync(user.ToEntity());
@@ -59,17 +47,11 @@ namespace GummyBears.WebApi.Controllers
 
         [HttpPut, Route("{userId:int}")]
         [Authorize(Roles = "User")]
-        public async Task<User> UpdateUser(int userId, [FromBody]User user)
+        public async Task<UserProfile> UpdateUser(int userId, [FromBody]User user)
         {
             if (user.Id != 0 && user.Id != userId)
             {
-                var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent("User Id change is not allowed."),
-                    ReasonPhrase = "User Id change is not allowed."
-                };
-
-                throw new HttpResponseException(responseMessage);
+                ThrowHttpResponseException(HttpStatusCode.BadRequest, "User Id change is not allowed.");
             }
 
             user.Id = userId;
@@ -82,24 +64,12 @@ namespace GummyBears.WebApi.Controllers
 
                 if (userEntity.UserName != user.UserName)
                 {
-                    var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                    {
-                        Content = new StringContent("User name change is not allowed."),
-                        ReasonPhrase = "User name change is not allowed."
-                    };
-
-                    throw new HttpResponseException(responseMessage);
+                    ThrowHttpResponseException(HttpStatusCode.BadRequest, "User name change is not allowed.");
                 }
 
                 if (userEntity.Email != user.Email)
                 {
-                    var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                    {
-                        Content = new StringContent("Email change is not allowed."),
-                        ReasonPhrase = "Email change is not allowed."
-                    };
-
-                    throw new HttpResponseException(responseMessage);
+                    ThrowHttpResponseException(HttpStatusCode.BadRequest, "Email change is not allowed.");
                 }
 
                await _dbContext.UsersRepo.UpdateAsync(user.ToEntity());
@@ -113,15 +83,18 @@ namespace GummyBears.WebApi.Controllers
         }
 
         [HttpGet, Route("{userId:int}")]
-        public async Task<IHttpActionResult> GetUser(int userId)
+        [Authorize(Roles = "User")]
+        public async Task<UserProfile> GetUser(int userId)
         {
-            return null;
-        }
+           UserEntity userEntity = await _dbContext.UsersRepo.GetSingleOrDefaultAsync(userId);
 
-        [HttpPost, Route("login")]
-        public IHttpActionResult Login()
-        {
-            return null;
+            if(userEntity == null)
+            {
+                ThrowHttpResponseException(HttpStatusCode.NotFound, string.Format("User with id '{0}' not found.", userId));
+            }
+
+
+            return userEntity.ToModel();
         }
     }
 }
