@@ -61,7 +61,7 @@ namespace GummyBears.WebApi
                     return await GenerateResponseMessage(HttpStatusCode.Unauthorized, "Token expired");
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 return GenerateResponseMessage(HttpStatusCode.InternalServerError, "Error encountered while attempting to process authorization token").Result;
             }
