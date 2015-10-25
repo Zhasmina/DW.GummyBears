@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Http;
 using System.Threading.Tasks;
 using GummyBears.WebApi.Helpers;
+using System.Transactions;
 
 namespace GummyBears.WebApi.Controllers
 {
@@ -44,9 +45,35 @@ namespace GummyBears.WebApi.Controllers
 
         [HttpPut, Route("{userId:int}")]
         [Authorize(Roles = "User")]
-        public IHttpActionResult UpdateUser(int userId, [FromBody]User user)
+        public async Task<IHttpActionResult> UpdateUser(int userId, [FromBody]User user)
         {
-            return null;
+            if(user.Id != 0 && user.Id != userId)
+            {
+                return BadRequest("User id change is not allowed.");
+            }
+            else{
+            user.Id = userId;
+            }
+            using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+               UserEntity userEntity = await _dbContext.UsersRepo.GetSingleOrDefaultAsync(user.Id);
+
+                if(userEntity.UserName != user.UserName)
+                {
+                    return BadRequest("User name change is not allowed.");
+                }
+
+                if (userEntity.Email != user.Email)
+                {
+                    return BadRequest("Email change is not allowed.");
+                }
+
+                await _dbContext.UsersRepo.UpdateAsync(user.ToEntity());
+
+                transactionScope.Complete();
+            }
+
+            return Ok();
         }
 
         [HttpPost, Route("login")]
