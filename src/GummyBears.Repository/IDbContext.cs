@@ -20,5 +20,7 @@ namespace GummyBears.Repository
 
         GroupMessagesRepository GroupMessagesRepo { get; }
 
+        AuthenticationRepository AuthenticationRepo { get; }
+
     }
 }

@@ -39,5 +39,8 @@ namespace GummyBears.Entities
 
         [Column("ProfilePicturePath")]
         public string ProfilePicturePath { get; set; }
+
+        [Column("Role")]
+        public string Role { get; set; }
     }
 }

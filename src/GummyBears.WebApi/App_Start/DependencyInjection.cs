@@ -5,6 +5,7 @@ using System.Web;
 using Autofac;
 using Autofac.Integration.WebApi;
 using System.Web.Http;
+using System.Web.Http.Dependencies;
 
 namespace GummyBears.WebApi.App_Start
 {
