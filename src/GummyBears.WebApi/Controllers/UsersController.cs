@@ -9,10 +9,12 @@ using System.Web.Http;
 using System.Threading.Tasks;
 using GummyBears.WebApi.Helpers;
 using System.Transactions;
+using System.Net.Http;
+using System.Net;
 
 namespace GummyBears.WebApi.Controllers
 {
-    [System.Web.Http.RoutePrefix("v1/users")]
+    [System.Web.Http.RoutePrefix("users")]
     public class UsersController : BaseController
     {
         private IDbContext _dbContext;
@@ -22,37 +24,57 @@ namespace GummyBears.WebApi.Controllers
         }
 
         [HttpPost, Route("")]
-        public async Task<IHttpActionResult> CreateUser(User user)
+        public async Task<User> CreateUser(User user)
         {
             UserEntity userByUserName = await _dbContext.UsersRepo.GetByUserName(user.UserName);
 
             if (userByUserName != null)
             {
-                return BadRequest(string.Format("User with name '{0}' already exists.", user.UserName));
+                var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(string.Format("User with name '{0}' already exists.", user.UserName)),
+                    ReasonPhrase = string.Format("User with name '{0}' already exists.", user.UserName)
+                };
+
+                throw new HttpResponseException(responseMessage);
             }
 
             UserEntity userByEmail = await _dbContext.UsersRepo.GetByEmail(user.Email);
 
             if (userByEmail != null)
             {
-                return BadRequest(string.Format("User with email '{0}' already exists.", user.Email));
+                var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(string.Format("User with name '{0}' already exists.", user.UserName)),
+                    ReasonPhrase = string.Format("User with name '{0}' already exists.", user.UserName)
+                };
+
+                throw new HttpResponseException(responseMessage);
             }
 
             UserEntity createdUser = await _dbContext.UsersRepo.CreateAsync(user.ToEntity());
 
-            return Ok(createdUser.ToModel());
+            return createdUser.ToModel();
         }
 
         [HttpPut, Route("{userId:int}")]
         [Authorize(Roles = "User")]
-        public async Task<IHttpActionResult> UpdateUser(int userId, [FromBody]User user)
+        public async Task<User> UpdateUser(int userId, [FromBody]User user)
         {
             if (user.Id != 0 && user.Id != userId)
             {
-                return BadRequest("User id change is not allowed.");
+                var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent("User Id change is not allowed."),
+                    ReasonPhrase = "User Id change is not allowed."
+                };
+
+                throw new HttpResponseException(responseMessage);
             }
 
             user.Id = userId;
+
+            UserEntity updatedUser;
 
             using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
@@ -60,20 +82,40 @@ namespace GummyBears.WebApi.Controllers
 
                 if (userEntity.UserName != user.UserName)
                 {
-                    return BadRequest("User name change is not allowed.");
+                    var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                    {
+                        Content = new StringContent("User name change is not allowed."),
+                        ReasonPhrase = "User name change is not allowed."
+                    };
+
+                    throw new HttpResponseException(responseMessage);
                 }
 
                 if (userEntity.Email != user.Email)
                 {
-                    return BadRequest("Email change is not allowed.");
+                    var responseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                    {
+                        Content = new StringContent("Email change is not allowed."),
+                        ReasonPhrase = "Email change is not allowed."
+                    };
+
+                    throw new HttpResponseException(responseMessage);
                 }
 
-                await _dbContext.UsersRepo.UpdateAsync(user.ToEntity());
+               await _dbContext.UsersRepo.UpdateAsync(user.ToEntity());
+
+               updatedUser = await _dbContext.UsersRepo.GetSingleOrDefaultAsync(user.Id);
 
                 transactionScope.Complete();
             }
 
-            return Ok();
+            return updatedUser.ToModel();
+        }
+
+        [HttpGet, Route("{userId:int}")]
+        public async Task<IHttpActionResult> GetUser(int userId)
+        {
+            return null;
         }
 
         [HttpPost, Route("login")]
