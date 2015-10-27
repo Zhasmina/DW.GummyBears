@@ -40,25 +40,28 @@ namespace GummyBears.WebApi
                 }
 
                 AuthenticationEntity authentication = await _dbContext.AuthenticationRepo.GetSingleOrDefaultAsync(token);
-                if (authentication != null && authentication.LastSeen.Add(_tokenLifespan) >= DateTime.UtcNow)
+                if (authentication != null)
                 {
-                    authentication.LastSeen = DateTime.UtcNow;
-                    await _dbContext.AuthenticationRepo.UpdateAsync(authentication);
-                    UserEntity user = _dbContext.UsersRepo.GetSingleOrDefault(authentication.UserId);
-                    
-                    if (user != null)
+                    if (authentication.LastSeen.Add(_tokenLifespan) >= DateTime.UtcNow)
                     {
-                        Thread.CurrentPrincipal = new SimplePrincipal(user.Id.ToString(), user.Role);
+                        authentication.LastSeen = DateTime.UtcNow;
+                        await _dbContext.AuthenticationRepo.UpdateAsync(authentication);
+                        UserEntity user = _dbContext.UsersRepo.GetSingleOrDefault(authentication.UserId);
 
+                        if (user != null)
+                        {
+                            Thread.CurrentPrincipal = new SimplePrincipal(user.Id.ToString(), user.Role);
+
+                        }
+                        else
+                        {
+                            return await GenerateResponseMessage(HttpStatusCode.Forbidden, "Token of non-existent user");
+                        }
                     }
                     else
                     {
-                        return await GenerateResponseMessage(HttpStatusCode.Forbidden, "Token of non-existent user");
+                        return await GenerateResponseMessage(HttpStatusCode.Unauthorized, "Token expired");
                     }
-                }
-                else
-                {
-                    return await GenerateResponseMessage(HttpStatusCode.Unauthorized, "Token expired");
                 }
             }
             catch(Exception ex)

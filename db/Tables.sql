@@ -14,7 +14,8 @@ CREATE TABLE [dbo].[Users]
 	[DateOfBirth] DATETIME NULL,
 	[Description] [nvarchar](MAX) NULL,
 	[Country] [nvarchar](100) NULL,
-	[ProfilePicturePath] [nvarchar](MAX) NULL
+	[ProfilePicturePath] [nvarchar](MAX) NULL,
+	Role [nvarchar(50)] NULL
 )
 
 GO

@@ -6,10 +6,12 @@ using Autofac;
 using Autofac.Integration.WebApi;
 using System.Web.Http;
 using System.Web.Http.Dependencies;
-using Dapperer.QueryBuilders.MsSql;
-using Dapperer.DbFactories;
 using GummyBears.Repository;
+using Dapperer.DbFactories;
+using Dapperer.QueryBuilders.MsSql;
 using Dapperer;
+using GummyBears.WebApi.Controllers;
+using GummyBears.Common;
 
 namespace GummyBears.WebApi.App_Start
 {
@@ -19,13 +21,16 @@ namespace GummyBears.WebApi.App_Start
         {
             var builder = new ContainerBuilder();
 
-            var container = builder.Build();
-
+            builder.RegisterApiControllers(typeof(BaseController).Assembly);
             // Repository
             builder.RegisterType<SqlQueryBuilder>().As<IQueryBuilder>().SingleInstance();
             builder.RegisterType<SqlDbFactory>().As<IDbFactory>();
             builder.RegisterType<DappererSettings>().As<IDappererSettings>();
             builder.RegisterType<DbContext>().As<IDbContext>();
+
+            builder.RegisterType<TokenGenerator>().As<ITokenGenerator>();
+
+            var container = builder.Build();
 
             configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
         }
