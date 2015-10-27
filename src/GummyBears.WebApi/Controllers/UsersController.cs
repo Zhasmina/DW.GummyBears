@@ -24,6 +24,7 @@ namespace GummyBears.WebApi.Controllers
         }
 
         [HttpPost, Route("")]
+        [AllowAnonymous]
         public async Task<UserProfile> CreateUser(User user)
         {
             UserEntity userByUserName = await _dbContext.UsersRepo.GetByUserName(user.UserName);
