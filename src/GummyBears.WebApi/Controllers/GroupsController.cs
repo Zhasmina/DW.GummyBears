@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using GummyBears.Entities;
+using GummyBears.Contracts;
+using GummyBears.WebApi.Helpers;
+using System.Transactions;
 
 namespace GummyBears.WebApi.Controllers
 {
@@ -16,6 +19,7 @@ namespace GummyBears.WebApi.Controllers
             : base(dbContext)
         { }
 
+        [HttpGet]
         [Route("groupId:int}")]
         [Authorize(Roles = "User")]
         public async Task<IEnumerable<GroupMessageEntity>> GetMessagesInGroup([FromUri]int groupId)
@@ -39,6 +43,34 @@ namespace GummyBears.WebApi.Controllers
             IEnumerable<GroupMessageEntity> messages = await DbContext.GroupMessagesRepo.GetGroupMessages(groupId);
 
             return messages;
+        }
+
+        [HttpPost]
+        [Route("")]
+        [Authorize(Roles = "User")]
+        public async Task<Group> CreateGroup([FromBody]Group group)
+        {
+            AuthenticationEntity authentication = await DbContext.AuthenticationRepo.GetSingleOrDefaultAsync(AuthenticationToken);
+            
+            if (authentication == null || authentication.UserId != group.AuthorId)
+            {
+                ThrowHttpResponseException(System.Net.HttpStatusCode.Unauthorized, "Wrong authentication token.");
+            }
+
+            using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                var createdGroup = await DbContext.GroupsRepo.CreateAsync(group.ToEntity());
+                await DbContext.GroupsUsersRepo.CreateAsync(new GroupUserEntity
+                {
+                    GroupId = createdGroup.Id,
+                    UserId = authentication.UserId,
+                    IsAdmin = true
+                });
+
+                transactionScope.Complete();
+            }
+
+            return group;
         }
     }
 }

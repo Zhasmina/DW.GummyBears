@@ -64,7 +64,7 @@ namespace GummyBears.WebApi.Controllers
 
             await DbContext.AuthenticationRepo.DeleteAsync(AuthenticationToken);
 
-            return string.Format("Successful loguot");
+            return string.Format("Successful logout");
         }
     }
 }

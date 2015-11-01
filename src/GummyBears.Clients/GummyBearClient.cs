@@ -53,6 +53,18 @@ namespace GummyBears.Clients
             return await SendRequestAsync<Group>(httpRequestMessage);
         }
 
+        public async Task<Response<string>> Logout(AuthenticationTokenRequest request)
+        {
+            HttpRequestMessage message = BuildRequestMessage(request, "usercredentials", HttpMethod.Post);
+            return await SendRequestAsync<string>(message);
+        }
+
+        public async Task<Response<AuthenticationData>> Login(AuthenticationRequest request)
+        {
+            HttpRequestMessage message = BuildRequestMessageWithBody(request, "usercredentials", HttpMethod.Post);
+            return await SendRequestAsync<AuthenticationData>(message);
+        }
+
         private async Task<Response<TResponse>> SendRequestAsync<TResponse>(HttpRequestMessage requestMessage)
         {
             var response = await _messageInvoker.SendAsync(requestMessage, CancellationToken.None).ConfigureAwait(false);
@@ -110,6 +122,11 @@ namespace GummyBears.Clients
             var requestMessage = new HttpRequestMessage(httpMethod, string.Format("{0}/{1}{2}", new Uri(_gummyBearsUrl), location, querystring));
             requestMessage.Headers.Add("X-Correlation-Token", request.CorrelationToken);
             requestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            if (requestMessage is AuthenticationTokenRequest)
+            {
+                requestMessage.Headers.Add("Authorization-Token", (request as AuthenticationTokenRequest).AuthenticationToken);
+            }
 
             return requestMessage;
         }

@@ -15,5 +15,8 @@ namespace GummyBears.Entities
 
         [Column("UserId")]
         public int UserId { get; set; }
+
+        [Column("IsAdmin")]
+        public bool IsAdmin { get; set; }
     }
 }
