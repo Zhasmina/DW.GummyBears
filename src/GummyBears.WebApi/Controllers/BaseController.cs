@@ -5,11 +5,18 @@ using System.Web;
 using System.Net;
 using System.Web.Http;
 using System.Net.Http;
+using GummyBears.Repository;
 
 namespace GummyBears.WebApi.Controllers
 {
     public class BaseController : ApiController 
     {
+        protected IDbContext DbContext;
+        protected string AuthenticationToken;
+        public BaseController(IDbContext dbContext)
+        {
+            DbContext = dbContext;
+        }
         protected void ThrowHttpResponseException(HttpStatusCode statusCode, string message)
         {
             var response = new HttpResponseMessage(statusCode)
@@ -18,6 +25,11 @@ namespace GummyBears.WebApi.Controllers
             };
 
             throw new HttpResponseException(response);
+        }
+
+        public void SetAuthenticationToken(string token)
+        {
+            AuthenticationToken = token;
         }
     }
 }

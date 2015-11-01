@@ -46,6 +46,7 @@ namespace GummyBears.WebApi
                     {
                         authentication.LastSeen = DateTime.UtcNow;
                         await _dbContext.AuthenticationRepo.UpdateAsync(authentication);
+
                         UserEntity user = _dbContext.UsersRepo.GetSingleOrDefault(authentication.UserId);
 
                         if (user != null)

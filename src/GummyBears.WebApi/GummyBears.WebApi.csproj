@@ -150,6 +150,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AuthenticationHandler.cs" />
+    <Compile Include="AuthenticationTokenFilter.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CredentialsController.cs" />
     <Compile Include="Controllers\GroupsController.cs" />
@@ -158,6 +159,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\RequestExtensions.cs" />
     <Compile Include="Roles.cs" />
     <Compile Include="Helpers\UserMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

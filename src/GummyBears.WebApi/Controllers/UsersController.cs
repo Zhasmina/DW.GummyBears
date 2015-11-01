@@ -17,31 +17,30 @@ namespace GummyBears.WebApi.Controllers
     [System.Web.Http.RoutePrefix("users")]
     public class UsersController : BaseController
     {
-        private IDbContext _dbContext;
         public UsersController(IDbContext dbContext)
+            :base(dbContext)
         {
-            _dbContext = dbContext;
         }
 
         [HttpPost, Route("")]
         [AllowAnonymous]
         public async Task<UserProfile> CreateUser(User user)
         {
-            UserEntity userByUserName = await _dbContext.UsersRepo.GetByUserName(user.UserName);
+            UserEntity userByUserName = await DbContext.UsersRepo.GetByUserName(user.UserName);
 
             if (userByUserName != null)
             {
                 ThrowHttpResponseException(HttpStatusCode.BadRequest, string.Format("User with name '{0}' already exists.", user.UserName));
             }
 
-            UserEntity userByEmail = await _dbContext.UsersRepo.GetByEmail(user.Email);
+            UserEntity userByEmail = await DbContext.UsersRepo.GetByEmail(user.Email);
 
             if (userByEmail != null)
             {
                 ThrowHttpResponseException(HttpStatusCode.BadRequest, string.Format("User with email '{0}' already exists.", user.Email));
             }
 
-            UserEntity createdUser = await _dbContext.UsersRepo.CreateAsync(user.ToEntity());
+            UserEntity createdUser = await DbContext.UsersRepo.CreateAsync(user.ToEntity());
 
             return createdUser.ToModel();
         }
@@ -61,7 +60,7 @@ namespace GummyBears.WebApi.Controllers
 
             using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                UserEntity userEntity = await _dbContext.UsersRepo.GetSingleOrDefaultAsync(user.Id);
+                UserEntity userEntity = await DbContext.UsersRepo.GetSingleOrDefaultAsync(user.Id);
 
                 if (userEntity.UserName != user.UserName)
                 {
@@ -73,9 +72,9 @@ namespace GummyBears.WebApi.Controllers
                     ThrowHttpResponseException(HttpStatusCode.BadRequest, "Email change is not allowed.");
                 }
 
-               await _dbContext.UsersRepo.UpdateAsync(user.ToEntity());
+                await DbContext.UsersRepo.UpdateAsync(user.ToEntity());
 
-               updatedUser = await _dbContext.UsersRepo.GetSingleOrDefaultAsync(user.Id);
+                updatedUser = await DbContext.UsersRepo.GetSingleOrDefaultAsync(user.Id);
 
                 transactionScope.Complete();
             }
@@ -87,7 +86,7 @@ namespace GummyBears.WebApi.Controllers
         [Authorize(Roles = "User")]
         public async Task<UserProfile> GetUser(int userId)
         {
-           UserEntity userEntity = await _dbContext.UsersRepo.GetSingleOrDefaultAsync(userId);
+            UserEntity userEntity = await DbContext.UsersRepo.GetSingleOrDefaultAsync(userId);
 
             if(userEntity == null)
             {
@@ -96,6 +95,21 @@ namespace GummyBears.WebApi.Controllers
 
 
             return userEntity.ToModel();
+        }
+
+        [HttpGet, Route("{userId}/groups")]
+        [Authorize(Roles = "User")]
+        public async Task<List<GroupEntity>> GetAllUserGroups([FromUri]int userId)
+        {
+           UserEntity user = await DbContext.UsersRepo.GetSingleOrDefaultAsync(userId);
+           if (user == null)
+           {
+               ThrowHttpResponseException(HttpStatusCode.NotFound, string.Format("User with id '{0}' not found.", userId));
+           }
+
+           IEnumerable<GroupEntity> groups = await DbContext.GroupsRepo.GetUserGroups(userId);
+
+            return groups.ToList();
         }
     }
 }

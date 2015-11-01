@@ -11,12 +11,11 @@ namespace GummyBears.WebApi.Controllers
     [System.Web.Http.RoutePrefix("usercredentials")]
     public class CredentialsController : BaseController
     {
-        private IDbContext _dbContext;
         private ITokenGenerator _tokenGenerator;
 
         public CredentialsController(IDbContext dbContext, ITokenGenerator tokenGenerator)
+            : base(dbContext)
         {
-            _dbContext = dbContext;
             _tokenGenerator = tokenGenerator;
         }
 
@@ -24,7 +23,7 @@ namespace GummyBears.WebApi.Controllers
         [Route("")]
         public async Task<AuthenticationData> Login([FromBody]Credentials credentials)
         {
-            UserEntity user = await _dbContext.UsersRepo.GetByUserName(credentials.Username);
+            UserEntity user = await DbContext.UsersRepo.GetByUserName(credentials.Username);
             if (user == null)
             {
                 ThrowHttpResponseException(System.Net.HttpStatusCode.NotFound, string.Format("User with name '{0}' not found.", credentials.Username));
@@ -36,7 +35,7 @@ namespace GummyBears.WebApi.Controllers
             }
 
             string token = _tokenGenerator.GenerateToken();
-            await _dbContext.AuthenticationRepo.CreateAsync(new AuthenticationEntity()
+            await DbContext.AuthenticationRepo.CreateAsync(new AuthenticationEntity()
             {
                 Token = token,
                 LastSeen = DateTime.UtcNow,
@@ -51,5 +50,21 @@ namespace GummyBears.WebApi.Controllers
             };
         }
 
+        [HttpPost]
+        [Route("")]
+        [Authorize(Roles = "User")]
+        public async Task<string> Logout()
+        {
+            AuthenticationEntity authentication = await DbContext.AuthenticationRepo.GetSingleOrDefaultAsync(AuthenticationToken);
+
+            if (authentication == null)
+            {
+                ThrowHttpResponseException(System.Net.HttpStatusCode.Unauthorized, "Wrong authentication token.");
+            }
+
+            await DbContext.AuthenticationRepo.DeleteAsync(AuthenticationToken);
+
+            return string.Format("Successful loguot");
+        }
     }
 }

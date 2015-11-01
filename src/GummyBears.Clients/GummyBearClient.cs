@@ -32,11 +32,25 @@ namespace GummyBears.Clients
             return await SendRequestAsync<User>( httpRequestMessage);
         }
 
-        public async Task<Response> UpdateUserAsync(UserRequest request)
+        public async Task<Response<UserProfile>> UpdateUserAsync(UserRequest request)
         {
             HttpRequestMessage httpRequestMessage = BuildRequestMessageWithBody(request, string.Format("users/{0}", request.Payload.Id), HttpMethod.Post);
 
-            return await SendRequestAsync<User>(httpRequestMessage);
+            return await SendRequestAsync<UserProfile>(httpRequestMessage);
+        }
+
+        public async Task<Response<UserProfile>> GetUserAsync(UserProfileRequest request)
+        {
+            HttpRequestMessage httpRequestMessage = BuildRequestMessage(request, string.Format("users/{0}", request.UserId), HttpMethod.Get);
+
+            return await SendRequestAsync<UserProfile>(httpRequestMessage);
+        }
+
+        public async Task<Response<Group>> GetAllUserGroups(UserProfileRequest request)
+        {
+            HttpRequestMessage httpRequestMessage = BuildRequestMessage(request, string.Format("users/{0}", request.UserId), HttpMethod.Get);
+
+            return await SendRequestAsync<Group>(httpRequestMessage);
         }
 
         private async Task<Response<TResponse>> SendRequestAsync<TResponse>(HttpRequestMessage requestMessage)
