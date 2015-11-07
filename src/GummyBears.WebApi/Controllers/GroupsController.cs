@@ -97,5 +97,11 @@ namespace GummyBears.WebApi.Controllers
 
             return null;
         }
+
+        // GetParticipants
+        // Attach file to the group 
+        // Get files
+
+
     }
 }
