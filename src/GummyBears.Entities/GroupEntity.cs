@@ -12,5 +12,8 @@ namespace GummyBears.Entities
     {
         [Column("Name")]
         public string Name { get; set; }
+
+        [Column("AuthorId")]
+        public int AuthorId { get; set; }
     }
 }

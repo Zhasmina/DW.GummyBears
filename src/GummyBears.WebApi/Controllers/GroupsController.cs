@@ -72,5 +72,30 @@ namespace GummyBears.WebApi.Controllers
 
             return group;
         }
+
+        //TODO not finished yet
+        [HttpPost]
+        [Route("{groupId:int}/participants")]
+        [Authorize(Roles = "User")]
+        public async Task<GroupParticipants> AddParticipants(int groupId, [FromBody]GroupParticipants groupParticipants) 
+        {
+            GroupEntity group = await DbContext.GroupsRepo.GetSingleOrDefaultAsync(groupId);
+
+            if (group == null)
+            {
+                ThrowHttpResponseException(System.Net.HttpStatusCode.BadRequest, string.Format("Group with id {0} not exists.", groupId));
+            }
+
+            AuthenticationEntity authentication = await DbContext.AuthenticationRepo.GetSingleOrDefaultAsync(AuthenticationToken);
+
+            if (authentication == null || authentication.UserId != group.AuthorId)
+            {
+                ThrowHttpResponseException(System.Net.HttpStatusCode.Unauthorized, "Wrong authentication token.");
+            }
+
+            //DbContext.GroupsUsersRepo
+
+            return null;
+        }
     }
 }
