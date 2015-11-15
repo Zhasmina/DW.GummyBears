@@ -8,7 +8,7 @@ namespace GummyBears.Clients
         {
             get
             {
-                return ConfigurationManager.AppSettings["Bede.PlayerMessenger.Url"];
+                return ConfigurationManager.AppSettings["GummyBears.WebApi.Url"];
             }
         }
     }

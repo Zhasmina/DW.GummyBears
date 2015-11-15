@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 
 namespace GummyBears.Clients
 {
-    public class GummyBearClient
+    public class GummyBearClient : GummyBears.Clients.IGummyBearClient
     {
         private readonly HttpMessageInvoker _messageInvoker;
         private readonly string _gummyBearsUrl;

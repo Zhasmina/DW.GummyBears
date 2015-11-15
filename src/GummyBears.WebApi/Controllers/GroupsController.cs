@@ -20,9 +20,9 @@ namespace GummyBears.WebApi.Controllers
         { }
 
         [HttpGet]
-        [Route("groupId:int}")]
+        [Route("{groupId:int}")]
         [Authorize(Roles = "User")]
-        public async Task<IEnumerable<GroupMessageEntity>> GetMessagesInGroup([FromUri]int groupId)
+        public async Task<IEnumerable<GroupMessageEntity>> GetMessagesInGroup(int groupId)
         {
             AuthenticationEntity authentication = await DbContext.AuthenticationRepo.GetSingleOrDefaultAsync(AuthenticationToken);
 

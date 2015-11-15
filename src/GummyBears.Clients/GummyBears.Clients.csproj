@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="DefaultGummyBearsClientSettings.cs" />
     <Compile Include="GummyBearClient.cs" />
+    <Compile Include="IGummyBearClient.cs" />
     <Compile Include="IGummyBearClientSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\AuthenticationRequest.cs" />
