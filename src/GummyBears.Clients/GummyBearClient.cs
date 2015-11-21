@@ -116,7 +116,7 @@ namespace GummyBears.Clients
         {
             if (string.IsNullOrEmpty(_gummyBearsUrl))
             {
-                throw new ConfigurationErrorsException("Missing setting: Bede.PlayerMessenger.Url");
+                throw new ConfigurationErrorsException("Missing setting: GummyBears.WebApi.Url");
             }
 
             var requestMessage = new HttpRequestMessage(httpMethod, string.Format("{0}/{1}{2}", new Uri(_gummyBearsUrl), location, querystring));
