@@ -121,12 +121,7 @@ namespace GummyBears.Clients
 
             var requestMessage = new HttpRequestMessage(httpMethod, string.Format("{0}/{1}{2}", new Uri(_gummyBearsUrl), location, querystring));
             requestMessage.Headers.Add("X-Correlation-Token", request.CorrelationToken);
-            requestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            if (requestMessage is AuthenticationTokenRequest)
-            {
-                requestMessage.Headers.Add("Authorization-Token", (request as AuthenticationTokenRequest).AuthenticationToken);
-            }
+            requestMessage.Headers.Add("Authorization-Token", "token");
 
             return requestMessage;
         }
