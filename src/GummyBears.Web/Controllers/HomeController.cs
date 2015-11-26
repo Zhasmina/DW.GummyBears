@@ -48,16 +48,55 @@ namespace GummyBears.Web.Controllers
                     return View(userProfile);
                 }
                 // Notify for success
-                return View("Index");
-
+                return RedirectToAction("Index");
             }
 
             return View(userProfile);
         }
 
+        [HttpGet]
         public ActionResult Login()
         {
+            return View(new Credentials());
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Login(Credentials credentials)
+        {
+            if (ModelState.IsValid)
+            {
+                var response = await _gummyBearClient.Login(new AuthenticationRequest()
+                {
+                    CorrelationToken = new Guid().ToString(),
+                    Payload = credentials
+                }).ConfigureAwait(false);
+
+                if (response.Status == Status.Failed) 
+                {
+                    return View(credentials);
+                }
+
+                return RedirectToAction("EditProfile", new { token = response.Payload.Token, userId = response.Payload.UserId});
+            }
             return View();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> EditProfile(string token, int userId) 
+        {
+           var response = await _gummyBearClient.GetUserAsync(new UserProfileRequest()
+            {
+                AuthenticationToken = token,
+                CorrelationToken = new Guid().ToString(),
+                UserId = userId
+            }).ConfigureAwait(false);
+
+           if (response.Status == Status.Failed)
+           {
+               return RedirectToAction("Login");
+           }
+
+           return View(response.Payload);
         }
 
         public ActionResult Logout()

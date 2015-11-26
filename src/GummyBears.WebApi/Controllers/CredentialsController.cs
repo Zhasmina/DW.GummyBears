@@ -21,6 +21,7 @@ namespace GummyBears.WebApi.Controllers
 
         [HttpPost]
         [Route("")]
+        [AllowAnonymous]
         public async Task<AuthenticationData> Login([FromBody]Credentials credentials)
         {
             UserEntity user = await DbContext.UsersRepo.GetByUserName(credentials.Username);
@@ -50,7 +51,7 @@ namespace GummyBears.WebApi.Controllers
             };
         }
 
-        [HttpPost]
+        [HttpDelete]
         [Route("")]
         [Authorize(Roles = "User")]
         public async Task<string> Logout()

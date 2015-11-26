@@ -25,7 +25,7 @@ namespace GummyBears.WebApi
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            if (request.Headers.Contains("Authorization-Token") && string.IsNullOrEmpty(request.Headers.GetValues("Authorization-Token").FirstOrDefault()))
+            if (request.Headers.Contains("Authorization-Token") && !string.IsNullOrEmpty(request.Headers.GetValues("Authorization-Token").FirstOrDefault()))
             {
                 AuthenticationEntity authentication = await _dbContext.AuthenticationRepo.GetSingleOrDefaultAsync(request.Headers.GetValues("Authorization-Token").FirstOrDefault());
                 if (authentication != null && authentication.LastSeen.Add(_tokenLifespan) >= DateTime.UtcNow)

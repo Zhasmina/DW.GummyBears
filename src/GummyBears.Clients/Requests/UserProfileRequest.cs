@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace GummyBears.Clients.Requests
 {
-    public class UserProfileRequest : IRequest
+    public class UserProfileRequest : AuthenticationTokenRequest
     {
         public int UserId { get; set; }
-
-        public string CorrelationToken { get; set; }
     }
 }
