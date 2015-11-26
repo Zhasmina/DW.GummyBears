@@ -15,12 +15,8 @@ namespace GummyBears.WebApi
         {
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            //FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             GlobalConfiguration.Configure(DependencyInjection.ConfigureContainer);
-
-            var dbContext = (IDbContext)GlobalConfiguration.Configuration.DependencyResolver.GetService(typeof(IDbContext));
-            var tokenLifespan = new TimeSpan(0, Int32.Parse(ConfigurationManager.AppSettings["tokenLifespan_minutes"]), 0);
-            GlobalConfiguration.Configuration.MessageHandlers.Add(new TokenValidationHandler(dbContext, tokenLifespan));
         }
     }
 }
