@@ -1,6 +1,11 @@
+
+DROP DATABASE GummyBears
+
 CREATE DATABASE GummyBears
 
 GO
+ 
+USE GummyBears
 
 CREATE TABLE [dbo].[Users]
 (
@@ -15,7 +20,7 @@ CREATE TABLE [dbo].[Users]
 	[Description] [nvarchar](MAX) NULL,
 	[Country] [nvarchar](100) NULL,
 	[ProfilePicturePath] [nvarchar](MAX) NULL,
-	Role [nvarchar(50)] NULL
+	[Role] [nvarchar](50) NULL
 )
 
 GO
@@ -24,3 +29,5 @@ CREATE TABLE [dbo].[Authentications](
 	[Token] [nvarchar](150) NOT NULL PRIMARY KEY,
 	[UserId] [int] NOT NULL  FOREIGN KEY REFERENCES Users(Id),
 	[LastSeen] [datetime] NOT NULL)
+
+GO
