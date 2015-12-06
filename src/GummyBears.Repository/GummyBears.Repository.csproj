@@ -50,6 +50,7 @@
     <Compile Include="CreationRepository.cs" />
     <Compile Include="DappererSettings.cs" />
     <Compile Include="DbContext.cs" />
+    <Compile Include="FeedsRepository.cs" />
     <Compile Include="GroupCreationsRepository.cs" />
     <Compile Include="GroupMessagesRepository.cs" />
     <Compile Include="GroupsRepository.cs" />
