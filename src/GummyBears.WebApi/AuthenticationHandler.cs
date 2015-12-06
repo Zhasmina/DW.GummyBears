@@ -25,51 +25,23 @@ namespace GummyBears.WebApi
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            try
+            if (request.Headers.Contains("Authorization-Token") && !string.IsNullOrEmpty(request.Headers.GetValues("Authorization-Token").FirstOrDefault()))
             {
-                if (!request.Headers.Contains("Authorization-Token"))
+                AuthenticationEntity authentication = await _dbContext.AuthenticationRepo.GetSingleOrDefaultAsync(request.Headers.GetValues("Authorization-Token").FirstOrDefault());
+                if (authentication != null && authentication.LastSeen.Add(_tokenLifespan) >= DateTime.UtcNow)
                 {
-                    return await GenerateResponseMessage(HttpStatusCode.Unauthorized, "You need to include Authorization-Token header in your request");
-                }
+                    authentication.LastSeen = DateTime.UtcNow;
+                    await _dbContext.AuthenticationRepo.UpdateAsync(authentication);
 
-                var token = request.Headers.GetValues("Authorization-Token").FirstOrDefault();
-                if (string.IsNullOrEmpty(token))
-                {
-                    return await GenerateResponseMessage(HttpStatusCode.Unauthorized, "Authorization-Token cannot be empty");
+                    UserEntity user = _dbContext.UsersRepo.GetSingleOrDefault(authentication.UserId);
 
-                }
-
-                AuthenticationEntity authentication = await _dbContext.AuthenticationRepo.GetSingleOrDefaultAsync(token);
-                if (authentication != null)
-                {
-                    if (authentication.LastSeen.Add(_tokenLifespan) >= DateTime.UtcNow)
+                    if (user != null)
                     {
-                        authentication.LastSeen = DateTime.UtcNow;
-                        await _dbContext.AuthenticationRepo.UpdateAsync(authentication);
-
-                        UserEntity user = _dbContext.UsersRepo.GetSingleOrDefault(authentication.UserId);
-
-                        if (user != null)
-                        {
-                            Thread.CurrentPrincipal = new SimplePrincipal(user.Id.ToString(), user.Role);
-
-                        }
-                        else
-                        {
-                            return await GenerateResponseMessage(HttpStatusCode.Forbidden, "Token of non-existent user");
-                        }
-                    }
-                    else
-                    {
-                        return await GenerateResponseMessage(HttpStatusCode.Unauthorized, "Token expired");
+                        Thread.CurrentPrincipal = new SimplePrincipal(user.Id.ToString(), user.Role);
                     }
                 }
             }
-            catch(Exception ex)
-            {
-                return GenerateResponseMessage(HttpStatusCode.InternalServerError, "Error encountered while attempting to process authorization token").Result;
-            }
-            
+
             return await base.SendAsync(request, cancellationToken);
         }
 

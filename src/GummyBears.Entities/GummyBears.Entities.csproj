@@ -48,6 +48,7 @@
     <Compile Include="AuthenticationEntity.cs" />
     <Compile Include="BaseEntity.cs" />
     <Compile Include="CreationEntity.cs" />
+    <Compile Include="FeedsEntity.cs" />
     <Compile Include="GroupCreationEntity.cs" />
     <Compile Include="GroupEntity.cs" />
     <Compile Include="GroupMessageEntity.cs" />

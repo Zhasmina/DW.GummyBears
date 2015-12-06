@@ -18,6 +18,7 @@ namespace GummyBears.WebApi.App_Start
     public class DependencyInjection
     {
         public static void ConfigureContainer(HttpConfiguration configuration)
+        
         {
             var builder = new ContainerBuilder();
 

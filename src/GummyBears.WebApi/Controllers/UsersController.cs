@@ -23,7 +23,6 @@ namespace GummyBears.WebApi.Controllers
         }
 
         [HttpPost, Route("")]
-        [AllowAnonymous]
         public async Task<UserProfile> CreateUser(User user)
         {
             UserEntity userByUserName = await DbContext.UsersRepo.GetByUserName(user.UserName);
@@ -46,7 +45,6 @@ namespace GummyBears.WebApi.Controllers
         }
 
         [HttpPut, Route("{userId:int}")]
-        [Authorize(Roles = "User")]
         public async Task<UserProfile> UpdateUser(int userId, [FromBody]User user)
         {
             if (user.Id != 0 && user.Id != userId)
@@ -83,7 +81,7 @@ namespace GummyBears.WebApi.Controllers
         }
 
         [HttpGet, Route("{userId:int}")]
-        [Authorize(Roles = "User")]
+        [AuthenticationTokenFilter]
         public async Task<UserProfile> GetUser(int userId)
         {
             UserEntity userEntity = await DbContext.UsersRepo.GetSingleOrDefaultAsync(userId);
@@ -92,8 +90,7 @@ namespace GummyBears.WebApi.Controllers
             {
                 ThrowHttpResponseException(HttpStatusCode.NotFound, string.Format("User with id '{0}' not found.", userId));
             }
-
-
+            
             return userEntity.ToModel();
         }
 

@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 
 namespace GummyBears.Clients
 {
-    public class GummyBearClient
+    public class GummyBearClient : GummyBears.Clients.IGummyBearClient
     {
         private readonly HttpMessageInvoker _messageInvoker;
         private readonly string _gummyBearsUrl;
@@ -32,9 +32,10 @@ namespace GummyBears.Clients
             return await SendRequestAsync<User>( httpRequestMessage);
         }
 
-        public async Task<Response<UserProfile>> UpdateUserAsync(UserRequest request)
+        public async Task<Response<UserProfile>> UpdateUserAsync(AuthenticatedUserRequest request)
         {
             HttpRequestMessage httpRequestMessage = BuildRequestMessageWithBody(request, string.Format("users/{0}", request.Payload.Id), HttpMethod.Post);
+            httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
 
             return await SendRequestAsync<UserProfile>(httpRequestMessage);
         }
@@ -42,7 +43,8 @@ namespace GummyBears.Clients
         public async Task<Response<UserProfile>> GetUserAsync(UserProfileRequest request)
         {
             HttpRequestMessage httpRequestMessage = BuildRequestMessage(request, string.Format("users/{0}", request.UserId), HttpMethod.Get);
-
+            httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
+            
             return await SendRequestAsync<UserProfile>(httpRequestMessage);
         }
 
@@ -51,6 +53,18 @@ namespace GummyBears.Clients
             HttpRequestMessage httpRequestMessage = BuildRequestMessage(request, string.Format("users/{0}", request.UserId), HttpMethod.Get);
 
             return await SendRequestAsync<Group>(httpRequestMessage);
+        }
+
+        public async Task<Response<string>> Logout(AuthenticationTokenRequest request)
+        {
+            HttpRequestMessage message = BuildRequestMessage(request, "usercredentials", HttpMethod.Post);
+            return await SendRequestAsync<string>(message);
+        }
+
+        public async Task<Response<AuthenticationData>> Login(AuthenticationRequest request)
+        {
+            HttpRequestMessage message = BuildRequestMessageWithBody(request, "usercredentials", HttpMethod.Post);
+            return await SendRequestAsync<AuthenticationData>(message);
         }
 
         private async Task<Response<TResponse>> SendRequestAsync<TResponse>(HttpRequestMessage requestMessage)
@@ -104,12 +118,11 @@ namespace GummyBears.Clients
         {
             if (string.IsNullOrEmpty(_gummyBearsUrl))
             {
-                throw new ConfigurationErrorsException("Missing setting: Bede.PlayerMessenger.Url");
+                throw new ConfigurationErrorsException("Missing setting: GummyBears.WebApi.Url");
             }
 
             var requestMessage = new HttpRequestMessage(httpMethod, string.Format("{0}/{1}{2}", new Uri(_gummyBearsUrl), location, querystring));
             requestMessage.Headers.Add("X-Correlation-Token", request.CorrelationToken);
-            requestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             return requestMessage;
         }

@@ -11,5 +11,7 @@ namespace GummyBears.Contracts
         public int GroupId { get; set; }
 
         public string GroupName { get; set; }
+
+        public int AuthorId { get; set; }
     }
 }

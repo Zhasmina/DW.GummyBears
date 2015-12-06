@@ -50,7 +50,7 @@ namespace GummyBears.WebApi.Controllers
             };
         }
 
-        [HttpPost]
+        [HttpDelete]
         [Route("")]
         [Authorize(Roles = "User")]
         public async Task<string> Logout()
@@ -64,7 +64,7 @@ namespace GummyBears.WebApi.Controllers
 
             await DbContext.AuthenticationRepo.DeleteAsync(AuthenticationToken);
 
-            return string.Format("Successful loguot");
+            return string.Format("Successful logout");
         }
     }
 }

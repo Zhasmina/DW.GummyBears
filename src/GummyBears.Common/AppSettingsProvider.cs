@@ -9,7 +9,7 @@ namespace GummyBears.Common
         {
             get
             {
-                return string.Format("Server={0},{1};Database={2};User Id={3};Password={4};", GetSetting("db.host"), GetSetting("db.port"), GetSetting("db.name"), GetSetting("db.user"), GetSetting("db.password"));
+                return string.Format("Server={0};Database={1};User Id={2};Password={3};", GetSetting("db.host"), GetSetting("db.name"), GetSetting("db.user"), GetSetting("db.password"));
             }
         }
 

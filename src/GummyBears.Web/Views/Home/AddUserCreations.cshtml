@@ -1,0 +1,16 @@
+﻿@model string
+@{
+    ViewBag.Title = "AddUserCreations";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>AddUserCreations</h2>
+
+<form action="" method="post" enctype="multipart/form-data">
+    @Html.Hidden(Model)
+    <label for="file">Filename:</label>
+    <input type="file" name="file" id="file" />
+
+    <input type="submit" />
+</form>
+
+

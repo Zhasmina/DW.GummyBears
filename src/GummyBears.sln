@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GummyBears.Contracts", "Gum
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GummyBears.Clients", "GummyBears.Clients\GummyBears.Clients.csproj", "{C51FCEE9-66D0-4596-9656-B6879F3D7EB0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GummyBears", "GummyBears\GummyBears.csproj", "{78C5D06D-580C-4373-978A-30C7B80321D3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GummyBears.Web", "GummyBears.Web\GummyBears.Web.csproj", "{F9EBD185-2F17-45B2-899F-67AAFD26A172}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GummyBears.CreationRightsManager", "GummyBears.CreationRightsManager\GummyBears.CreationRightsManager.csproj", "{9F95231E-0E09-42BE-98A7-ACF3BB3EE010}"
 EndProject
@@ -57,6 +57,10 @@ Global
 		{9F95231E-0E09-42BE-98A7-ACF3BB3EE010}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F95231E-0E09-42BE-98A7-ACF3BB3EE010}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F95231E-0E09-42BE-98A7-ACF3BB3EE010}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9EBD185-2F17-45B2-899F-67AAFD26A172}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9EBD185-2F17-45B2-899F-67AAFD26A172}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9EBD185-2F17-45B2-899F-67AAFD26A172}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9EBD185-2F17-45B2-899F-67AAFD26A172}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
