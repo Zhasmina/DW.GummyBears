@@ -22,5 +22,6 @@ namespace GummyBears.Repository
 
         AuthenticationRepository AuthenticationRepo { get; }
 
+        FeedsRepository FeedsRepo { get; }
     }
 }

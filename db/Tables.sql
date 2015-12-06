@@ -31,3 +31,11 @@ CREATE TABLE [dbo].[Authentications](
 	[LastSeen] [datetime] NOT NULL)
 
 GO
+
+CREATE TABLE [dbo].[Feeds](
+	[id] [int] NOT NULL PRIMARY KEY IDENTITY,
+	[text] [ntext] NOT NULL,
+	[author_id] [int] NOT NULL,
+	[created_at] [datetime] NOT NULL)
+	
+GO
