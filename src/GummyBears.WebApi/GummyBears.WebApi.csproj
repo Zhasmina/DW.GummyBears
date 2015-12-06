@@ -153,6 +153,7 @@
     <Compile Include="AuthenticationHandler.cs" />
     <Compile Include="AuthenticationTokenFilterAttribute.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CreationsController.cs" />
     <Compile Include="Controllers\CredentialsController.cs" />
     <Compile Include="Controllers\FeedsController.cs" />
     <Compile Include="Controllers\GroupsController.cs" />
