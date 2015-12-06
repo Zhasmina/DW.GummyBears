@@ -43,6 +43,7 @@
     <Compile Include="Credentials.cs" />
     <Compile Include="Error.cs" />
     <Compile Include="Feed.cs" />
+    <Compile Include="FeedsPage.cs" />
     <Compile Include="Group.cs" />
     <Compile Include="GroupParticipants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

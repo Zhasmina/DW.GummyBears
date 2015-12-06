@@ -16,7 +16,6 @@ namespace GummyBears.WebApi.Controllers
     [RoutePrefix("feeds")]
     public class FeedsController : BaseController
     {
-        //Endpoints to manage messages in feed
         public FeedsController(IDbContext dbContext)
             : base(dbContext)
         {
@@ -41,7 +40,7 @@ namespace GummyBears.WebApi.Controllers
 
         [HttpGet]
         [Authorize(Roles = "User")]
-        public async Task<FeedsPage> Get(int pageNumber = 0, int pageSize = 10)
+        public async Task<FeedsPage> GetFeed(int pageNumber = 0, int pageSize = 10)
         {
             Page<FeedsEntity> page = await DbContext.FeedsRepo.PageAsync(pageNumber * pageSize, pageSize);
             var result = new FeedsPage
@@ -59,15 +58,6 @@ namespace GummyBears.WebApi.Controllers
             };
 
             return result;
-        }
-
-        public class FeedsPage
-        {
-            public int CurrentPage { get; set; }
-            public List<Feed> Items { get; set; }
-            public int ItemsPerPage { get; set; }
-            public int TotalItems { get; set; }
-            public int TotalPages { get; set; }
         }
     }
 }
