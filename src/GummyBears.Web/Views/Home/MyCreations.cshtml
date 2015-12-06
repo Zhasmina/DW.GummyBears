@@ -1,0 +1,10 @@
+﻿@model string
+@{
+    ViewBag.Title = "MyCreations";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Hidden(Model)
+@Html.ActionLink("Add new creation", "AddUserCreations", new { token = Model })
+<h2>MyCreations</h2>
+

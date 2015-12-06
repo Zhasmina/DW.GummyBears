@@ -1,4 +1,4 @@
-﻿@model GummyBears.Contracts.UserProfile
+﻿@model GummyBears.Web.Models.TokenResponse<GummyBears.Contracts.UserProfile>
 
 @{
     ViewBag.Title = "EditProfile";
@@ -11,79 +11,82 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.UserName)
+            @Html.DisplayNameFor(model => model.Payload.UserName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.UserName)
+            @Html.DisplayFor(model => model.Payload.UserName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.FirstName)
+            @Html.DisplayNameFor(model => model.Payload.FirstName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.FirstName)
+            @Html.DisplayFor(model => model.Payload.FirstName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.LastName)
+            @Html.DisplayNameFor(model => model.Payload.LastName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.LastName)
+            @Html.DisplayFor(model => model.Payload.LastName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Email)
+            @Html.DisplayNameFor(model => model.Payload.Email)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Email)
+            @Html.DisplayFor(model => model.Payload.Email)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.TelephoneNumber)
+            @Html.DisplayNameFor(model => model.Payload.TelephoneNumber)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.TelephoneNumber)
+            @Html.DisplayFor(model => model.Payload.TelephoneNumber)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.DateOfBirth)
+            @Html.DisplayNameFor(model => model.Payload.DateOfBirth)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.DateOfBirth)
+            @Html.DisplayFor(model => model.Payload.DateOfBirth)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor(model => model.Payload.Description)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Description)
+            @Html.DisplayFor(model => model.Payload.Description)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Country)
+            @Html.DisplayNameFor(model => model.Payload.Country)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Country)
+            @Html.DisplayFor(model => model.Payload.Country)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ProfilePicturePath)
+            @Html.DisplayNameFor(model => model.Payload.ProfilePicturePath)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ProfilePicturePath)
+            @Html.DisplayFor(model => model.Payload.ProfilePicturePath)
         </dd>
     </dl>
+    @Html.HiddenFor(model => model.Token)
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Payload.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+<p>@Html.ActionLink("View My Creations", "GetUserCreations", new { token = Model.Token })
+

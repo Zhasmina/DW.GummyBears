@@ -32,9 +32,10 @@ namespace GummyBears.Clients
             return await SendRequestAsync<User>( httpRequestMessage);
         }
 
-        public async Task<Response<UserProfile>> UpdateUserAsync(UserRequest request)
+        public async Task<Response<UserProfile>> UpdateUserAsync(AuthenticatedUserRequest request)
         {
             HttpRequestMessage httpRequestMessage = BuildRequestMessageWithBody(request, string.Format("users/{0}", request.Payload.Id), HttpMethod.Post);
+            httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
 
             return await SendRequestAsync<UserProfile>(httpRequestMessage);
         }
@@ -42,7 +43,8 @@ namespace GummyBears.Clients
         public async Task<Response<UserProfile>> GetUserAsync(UserProfileRequest request)
         {
             HttpRequestMessage httpRequestMessage = BuildRequestMessage(request, string.Format("users/{0}", request.UserId), HttpMethod.Get);
-
+            httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
+            
             return await SendRequestAsync<UserProfile>(httpRequestMessage);
         }
 
@@ -121,7 +123,6 @@ namespace GummyBears.Clients
 
             var requestMessage = new HttpRequestMessage(httpMethod, string.Format("{0}/{1}{2}", new Uri(_gummyBearsUrl), location, querystring));
             requestMessage.Headers.Add("X-Correlation-Token", request.CorrelationToken);
-            requestMessage.Headers.Add("Authorization-Token", "token");
 
             return requestMessage;
         }

@@ -90,8 +90,7 @@ namespace GummyBears.WebApi.Controllers
             {
                 ThrowHttpResponseException(HttpStatusCode.NotFound, string.Format("User with id '{0}' not found.", userId));
             }
-
-
+            
             return userEntity.ToModel();
         }
 

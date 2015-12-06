@@ -4,11 +4,12 @@ using GummyBears.Clients.Responses;
 using GummyBears.Contracts;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-
+using GummyBears.Web.Models;
 namespace GummyBears.Web.Controllers
 {
     public class HomeController : Controller
@@ -71,38 +72,69 @@ namespace GummyBears.Web.Controllers
                     Payload = credentials
                 }).ConfigureAwait(false);
 
-                if (response.Status == Status.Failed) 
+                if (response.Status == Status.Failed)
                 {
                     return View(credentials);
                 }
 
-                return RedirectToAction("EditProfile", new { token = response.Payload.Token, userId = response.Payload.UserId});
+                return RedirectToAction("GetUserProfile", new { token = response.Payload.Token, userId = response.Payload.UserId });
             }
             return View();
         }
-
-        [HttpGet]
-        public async Task<ActionResult> EditProfile(string token, int userId) 
+        public ActionResult EditUserProfie(UserProfile userProfile)
         {
-           var response = await _gummyBearClient.GetUserAsync(new UserProfileRequest()
-            {
-                AuthenticationToken = token,
-                CorrelationToken = new Guid().ToString(),
-                UserId = userId
-            }).ConfigureAwait(false);
-
-           if (response.Status == Status.Failed)
-           {
-               return RedirectToAction("Login");
-           }
-
-           return View(response.Payload);
+            return View(userProfile);
         }
-
+        [HttpGet]
         public ActionResult Logout()
         {
             return View();
         }
 
+        [HttpGet]
+        public async Task<ActionResult> GetUserProfile(string token, int userId)
+        {
+            Response<UserProfile> response = await _gummyBearClient.GetUserAsync(new UserProfileRequest()
+             {
+                 AuthenticationToken = token,
+                 CorrelationToken = new Guid().ToString(),
+                 UserId = userId
+             }).ConfigureAwait(false);
+
+            if (response.Status == Status.Failed)
+            {
+                return RedirectToAction("Login");
+            }
+            GummyBears.Web.Models.TokenResponse<UserProfile> tokenResponse = new TokenResponse<UserProfile>()
+            {
+                Payload = response.Payload,
+                Token = token
+            };
+            return View("EditProfile", tokenResponse);
+        }
+
+        [HttpGet]
+        public ActionResult GetUserCreations(string token)
+        {
+            return View("MyCreations", model: token);
+        }
+
+        [HttpGet]
+        public ActionResult AddUserCreations(string token)
+        {
+            return View(model: token);
+        }
+        [HttpPost]
+        public ActionResult AddUserCreations(string token, HttpPostedFileBase file)
+        {
+            if (file.ContentLength > 0)
+            {
+                var fileName = Path.GetFileName(file.FileName);
+                var path = Path.Combine(Server.MapPath("~/App_Data/Uploads"), fileName);
+                file.SaveAs(path);
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }
