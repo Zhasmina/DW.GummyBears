@@ -16,7 +16,9 @@ namespace GummyBears.WebApi.Helpers
                 FilePath = creation.CreationPath,
                 Name = creation.CreationName,
                 Id = creation.CreationId,
-                UserId = creation.UserId
+                UserId = creation.UserId,
+                Signiture = creation.Signature,
+                CreationFootprint = creation.Footprint
             };
         }
 

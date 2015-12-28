@@ -22,6 +22,8 @@ namespace GummyBears.CreationRightsManager
                 {
                     throw new Exception("Data should not be set after data footprint.");
                 }
+
+                _data = value;
             }
         }
 

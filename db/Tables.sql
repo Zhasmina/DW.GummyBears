@@ -40,6 +40,8 @@ CREATE TABLE [dbo].[Creations](
 	[UserId] [int] NOT NULL,
 	[Name] [nvarchar](max) NOT NULL,
 	[FilePath] [nvarchar](max) NOT NULL,
+	[Signiture] [nvarchar](max) NOT NULL,
+	[CreationFootprint] [nvarchar](max) NOT NULL
 PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

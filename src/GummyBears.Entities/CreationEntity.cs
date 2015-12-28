@@ -18,5 +18,11 @@ namespace GummyBears.Entities
 
         [Column("FilePath")]
         public string FilePath { get; set; }
+
+        [Column("Signiture")]
+        public string Signiture { get; set; }
+
+        [Column("CreationFootprint")]
+        public string CreationFootprint { get; set; }
     }
 }
