@@ -16,5 +16,9 @@ namespace GummyBears.Contracts
         public string CreationName { get; set; }
 
         public string CreationPath { get; set; }
+
+        public string Footprint { get; set; }
+
+        public string Signature { get; set; }
     }
 }
