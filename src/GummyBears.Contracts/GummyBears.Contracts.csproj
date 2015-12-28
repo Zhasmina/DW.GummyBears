@@ -32,6 +32,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,7 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthenticationData.cs" />
+    <Compile Include="Creation.cs" />
     <Compile Include="Credentials.cs" />
+    <Compile Include="EmptyResponse.cs" />
     <Compile Include="Error.cs" />
     <Compile Include="Feed.cs" />
     <Compile Include="FeedsPage.cs" />

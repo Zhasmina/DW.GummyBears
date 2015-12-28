@@ -10,6 +10,7 @@ using GummyBears.Clients.Responses;
 using GummyBears.Contracts;
 using GummyBears.Clients.Requests;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace GummyBears.Clients
 {
@@ -51,8 +52,33 @@ namespace GummyBears.Clients
         public async Task<Response<Group>> GetAllUserGroups(UserProfileRequest request)
         {
             HttpRequestMessage httpRequestMessage = BuildRequestMessage(request, string.Format("users/{0}", request.UserId), HttpMethod.Get);
+            httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
 
             return await SendRequestAsync<Group>(httpRequestMessage);
+        }
+
+        public async Task<Response<IEnumerable<Creation>>> GetAllUserCreations(UserProfileRequest request)
+        {
+            HttpRequestMessage httpRequestMessage = BuildRequestMessage(request, string.Format("users/{0}/creations", request.UserId), HttpMethod.Get);
+            httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
+
+            return await SendRequestAsync<IEnumerable<Creation>>(httpRequestMessage);
+        }
+
+        public async Task<Response<Creation>> CreateUserCreations(AuthenticatedCreationRequest request)
+        {
+            HttpRequestMessage httpRequestMessage = BuildRequestMessageWithBody(request, string.Format("users/{0}/creations", request.Payload.UserId), HttpMethod.Post);
+            httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
+
+            return await SendRequestAsync<Creation>(httpRequestMessage);
+        }
+
+        public async Task<Response<EmptyResponse>> DeleteCreation(AuthenticatedCreationRequest request)
+        {
+            HttpRequestMessage httpRequestMessage = BuildRequestMessage(request, string.Format("users/{0}/creations/{1}", request.Payload.UserId, request.Payload.CreationId), HttpMethod.Delete);
+            httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
+
+            return await SendRequestAsync<EmptyResponse>(httpRequestMessage);
         }
 
         public async Task<Response<string>> Logout(AuthenticationTokenRequest request)
@@ -67,6 +93,29 @@ namespace GummyBears.Clients
             return await SendRequestAsync<AuthenticationData>(message);
         }
 
+        public async Task<Response<Feed>> PostToFeed(AuthenticatedFeedRequest request)
+        {
+            HttpRequestMessage httpRequestMessage = BuildRequestMessageWithBody(request, "feeds", HttpMethod.Post);
+            httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
+
+            return await SendRequestAsync<Feed>(httpRequestMessage);
+        }
+
+        public async Task<Response<FeedsPage>> GetFeeds(PagedRequest request)
+        {
+            string requestString = "api/feeds" +
+                (request.PageNumber.HasValue || request.PageSize.HasValue ? "?" : string.Empty) +
+                (request.PageNumber.HasValue ? "pageNumber=" + request.PageNumber.Value.ToString() : string.Empty) +
+                (request.PageSize.HasValue ? 
+                    (request.PageNumber.HasValue ? 
+                        "&pageSize=" + request.PageSize.Value.ToString() :
+                        "pageSize=" + request.PageSize.Value.ToString()) :
+                string.Empty); 
+            HttpRequestMessage httpRequestMessage = BuildRequestMessage(request, requestString, HttpMethod.Get);
+            httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
+
+            return await SendRequestAsync<FeedsPage>(httpRequestMessage);
+        }
         private async Task<Response<TResponse>> SendRequestAsync<TResponse>(HttpRequestMessage requestMessage)
         {
             var response = await _messageInvoker.SendAsync(requestMessage, CancellationToken.None).ConfigureAwait(false);

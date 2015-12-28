@@ -173,6 +173,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AuthenticatedFeedModel.cs" />
+    <Compile Include="Models\AuthenticatedUserModel.cs" />
     <Compile Include="Models\TokenResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -192,6 +194,8 @@
     <Content Include="Views\Home\EditUserProfie.cshtml" />
     <Content Include="Views\Home\MyCreations.cshtml" />
     <Content Include="Views\Home\AddUserCreations.cshtml" />
+    <Content Include="Views\Home\GetFeeds.cshtml" />
+    <Content Include="Views\Home\CreatePostInFeed.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -225,9 +229,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>4719</DevelopmentServerPort>
+          <DevelopmentServerPort>4859</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:4719/</IISUrl>
+          <IISUrl>http://localhost:4859/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

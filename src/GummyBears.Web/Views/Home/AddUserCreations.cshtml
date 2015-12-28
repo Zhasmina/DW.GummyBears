@@ -1,4 +1,4 @@
-﻿@model string
+﻿@model GummyBears.Web.Models.AuthenticatedUserModel
 @{
     ViewBag.Title = "AddUserCreations";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,11 +6,14 @@
 <h2>AddUserCreations</h2>
 
 <form action="" method="post" enctype="multipart/form-data">
-    @Html.Hidden(Model)
-    <label for="file">Filename:</label>
+    @Html.Hidden(Model.Token)
+    @Html.Hidden("userId", Model.UserId)
+    <label for="creationName">Creation Name:</label>
+    <input type="text" name="creationName" id="creationName" />
+    <label for="file">File:</label>
     <input type="file" name="file" id="file" />
 
     <input type="submit" />
-</form>
+</form> 
 
 

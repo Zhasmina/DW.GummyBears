@@ -26,10 +26,5 @@ namespace GummyBears.WebApi.Controllers
 
             throw new HttpResponseException(response);
         }
-
-        public void SetAuthenticationToken(string token)
-        {
-            AuthenticationToken = token;
-        }
     }
 }

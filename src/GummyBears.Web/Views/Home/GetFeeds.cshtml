@@ -1,0 +1,41 @@
+﻿@model GummyBears.Contracts.FeedsPage
+
+@{
+    ViewBag.Title = "GetFeeds";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>GetFeeds</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CurrentPage)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ItemsPerPage)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TotalItems)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TotalPages)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.Items) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Text)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AuthorId)
+        </td>
+    </tr>
+}
+
+</table>

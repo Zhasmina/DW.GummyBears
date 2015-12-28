@@ -88,5 +88,9 @@
     @Html.ActionLink("Edit", "Edit", new { id = Model.Payload.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
-<p>@Html.ActionLink("View My Creations", "GetUserCreations", new { token = Model.Token })
-
+<p>
+    @Html.ActionLink("View My Creations", "GetUserCreations", new { token = Model.Token, userId = Model.Payload.Id })
+</p>
+<p>
+    @Html.ActionLink("Feeds", "GetFeeds", new { token = Model.Token })
+</p>

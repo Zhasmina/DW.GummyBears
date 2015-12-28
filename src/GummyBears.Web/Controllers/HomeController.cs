@@ -81,10 +81,12 @@ namespace GummyBears.Web.Controllers
             }
             return View();
         }
-        public ActionResult EditUserProfie(UserProfile userProfile)
+
+        public ActionResult EditUserProfile(UserProfile userProfile)
         {
             return View(userProfile);
         }
+        
         [HttpGet]
         public ActionResult Logout()
         {
@@ -108,31 +110,128 @@ namespace GummyBears.Web.Controllers
             GummyBears.Web.Models.TokenResponse<UserProfile> tokenResponse = new TokenResponse<UserProfile>()
             {
                 Payload = response.Payload,
-                Token = token
+                Token = token,
+                UserId = response.Payload.Id
             };
             return View("EditProfile", tokenResponse);
         }
 
         [HttpGet]
-        public ActionResult GetUserCreations(string token)
+        public async Task<ActionResult> GetUserCreations(string token, int userId)
         {
-            return View("MyCreations", model: token);
+            Response<IEnumerable<Creation>> response = await _gummyBearClient.GetAllUserCreations(new UserProfileRequest()
+            {
+                AuthenticationToken = token,
+                UserId = userId,
+                CorrelationToken = new Guid().ToString()
+            }).ConfigureAwait(false);
+
+            if (response.Status == Status.Failed)
+            {
+                return RedirectToAction("Index");
+            }
+
+            TokenResponse<IEnumerable<Creation>> tokenResponse = new TokenResponse<IEnumerable<Creation>>()
+            {
+                Payload = response.Payload,
+                Token = token,
+                UserId = userId
+            };
+
+            return View("MyCreations", model: tokenResponse);
         }
 
         [HttpGet]
-        public ActionResult AddUserCreations(string token)
+        public ActionResult AddUserCreations(string token, int userId)
         {
-            return View(model: token);
+            return View(model: new AuthenticatedUserModel() { Token = token, UserId = userId });
         }
+
         [HttpPost]
-        public ActionResult AddUserCreations(string token, HttpPostedFileBase file)
+        public async Task<ActionResult> AddUserCreations(string token, string creationName, int userId, HttpPostedFileBase file)
         {
             if (file.ContentLength > 0)
             {
                 var fileName = Path.GetFileName(file.FileName);
                 var path = Path.Combine(Server.MapPath("~/App_Data/Uploads"), fileName);
                 file.SaveAs(path);
+
+                var response = await _gummyBearClient.CreateUserCreations(new AuthenticatedCreationRequest()
+                 {
+                     AuthenticationToken = token,
+                     CorrelationToken = new Guid().ToString(),
+                     Payload = new Creation()
+                     {
+                         CreationPath = path,
+                         CreationName = creationName,
+                         UserId = userId
+                     }
+                 }).ConfigureAwait(false);
+
+                if (response.Status == Status.Failed)
+                {
+                    return RedirectToAction("Index");
+                }
             }
+
+            return RedirectToAction("GetUserCreations", new { token = token, userId = userId });
+        }
+   
+        public async Task<ActionResult> DeleteCreation(string token, int creationId, int userId)
+        {
+           var response = await _gummyBearClient.DeleteCreation(new AuthenticatedCreationRequest()
+            {
+                AuthenticationToken = token,
+                CorrelationToken = new Guid().ToString(),
+                Payload = new Creation
+                {
+                    CreationId = creationId,
+                    UserId = userId
+                }
+            }).ConfigureAwait(false);
+
+           return RedirectToAction("GetUserCreations", new { token = token, userId = userId });
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetFeeds(string token, int userId)
+        {
+            var response = await _gummyBearClient.GetFeeds(new PagedRequest() 
+            { 
+                CorrelationToken = new Guid().ToString(),
+                AuthenticationToken = token
+            }).ConfigureAwait(false);
+
+            if (response.Status == Status.Failed)
+            {
+                RedirectToAction("Index");
+            }
+
+            return View(response.Payload);
+        }
+
+        [HttpGet]
+        public ActionResult CreatePostInFeed(string token, int userId)
+        {
+            return View(new AuthenticatedFeedModel()
+            {
+                AuthenticationToken = token, 
+                UserId = userId 
+            });
+        }
+        [HttpPost]
+        public async Task<ActionResult> CreatePostInFeed(string token)
+        {
+            await _gummyBearClient.PostToFeed(new AuthenticatedFeedRequest()
+            {
+                AuthenticationToken = token,
+                CorrelationToken = new Guid().ToString(),
+                Payload = new Feed()
+                {
+                    AuthorId = 2,
+                    Text = ""
+                }
+            }).ConfigureAwait(false);
 
             return RedirectToAction("Index");
         }

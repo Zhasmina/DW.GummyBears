@@ -22,16 +22,9 @@ namespace GummyBears.WebApi.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "User")]
+        [AuthenticationTokenFilter]
         public async Task<Feed> CreateFeed([FromBody]Feed feed)
         {
-            AuthenticationEntity authentication = await DbContext.AuthenticationRepo.GetSingleOrDefaultAsync(AuthenticationToken);
-
-            if (authentication == null || authentication.UserId != feed.AuthorId)
-            {
-                ThrowHttpResponseException(System.Net.HttpStatusCode.Unauthorized, "Wrong authentication token.");
-            }
-
             var createdFeed = await DbContext.FeedsRepo.CreateAsync(feed.ToEntity());
             feed.Id = createdFeed.Id;
 
@@ -39,10 +32,11 @@ namespace GummyBears.WebApi.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "User")]
+        [AuthenticationTokenFilter]
         public async Task<FeedsPage> GetFeed(int pageNumber = 0, int pageSize = 10)
         {
-            Page<FeedsEntity> page = await DbContext.FeedsRepo.PageAsync(pageNumber * pageSize, pageSize);
+            Page<FeedsEntity> page = await DbContext.FeedsRepo.PageAsync(pageNumber * pageSize, pageSize).ConfigureAwait(false);
+           
             var result = new FeedsPage
             {
                 CurrentPage = page.CurrentPage,
@@ -50,7 +44,8 @@ namespace GummyBears.WebApi.Controllers
                 {
                     AuthorId = i.AuthorId,
                     Id = i.Id,
-                    Text = i.Text
+                    Text = i.Text,
+                    
                 }).ToList(),
                 ItemsPerPage = page.ItemsPerPage,
                 TotalItems = page.TotalItems,

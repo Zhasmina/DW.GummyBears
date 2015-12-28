@@ -1,10 +1,18 @@
-﻿@model string
+﻿@model GummyBears.Web.Models.TokenResponse<IEnumerable<GummyBears.Contracts.Creation>>
 @{
     ViewBag.Title = "MyCreations";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@Html.Hidden(Model)
-@Html.ActionLink("Add new creation", "AddUserCreations", new { token = Model })
+@Html.Hidden(Model.Token)
+@Html.Hidden("userId", Model.UserId)
+@foreach(GummyBears.Contracts.Creation item in Model.Payload)
+{
+    @Html.Label(item.CreationName)
+    @Html.Display(item.CreationName)
+    @Html.ActionLink("Delete", "DeleteCreation", new {token = Model.Token, userId = Model.UserId, creationId = item.CreationId})
+}
+
+@Html.ActionLink("Add new creation", "AddUserCreations", new { token = Model.Token, userId = Model.UserId })
 <h2>MyCreations</h2>
 
