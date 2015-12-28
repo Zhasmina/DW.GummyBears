@@ -137,6 +137,10 @@
       <Project>{d6124233-dde7-4dc9-8854-41d7ad564632}</Project>
       <Name>GummyBears.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GummyBears.CreationRightsManager\GummyBears.CreationRightsManager.csproj">
+      <Project>{9f95231e-0e09-42be-98a7-acf3bb3ee010}</Project>
+      <Name>GummyBears.CreationRightsManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GummyBears.Entities\GummyBears.Entities.csproj">
       <Project>{e26c6525-75b8-4bed-b545-31f3db3840f9}</Project>
       <Name>GummyBears.Entities</Name>

@@ -9,23 +9,26 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using GummyBears.WebApi.Helpers;
+using GummyBears.CreationRightsManager;
+using System.IO;
 
 namespace GummyBears.WebApi.Controllers
 {
-     [System.Web.Http.RoutePrefix("users")]
+    [System.Web.Http.RoutePrefix("users")]
     public class CreationsController : BaseController
     {
+        private readonly Manager _creationRightsManager;
         //create record for creation
         //get user's records ... paths :)
-        public CreationsController(IDbContext dbContext)
-            :base(dbContext)
+        public CreationsController(IDbContext dbContext, Manager creationRightsManager)
+            : base(dbContext)
         {
-
+            _creationRightsManager = creationRightsManager;
         }
 
         [HttpGet, Route("{userId:int}/creations")]
         [AuthenticationTokenFilter]
-        public async Task<List<Creation>> GetAllUserCreations([FromUri]int userId)
+        public async Task<List<Contracts.Creation>> GetAllUserCreations([FromUri]int userId)
         {
             UserEntity user = await DbContext.UsersRepo.GetSingleOrDefaultAsync(userId);
             if (user == null)
@@ -40,10 +43,25 @@ namespace GummyBears.WebApi.Controllers
 
         [HttpPost, Route("{userId:int}/creations")]
         [AuthenticationTokenFilter]
-        public async Task<Creation> AddCreation(Creation creation) 
+        public async Task<Contracts.Creation> AddCreation(Contracts.Creation creation)
         {
-            var createdCreation = await DbContext.CreationsRepo.CreateAsync(creation.ToEntity());
-            creation.CreationId = createdCreation.Id;
+            UserEntity author = await DbContext.UsersRepo.GetSingleOrDefaultAsync(creation.UserId);
+            var authorString = string.Format("{0} {1}, a.k.a {2}", author.FirstName, author.LastName, author.UserName);
+            var fileData = File.ReadAllBytes(creation.CreationPath);
+            var rightCreation = new CreationRightsManager.Creation()
+            {
+                Author = authorString,
+                Owner = authorString,
+                TimeOfCreation = DateTime.UtcNow,
+                Data = new MemoryStream(fileData)
+            };
+
+            CreationCertificateData cert = _creationRightsManager.Register(rightCreation);
+            creation.Footprint = cert.CreationFootprint;
+            creation.Signature = cert.Signature;
+
+            var savedCreation = await DbContext.CreationsRepo.CreateAsync(creation.ToEntity());
+            creation.CreationId = savedCreation.Id;
 
             return creation;
         }
@@ -53,7 +71,7 @@ namespace GummyBears.WebApi.Controllers
         public async Task<EmptyResponse> DeleteCreation(int userId, int creationId)
         {
             UserEntity user = await DbContext.UsersRepo.GetSingleOrDefaultAsync(userId);
-            
+
             if (user == null)
             {
                 ThrowHttpResponseException(HttpStatusCode.NotFound, string.Format("User with id '{0}' not found.", userId));
@@ -63,7 +81,7 @@ namespace GummyBears.WebApi.Controllers
 
             if (creation == null)
             {
-                ThrowHttpResponseException(HttpStatusCode.NotFound, string.Format("Creation with id '{0}' not found.", creationId)); 
+                ThrowHttpResponseException(HttpStatusCode.NotFound, string.Format("Creation with id '{0}' not found.", creationId));
             }
 
             await DbContext.CreationsRepo.DeleteAsync(creationId).ConfigureAwait(false);

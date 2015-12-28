@@ -29,6 +29,7 @@ namespace GummyBears.WebApi.App_Start
             builder.RegisterType<DbContext>().As<IDbContext>();
 
             builder.RegisterType<TokenGenerator>().As<ITokenGenerator>();
+            builder.RegisterType<CreationRightsManager.Manager>();
 
             var container = builder.Build();
 
