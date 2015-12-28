@@ -1,4 +1,4 @@
-﻿@model GummyBears.Contracts.FeedsPage
+﻿@model GummyBears.Web.Models.AuthenticatedFeedsPageModel
 
 @{
     ViewBag.Title = "GetFeeds";
@@ -8,7 +8,7 @@
 <h2>GetFeeds</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Post message", "CreatePostInFeed", new { token = Model.AuthenticationToken, userId = Model.UserId })
 </p>
 <table class="table">
     <tr>

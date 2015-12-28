@@ -92,5 +92,5 @@
     @Html.ActionLink("View My Creations", "GetUserCreations", new { token = Model.Token, userId = Model.Payload.Id })
 </p>
 <p>
-    @Html.ActionLink("Feeds", "GetFeeds", new { token = Model.Token })
+    @Html.ActionLink("Feeds", "GetFeeds", new { token = Model.Token, userId = Model.Payload.Id })
 </p>

@@ -95,7 +95,7 @@ namespace GummyBears.Clients
 
         public async Task<Response<Feed>> PostToFeed(AuthenticatedFeedRequest request)
         {
-            HttpRequestMessage httpRequestMessage = BuildRequestMessageWithBody(request, "feeds", HttpMethod.Post);
+            HttpRequestMessage httpRequestMessage = BuildRequestMessageWithBody(request, "api/feeds", HttpMethod.Post);
             httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
 
             return await SendRequestAsync<Feed>(httpRequestMessage);

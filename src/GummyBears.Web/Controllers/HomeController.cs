@@ -207,7 +207,16 @@ namespace GummyBears.Web.Controllers
                 RedirectToAction("Index");
             }
 
-            return View(response.Payload);
+            return View(new AuthenticatedFeedsPageModel 
+            {
+                AuthenticationToken = token,
+                UserId = userId,
+                CurrentPage = response.Payload.CurrentPage,
+                Items = response.Payload.Items,
+                ItemsPerPage = response.Payload.ItemsPerPage,
+                TotalItems = response.Payload.TotalItems,
+                TotalPages = response.Payload.TotalPages
+            });
         }
 
         [HttpGet]
@@ -220,16 +229,16 @@ namespace GummyBears.Web.Controllers
             });
         }
         [HttpPost]
-        public async Task<ActionResult> CreatePostInFeed(string token)
+        public async Task<ActionResult> CreatePostInFeed(AuthenticatedFeedModel authenticatedFeedModel)
         {
             await _gummyBearClient.PostToFeed(new AuthenticatedFeedRequest()
             {
-                AuthenticationToken = token,
+                AuthenticationToken = authenticatedFeedModel.AuthenticationToken,
                 CorrelationToken = new Guid().ToString(),
                 Payload = new Feed()
                 {
-                    AuthorId = 2,
-                    Text = ""
+                    AuthorId = authenticatedFeedModel.UserId,
+                    Text = authenticatedFeedModel.MessageText
                 }
             }).ConfigureAwait(false);
 
