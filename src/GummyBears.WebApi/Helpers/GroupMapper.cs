@@ -14,7 +14,17 @@ namespace GummyBears.WebApi.Helpers
             return new GroupEntity
             {
                 Id = group.GroupId,
-                Name = group.GroupName
+                Name = group.GroupName,
+            };
+        }
+
+        public static Group ToContract(this GroupEntity groupEntity)
+        {
+            return new Group
+            {
+                GroupId = groupEntity.Id,
+                GroupName = groupEntity.Name,
+                AuthorId = groupEntity.AuthorId
             };
         }
     }

@@ -9,7 +9,7 @@ namespace GummyBears.Clients
     public interface IGummyBearClient
     {
         Task<GummyBears.Clients.Responses.Response<GummyBears.Contracts.User>> CreateUserAsync(GummyBears.Clients.Requests.UserRequest request);
-        Task<Response<Group>> GetAllUserGroups(GummyBears.Clients.Requests.UserProfileRequest request);
+        Task<Response<List<Group>>> GetAllUserGroups(UserProfileRequest request);
         Task<Response<UserProfile>> GetUserAsync(GummyBears.Clients.Requests.UserProfileRequest request);
         Task<Response<AuthenticationData>> Login(GummyBears.Clients.Requests.AuthenticationRequest request);
         Task<Response<string>> Logout(AuthenticationTokenRequest request);
@@ -21,5 +21,9 @@ namespace GummyBears.Clients
         Task<Response<FeedsPage>> GetFeeds(PagedRequest request);
 
         Task<Response<Feed>> PostToFeed(AuthenticatedFeedRequest request);
+
+        Task<Response<Group>> CreateGroup(AuthenticatedGroupRequest request);
+
+        Task<Response<IEnumerable<GroupMessage>>> GetMessagesInGroup(GroupMessagesRequest request);
     }
 }

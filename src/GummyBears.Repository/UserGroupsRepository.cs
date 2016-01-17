@@ -38,6 +38,20 @@ namespace GummyBears.Repository
             }
         }
 
+        public async Task<IEnumerable<GroupUserEntity>> GetByGroupId(int groupId)
+        {
+            const string sql = @"
+                SELECT distinct * FROM UserGroups 
+                WHERE GroupId =@GroupId";
+
+            using (IDbConnection connection = CreateConnection())
+            {
+                return (await connection.QueryAsync<GroupUserEntity>(sql, new
+                {
+                    GroupId = groupId
+                }).ConfigureAwait(false));
+            }
+        }
 
     }
 }

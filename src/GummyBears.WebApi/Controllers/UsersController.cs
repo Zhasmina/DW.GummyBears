@@ -95,8 +95,8 @@ namespace GummyBears.WebApi.Controllers
         }
 
         [HttpGet, Route("{userId}/groups")]
-        [Authorize(Roles = "User")]
-        public async Task<List<GroupEntity>> GetAllUserGroups([FromUri]int userId)
+        [AuthenticationTokenFilter]
+        public async Task<List<Group>> GetAllUserGroups([FromUri]int userId)
         {
            UserEntity user = await DbContext.UsersRepo.GetSingleOrDefaultAsync(userId);
            if (user == null)
@@ -106,7 +106,7 @@ namespace GummyBears.WebApi.Controllers
 
            IEnumerable<GroupEntity> groups = await DbContext.GroupsRepo.GetUserGroups(userId);
 
-            return groups.ToList();
+           return groups.Select(g => g.ToContract()).ToList();
         }
     }
 }

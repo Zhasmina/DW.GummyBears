@@ -6,10 +6,14 @@ using System.Threading.Tasks;
 
 namespace GummyBears.Contracts
 {
-    public class GroupParticipants
+    public class GroupMessage
     {
         public int GroupId { get; set; }
 
-        public int ParticipantId { get; set; }
+        public int UserId { get; set; }
+
+        public string Message { get; set; }
+
+        public DateTime SendDate { get; set; }
     }
 }

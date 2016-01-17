@@ -21,8 +21,8 @@ namespace GummyBears.WebApi.Controllers
 
         [HttpGet]
         [Route("{groupId:int}")]
-        [Authorize(Roles = "User")]
-        public async Task<IEnumerable<GroupMessageEntity>> GetMessagesInGroup(int groupId)
+        [AuthenticationTokenFilter]
+        public async Task<IEnumerable<GroupMessage>> GetMessagesInGroup(int groupId)
         {
             AuthenticationEntity authentication = await DbContext.AuthenticationRepo.GetSingleOrDefaultAsync(AuthenticationToken);
 
@@ -42,16 +42,16 @@ namespace GummyBears.WebApi.Controllers
 
             IEnumerable<GroupMessageEntity> messages = await DbContext.GroupMessagesRepo.GetGroupMessages(groupId);
 
-            return messages;
+            return messages.Select(m => m.ToContract()).ToList();
         }
 
         [HttpPost]
         [Route("")]
-        [Authorize(Roles = "User")]
+        [AuthenticationTokenFilter]
         public async Task<Group> CreateGroup([FromBody]Group group)
         {
             AuthenticationEntity authentication = await DbContext.AuthenticationRepo.GetSingleOrDefaultAsync(AuthenticationToken);
-            
+
             if (authentication == null || authentication.UserId != group.AuthorId)
             {
                 ThrowHttpResponseException(System.Net.HttpStatusCode.Unauthorized, "Wrong authentication token.");
@@ -76,8 +76,8 @@ namespace GummyBears.WebApi.Controllers
         //TODO not finished yet
         [HttpPost]
         [Route("{groupId:int}/participants")]
-        [Authorize(Roles = "User")]
-        public async Task<GroupParticipants> AddParticipants(int groupId, [FromBody]GroupParticipants groupParticipants) 
+        [AuthenticationTokenFilter]
+        public async Task<IEnumerable<GroupParticipants>> AddParticipants(int groupId, [FromBody]GroupParticipants groupParticipants)
         {
             GroupEntity group = await DbContext.GroupsRepo.GetSingleOrDefaultAsync(groupId);
 
@@ -93,9 +93,31 @@ namespace GummyBears.WebApi.Controllers
                 ThrowHttpResponseException(System.Net.HttpStatusCode.Unauthorized, "Wrong authentication token.");
             }
 
-            //DbContext.GroupsUsersRepo
+            IEnumerable<GroupUserEntity> groupUsers = await DbContext.GroupsUsersRepo.GetByGroupId(groupId);
+            return groupUsers.Select(gm => gm.ToContract()).ToList();
+        }
 
-            return null;
+        [HttpGet]
+        [Route("{groupId:int}/participants")]
+        [AuthenticationTokenFilter]
+        public async Task<IEnumerable<GroupParticipants>> GetParticipants(int groupId)
+        {
+            GroupEntity group = await DbContext.GroupsRepo.GetSingleOrDefaultAsync(groupId);
+
+            if (group == null)
+            {
+                ThrowHttpResponseException(System.Net.HttpStatusCode.BadRequest, string.Format("Group with id {0} not exists.", groupId));
+            }
+
+            AuthenticationEntity authentication = await DbContext.AuthenticationRepo.GetSingleOrDefaultAsync(AuthenticationToken);
+
+            if (authentication == null || authentication.UserId != group.AuthorId)
+            {
+                ThrowHttpResponseException(System.Net.HttpStatusCode.Unauthorized, "Wrong authentication token.");
+            }
+
+            IEnumerable<GroupUserEntity> groupUsers = await DbContext.GroupsUsersRepo.GetByGroupId(groupId);
+            return groupUsers.Select(gm => gm.ToContract()).ToList();
         }
 
         // GetParticipants

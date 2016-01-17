@@ -1,0 +1,38 @@
+﻿@model GummyBears.Web.Models.AuthenticatedUserGroupsModel
+
+@{
+    ViewBag.Title = "GetGroups";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>GetGroups</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+@Html.HiddenFor(m => m.UserId)
+@Html.HiddenFor(m => m.AuthenticationToken)
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.Label("GroupId")
+        </th>
+        <th>
+           @Html.Label("GroupName")
+        </th>
+    </tr>
+
+@foreach (var item in Model.Groups) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.GroupId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GroupName)
+        </td>
+    </tr>
+}
+
+</table>

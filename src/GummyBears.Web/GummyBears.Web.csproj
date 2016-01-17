@@ -175,6 +175,9 @@
     </Compile>
     <Compile Include="Models\AuthenticatedFeedModel.cs" />
     <Compile Include="Models\AuthenticatedFeedsPageModel.cs" />
+    <Compile Include="Models\AuthenticatedGroupMessagesModel.cs" />
+    <Compile Include="Models\AuthenticatedGroupModel.cs" />
+    <Compile Include="Models\AuthenticatedUserGroupsModel.cs" />
     <Compile Include="Models\AuthenticatedUserModel.cs" />
     <Compile Include="Models\TokenResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -197,6 +200,8 @@
     <Content Include="Views\Home\AddUserCreations.cshtml" />
     <Content Include="Views\Home\GetFeeds.cshtml" />
     <Content Include="Views\Home\CreatePostInFeed.cshtml" />
+    <Content Include="Views\Home\GetGroups.cshtml" />
+    <Content Include="Views\Home\GetMessagesInGroup.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

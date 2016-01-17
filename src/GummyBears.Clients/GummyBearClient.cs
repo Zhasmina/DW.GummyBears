@@ -49,12 +49,12 @@ namespace GummyBears.Clients
             return await SendRequestAsync<UserProfile>(httpRequestMessage);
         }
 
-        public async Task<Response<Group>> GetAllUserGroups(UserProfileRequest request)
+        public async Task<Response<List<Group>>> GetAllUserGroups(UserProfileRequest request)
         {
-            HttpRequestMessage httpRequestMessage = BuildRequestMessage(request, string.Format("users/{0}", request.UserId), HttpMethod.Get);
+            HttpRequestMessage httpRequestMessage = BuildRequestMessage(request, string.Format("users/{0}/groups", request.UserId), HttpMethod.Get);
             httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
 
-            return await SendRequestAsync<Group>(httpRequestMessage);
+            return await SendRequestAsync<List<Group>>(httpRequestMessage);
         }
 
         public async Task<Response<IEnumerable<Creation>>> GetAllUserCreations(UserProfileRequest request)
@@ -116,6 +116,24 @@ namespace GummyBears.Clients
 
             return await SendRequestAsync<FeedsPage>(httpRequestMessage);
         }
+
+        public async Task<Response<Group>> CreateGroup(AuthenticatedGroupRequest request)
+        {
+
+            HttpRequestMessage httpRequestMessage = BuildRequestMessageWithBody(request,"groups", HttpMethod.Post);
+            httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
+
+            return await SendRequestAsync<Group>(httpRequestMessage);
+        }
+
+        public async Task<Response<IEnumerable<GroupMessage>>> GetMessagesInGroup(GroupMessagesRequest request)
+        {
+            HttpRequestMessage httpRequestMessage = BuildRequestMessage(request, string.Format("groups/{0}", request.GroupId), HttpMethod.Get);
+            httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
+
+            return await SendRequestAsync<IEnumerable<GroupMessage>>(httpRequestMessage);
+        }
+
         private async Task<Response<TResponse>> SendRequestAsync<TResponse>(HttpRequestMessage requestMessage)
         {
             var response = await _messageInvoker.SendAsync(requestMessage, CancellationToken.None).ConfigureAwait(false);

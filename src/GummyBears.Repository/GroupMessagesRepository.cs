@@ -23,7 +23,7 @@ namespace GummyBears.Repository
         public async Task<IEnumerable<GroupMessageEntity>> GetGroupMessages(int groupId)
         {
             const string sql = @"
-                SELECT * FROM GroupMessages  
+                SELECT distinct * FROM GroupMessages  
                 WHERE GroupId = @GroupId";
 
             using (IDbConnection connection = CreateConnection())
