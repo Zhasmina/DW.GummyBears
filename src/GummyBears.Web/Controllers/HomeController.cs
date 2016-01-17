@@ -57,13 +57,14 @@ namespace GummyBears.Web.Controllers
         }
         #endregion
 
+        #region Login/out
+
         [HttpGet]
         public ActionResult Login()
         {
             return View(new Credentials());
         }
 
-        #region Login/out
         [HttpPost]
         public async Task<ActionResult> Login(Credentials credentials)
         {
@@ -126,7 +127,7 @@ namespace GummyBears.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> GetUserCreations(string token, int userId)
         {
-            Response<IEnumerable<Creation>> response = await _gummyBearClient.GetAllUserCreations(new UserProfileRequest()
+            Response<IEnumerable<Creation>> response = await _gummyBearClient.GetUserCreations(new UserProfileRequest()
             {
                 AuthenticationToken = token,
                 UserId = userId,
@@ -332,6 +333,50 @@ namespace GummyBears.Web.Controllers
                 UserId = userId,
                 GroupMessages = response.Payload
             });
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetGroupParticipants(string token, int userId, int groupId)
+        {
+          Response<IEnumerable<GroupParticipants>> groupParticipatsResponse = await _gummyBearClient.GetParticipantsInGroup(new AuthenticatedGroupRequest
+            {
+                AuthenticationToken = token,
+                CorrelationToken = Guid.NewGuid().ToString(),
+                Payload = new Group
+                {
+                    GroupId = groupId
+                }
+            });
+
+          if (groupParticipatsResponse.Status == Status.Failed)
+          {
+              return RedirectToAction("Index");
+          }
+
+          return View(new AuthenticatedGroupParticipantsModel
+            {
+                AuthenticationToken = token,
+                GroupId = groupId,
+                UserId = userId,
+                GroupParticipants = groupParticipatsResponse.Payload
+            });
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> AddParticipant(string token, int userId, int groupId)
+        {
+            return View(new AuthenticatedGroupParticipantsModel()
+                {
+                    AuthenticationToken = token,
+                    GroupId = groupId,
+                    UserId = userId
+                });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AddParticipant()
+        {
+            return RedirectToAction("Index");
         }
     }
 }

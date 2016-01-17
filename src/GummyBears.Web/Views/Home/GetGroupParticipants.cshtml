@@ -1,0 +1,43 @@
+﻿@model GummyBears.Web.Models.AuthenticatedGroupParticipantsModel
+
+@{
+    ViewBag.Title = "GetGroupParticipants";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>GetGroupParticipants</h2>
+
+<div>
+    <h4>AuthenticatedGroupParticipantsModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AuthenticationToken)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AuthenticationToken)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GroupId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GroupId)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -14,7 +14,7 @@ namespace GummyBears.Clients
         Task<Response<AuthenticationData>> Login(GummyBears.Clients.Requests.AuthenticationRequest request);
         Task<Response<string>> Logout(AuthenticationTokenRequest request);
         Task<Response<UserProfile>> UpdateUserAsync(AuthenticatedUserRequest request);
-        Task<Response<IEnumerable<Creation>>> GetAllUserCreations(UserProfileRequest request);
+        Task<Response<IEnumerable<Creation>>> GetUserCreations(UserProfileRequest request);
         Task<Response<Creation>> CreateUserCreations(AuthenticatedCreationRequest request);
         Task<Response<EmptyResponse>> DeleteCreation(AuthenticatedCreationRequest request);
 
@@ -25,5 +25,13 @@ namespace GummyBears.Clients
         Task<Response<Group>> CreateGroup(AuthenticatedGroupRequest request);
 
         Task<Response<IEnumerable<GroupMessage>>> GetMessagesInGroup(GroupMessagesRequest request);
+
+        Task<Response<IEnumerable<GroupParticipants>>> AddParticipantsInGroup(AuthenticatedGroupParticipantsRequest request);
+
+        Task<Response<IEnumerable<GroupParticipants>>> GetParticipantsInGroup(AuthenticatedGroupRequest request);
+
+        Task<Response<GroupCreation>> AttackFileToGroup(AuthenticatedGroupCreationsRequest request);
+
+        Task<Response<IEnumerable<Creation>>> GetAttachedFilesInGroup(AuthenticatedGroupCreationsRequest request);
     }
 }

@@ -57,7 +57,7 @@ namespace GummyBears.Clients
             return await SendRequestAsync<List<Group>>(httpRequestMessage);
         }
 
-        public async Task<Response<IEnumerable<Creation>>> GetAllUserCreations(UserProfileRequest request)
+        public async Task<Response<IEnumerable<Creation>>> GetUserCreations(UserProfileRequest request)
         {
             HttpRequestMessage httpRequestMessage = BuildRequestMessage(request, string.Format("users/{0}/creations", request.UserId), HttpMethod.Get);
             httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
@@ -132,6 +132,40 @@ namespace GummyBears.Clients
             httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
 
             return await SendRequestAsync<IEnumerable<GroupMessage>>(httpRequestMessage);
+        }
+
+        public async Task<Response<IEnumerable<GroupParticipants>>> AddParticipantsInGroup(AuthenticatedGroupParticipantsRequest request)
+        {
+
+            HttpRequestMessage httpRequestMessage = BuildRequestMessageWithBody(request, string.Format("groups/{0}/participants", request.Payload.GroupId), HttpMethod.Post);
+            httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
+
+            return await SendRequestAsync<IEnumerable<GroupParticipants>>(httpRequestMessage);
+        }
+
+        public async Task<Response<IEnumerable<GroupParticipants>>> GetParticipantsInGroup(AuthenticatedGroupRequest request)
+        {
+            HttpRequestMessage httpRequestMessage = BuildRequestMessage(request, string.Format("groups/{0}/participants", request.Payload.GroupId), HttpMethod.Get);
+            httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
+
+            return await SendRequestAsync<IEnumerable<GroupParticipants>>(httpRequestMessage);
+        }
+
+        public async Task<Response<GroupCreation>> AttackFileToGroup(AuthenticatedGroupCreationsRequest request)
+        {
+
+            HttpRequestMessage httpRequestMessage = BuildRequestMessageWithBody(request, string.Format("groups/{0}/files", request.Payload.GroupId), HttpMethod.Post);
+            httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
+
+            return await SendRequestAsync<GroupCreation>(httpRequestMessage);
+        }
+
+        public async Task<Response<IEnumerable<Creation>>> GetAttachedFilesInGroup(AuthenticatedGroupCreationsRequest request)
+        {
+            HttpRequestMessage httpRequestMessage = BuildRequestMessage(request, string.Format("groups/{0}/files", request.Payload.GroupId), HttpMethod.Get);
+            httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
+
+            return await SendRequestAsync<IEnumerable<Creation>>(httpRequestMessage);
         }
 
         private async Task<Response<TResponse>> SendRequestAsync<TResponse>(HttpRequestMessage requestMessage)

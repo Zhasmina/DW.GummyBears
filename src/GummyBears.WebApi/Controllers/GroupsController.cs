@@ -73,7 +73,6 @@ namespace GummyBears.WebApi.Controllers
             return group;
         }
 
-        //TODO not finished yet
         [HttpPost]
         [Route("{groupId:int}/participants")]
         [AuthenticationTokenFilter]
@@ -166,5 +165,7 @@ namespace GummyBears.WebApi.Controllers
 
             return creations.Select(c => c.ToContract()).ToList();
         }
+
+        //POST MESSAGE
     }
 }

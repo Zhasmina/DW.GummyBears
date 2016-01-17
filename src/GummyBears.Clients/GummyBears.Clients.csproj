@@ -95,6 +95,8 @@
     <Compile Include="IGummyBearClientSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\AuthenticatedCreationRequest.cs" />
+    <Compile Include="Requests\AuthenticatedGroupCreationsRequest.cs" />
+    <Compile Include="Requests\AuthenticatedGroupParticipantsRequest.cs" />
     <Compile Include="Requests\AuthenticatedGroupRequest.cs" />
     <Compile Include="Requests\AuthenticatedUserRequest.cs" />
     <Compile Include="Requests\AuthenticationRequest.cs" />
