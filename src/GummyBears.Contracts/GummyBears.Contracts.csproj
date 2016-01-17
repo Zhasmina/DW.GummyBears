@@ -49,6 +49,7 @@
     <Compile Include="Feed.cs" />
     <Compile Include="FeedsPage.cs" />
     <Compile Include="Group.cs" />
+    <Compile Include="GroupCreations.cs" />
     <Compile Include="GroupMessage.cs" />
     <Compile Include="GroupParticipants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

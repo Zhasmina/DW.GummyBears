@@ -168,6 +168,7 @@
     </Compile>
     <Compile Include="Helpers\CreationMapper.cs" />
     <Compile Include="Helpers\FeedsMapper.cs" />
+    <Compile Include="Helpers\GroupCreationMapper.cs" />
     <Compile Include="Helpers\GroupMapper.cs" />
     <Compile Include="Helpers\GroupUserMapper.cs" />
     <Compile Include="Helpers\GroupMessageMapper.cs" />

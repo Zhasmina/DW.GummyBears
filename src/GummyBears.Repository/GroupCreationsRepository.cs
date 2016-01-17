@@ -9,6 +9,7 @@ using Dapperer.DbFactories;
 using Dapperer.QueryBuilders.MsSql;
 using GummyBears.Common;
 using GummyBears.Entities;
+using System.Data;
 
 namespace GummyBears.Repository
 {
@@ -17,6 +18,22 @@ namespace GummyBears.Repository
         public GroupCreationsRepository(IQueryBuilder queryBuilder, SqlDbFactory sqlDbFactory)
             : base(queryBuilder, sqlDbFactory)
         {
+        }
+
+        public async Task<IEnumerable<CreationEntity>> GetGroupCreations(int groupId)
+        {
+            const string sql = @"
+                SELECT c.* FROM GroupCreations gc
+                JOIN Creations c ON c.Id = gc.CreationId
+                WHERE gc.Id = @GroupId";
+
+            using (IDbConnection connection = CreateConnection())
+            {
+                return await connection.QueryAsync<CreationEntity>(sql, new
+                {
+                    GroupId = groupId
+                }).ConfigureAwait(false);
+            }
         }
     }
 }

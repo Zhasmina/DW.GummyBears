@@ -120,10 +120,51 @@ namespace GummyBears.WebApi.Controllers
             return groupUsers.Select(gm => gm.ToContract()).ToList();
         }
 
-        // GetParticipants
-        // Attach file to the group 
-        // Get files
+        [HttpPut]
+        [Route("{groupId:int}/files")]
+        [AuthenticationTokenFilter]
+        public async Task<GroupCreation> AttachFile(GroupCreation groupCreation)
+        {
+            CreationEntity creation = await DbContext.CreationsRepo.GetSingleOrDefaultAsync(groupCreation.CreationId).ConfigureAwait(false);
 
+            if (creation == null)
+            {
+                ThrowHttpResponseException(System.Net.HttpStatusCode.NotFound, string.Format("Creation with id {0} not found.", groupCreation.CreationId));
 
+            }
+
+            AuthenticationEntity authentication = await DbContext.AuthenticationRepo.GetSingleOrDefaultAsync(AuthenticationToken);
+
+            if (authentication == null || authentication.UserId != creation.Id)
+            {
+                ThrowHttpResponseException(System.Net.HttpStatusCode.Unauthorized, "Wrong authentication token.");
+            }
+
+            GroupCreationEntity groupCreationEntity = await DbContext.GroupCreationsRepo.CreateAsync(
+                new GroupCreationEntity()
+                {
+                    CreationId = creation.Id,
+                    GroupId = groupCreation.GroupId,
+                }).ConfigureAwait(false);
+
+            return groupCreationEntity.ToContract();
+        }
+
+        [HttpGet]
+        [Route("{groupId:int}/files")]
+        [AuthenticationTokenFilter]
+        public async Task<IEnumerable<Creation>> GetFilesInGroup(int groupId)
+        {
+            GroupEntity group = await DbContext.GroupsRepo.GetSingleOrDefaultAsync(groupId).ConfigureAwait(false);
+
+            if (group == null)
+            {
+                ThrowHttpResponseException(System.Net.HttpStatusCode.NotFound, string.Format("Group with id {0} not found.", groupId));
+            }
+
+            IEnumerable<CreationEntity> creations = await DbContext.GroupCreationsRepo.GetGroupCreations(groupId).ConfigureAwait(false);
+
+            return creations.Select(c => c.ToContract()).ToList();
+        }
     }
 }

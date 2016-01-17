@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace GummyBears.Contracts
 {
-    class GroupCreations
+    public class GroupCreation
     {
+        public int Id { get; set; }
+
+        public int GroupId { get; set; }
+
+        public int CreationId { get; set; }
     }
 }

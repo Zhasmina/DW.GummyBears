@@ -7,7 +7,7 @@ using System.Web;
 
 namespace GummyBears.WebApi.Helpers
 {
-    public static class GroupUserMapper
+    public static class GroupMessageMapper
     {
         public static GroupMessageEntity ToEntity(this GroupMessage groupMessage)
         {
