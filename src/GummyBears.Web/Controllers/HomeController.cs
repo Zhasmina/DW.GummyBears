@@ -322,12 +322,12 @@ namespace GummyBears.Web.Controllers
                  GroupId = groupId
              }).ConfigureAwait(false);
 
-            if(response.Status == Status.Failed)
+            if (response.Status == Status.Failed)
             {
                 return RedirectToAction("Index");
             }
 
-            return View(new AuthenticatedGroupMessagesModel() 
+            return View(new AuthenticatedGroupMessagesModel()
             {
                 AuthenticationToken = token,
                 UserId = userId,
@@ -338,44 +338,54 @@ namespace GummyBears.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> GetGroupParticipants(string token, int userId, int groupId)
         {
-          Response<IEnumerable<GroupParticipants>> groupParticipatsResponse = await _gummyBearClient.GetParticipantsInGroup(new AuthenticatedGroupRequest
-            {
-                AuthenticationToken = token,
-                CorrelationToken = Guid.NewGuid().ToString(),
-                Payload = new Group
-                {
-                    GroupId = groupId
-                }
-            });
+            Response<IEnumerable<GroupParticipants>> groupParticipatsResponse = await _gummyBearClient.GetParticipantsInGroup(new AuthenticatedGroupRequest
+              {
+                  AuthenticationToken = token,
+                  CorrelationToken = Guid.NewGuid().ToString(),
+                  Payload = new Group
+                  {
+                      GroupId = groupId
+                  }
+              });
 
-          if (groupParticipatsResponse.Status == Status.Failed)
-          {
-              return RedirectToAction("Index");
-          }
-
-          return View(new AuthenticatedGroupParticipantsModel
+            if (groupParticipatsResponse.Status == Status.Failed)
             {
-                AuthenticationToken = token,
-                GroupId = groupId,
-                UserId = userId,
-                GroupParticipants = groupParticipatsResponse.Payload
-            });
+                return RedirectToAction("Index");
+            }
+
+            return View(new AuthenticatedGroupParticipantsModel
+              {
+                  AuthenticationToken = token,
+                  GroupId = groupId,
+                  UserId = userId,
+                  GroupParticipants = groupParticipatsResponse.Payload
+              });
         }
 
         [HttpGet]
-        public async Task<ActionResult> AddParticipant(string token, int userId, int groupId)
+        public ActionResult AddParticipant(string token, int userId, int groupId)
         {
-            return View(new AuthenticatedGroupParticipantsModel()
-                {
-                    AuthenticationToken = token,
-                    GroupId = groupId,
-                    UserId = userId
-                });
+            return View(new AuthenticatedGroupParticipantsModel
+            {
+                AuthenticationToken = token,
+                GroupId = groupId,
+                UserId = userId
+            });
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddParticipant()
+        public async Task<ActionResult> AddParticipant(AuthenticatedGroupParticipantsModel model)
         {
+            _gummyBearClient.AddParticipantsInGroup(new AuthenticatedGroupParticipantsRequest
+            {
+                AuthenticationToken = model.AuthenticationToken,
+                CorrelationToken = new Guid().ToString(),
+                Payload = new GroupParticipants
+                {
+                    GroupId = model.GroupId,
+                    ParticipantId = model.GroupParticipants
+                }
+            })
             return RedirectToAction("Index");
         }
     }
