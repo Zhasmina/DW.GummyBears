@@ -17,7 +17,6 @@ namespace GummyBears.CreationRightsManager
             }
             set
             {
-
                 if (_dataFootPrint != null)
                 {
                     throw new Exception("Data should not be set after data footprint.");
