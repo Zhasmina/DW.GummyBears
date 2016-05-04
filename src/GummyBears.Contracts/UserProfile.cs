@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace GummyBears.Contracts
 {
@@ -10,16 +7,23 @@ namespace GummyBears.Contracts
     {
         public int Id { get; set; }
 
+        [Required]
+        [RegularExpression(@"^[A-Za-z][A-Za-z0-9._]{4,15}$")]
         public string UserName { get; set; }
 
+        [Required]
+        [StringLength(20, MinimumLength = 1)]
         public string FirstName { get; set; }
 
+        [Required]
+        [StringLength(20, MinimumLength = 1)]
         public string LastName { get; set; }
 
+        [EmailAddress]
         public string Email { get; set; }
 
         public string TelephoneNumber { get; set; }
-
+        
         public DateTime DateOfBirth { get; set; }
 
         public string Description { get; set; }
