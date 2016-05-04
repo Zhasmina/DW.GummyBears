@@ -40,7 +40,7 @@ namespace GummyBears.Web.Controllers
             {
                 Response<User> response = await _gummyBearClient.CreateUserAsync(new UserRequest()
                 {
-                    CorrelationToken = new Guid().ToString(),
+                    CorrelationToken = Guid.NewGuid().ToString(),
                     Payload = userProfile
                 }).ConfigureAwait(false);
 
@@ -72,7 +72,7 @@ namespace GummyBears.Web.Controllers
             {
                 var response = await _gummyBearClient.Login(new AuthenticationRequest()
                 {
-                    CorrelationToken = new Guid().ToString(),
+                    CorrelationToken = Guid.NewGuid().ToString(),
                     Payload = credentials
                 }).ConfigureAwait(false);
 
@@ -104,7 +104,7 @@ namespace GummyBears.Web.Controllers
             Response<UserProfile> response = await _gummyBearClient.GetUserAsync(new UserProfileRequest()
              {
                  AuthenticationToken = token,
-                 CorrelationToken = new Guid().ToString(),
+                 CorrelationToken = Guid.NewGuid().ToString(),
                  UserId = userId
              }).ConfigureAwait(false);
 
@@ -112,7 +112,7 @@ namespace GummyBears.Web.Controllers
             {
                 return RedirectToAction("Login");
             }
-            GummyBears.Web.Models.TokenResponse<UserProfile> tokenResponse = new TokenResponse<UserProfile>()
+            TokenResponse<UserProfile> tokenResponse = new TokenResponse<UserProfile>()
             {
                 Payload = response.Payload,
                 Token = token,
@@ -131,7 +131,7 @@ namespace GummyBears.Web.Controllers
             {
                 AuthenticationToken = token,
                 UserId = userId,
-                CorrelationToken = new Guid().ToString()
+                CorrelationToken = Guid.NewGuid().ToString()
             }).ConfigureAwait(false);
 
             if (response.Status == Status.Failed)
@@ -167,7 +167,7 @@ namespace GummyBears.Web.Controllers
                 var response = await _gummyBearClient.CreateUserCreations(new AuthenticatedCreationRequest()
                  {
                      AuthenticationToken = token,
-                     CorrelationToken = new Guid().ToString(),
+                     CorrelationToken = Guid.NewGuid().ToString(),
                      Payload = new Creation()
                      {
                          CreationPath = path,
@@ -190,7 +190,7 @@ namespace GummyBears.Web.Controllers
             var response = await _gummyBearClient.DeleteCreation(new AuthenticatedCreationRequest()
              {
                  AuthenticationToken = token,
-                 CorrelationToken = new Guid().ToString(),
+                 CorrelationToken = Guid.NewGuid().ToString(),
                  Payload = new Creation
                  {
                      CreationId = creationId,
@@ -209,7 +209,7 @@ namespace GummyBears.Web.Controllers
         {
             var response = await _gummyBearClient.GetFeeds(new PagedRequest()
             {
-                CorrelationToken = new Guid().ToString(),
+                CorrelationToken = Guid.NewGuid().ToString(),
                 AuthenticationToken = token
             }).ConfigureAwait(false);
 
@@ -245,7 +245,7 @@ namespace GummyBears.Web.Controllers
             await _gummyBearClient.PostToFeed(new AuthenticatedFeedRequest()
             {
                 AuthenticationToken = authenticatedFeedModel.AuthenticationToken,
-                CorrelationToken = new Guid().ToString(),
+                CorrelationToken = Guid.NewGuid().ToString(),
                 Payload = new Feed()
                 {
                     AuthorId = authenticatedFeedModel.UserId,
@@ -263,7 +263,7 @@ namespace GummyBears.Web.Controllers
             var response = await _gummyBearClient.GetAllUserGroups(new UserProfileRequest
             {
                 AuthenticationToken = token,
-                CorrelationToken = new Guid().ToString(),
+                CorrelationToken = Guid.NewGuid().ToString(),
                 UserId = userId
             }).ConfigureAwait(false);
 
@@ -296,7 +296,7 @@ namespace GummyBears.Web.Controllers
             Response<Group> response = await _gummyBearClient.CreateGroup(new AuthenticatedGroupRequest()
              {
                  AuthenticationToken = model.AuthenticationToken,
-                 CorrelationToken = new Guid().ToString(),
+                 CorrelationToken = Guid.NewGuid().ToString(),
                  Payload = new Group()
                  {
                      AuthorId = model.UserId,
@@ -318,7 +318,7 @@ namespace GummyBears.Web.Controllers
             Response<IEnumerable<GroupMessage>> response = await _gummyBearClient.GetMessagesInGroup(new GroupMessagesRequest()
              {
                  AuthenticationToken = token,
-                 CorrelationToken = new Guid().ToString(),
+                 CorrelationToken = Guid.NewGuid().ToString(),
                  GroupId = groupId
              }).ConfigureAwait(false);
 
@@ -358,7 +358,7 @@ namespace GummyBears.Web.Controllers
                   AuthenticationToken = token,
                   GroupId = groupId,
                   UserId = userId,
-                  GroupParticipants = groupParticipatsResponse.Payload
+                  ParticipantIds = groupParticipatsResponse.Payload.Select(gp => gp.ParticipantId).ToList()
               });
         }
 
@@ -376,16 +376,13 @@ namespace GummyBears.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> AddParticipant(AuthenticatedGroupParticipantsModel model)
         {
-            _gummyBearClient.AddParticipantsInGroup(new AuthenticatedGroupParticipantsRequest
+            await _gummyBearClient.AddParticipantsInGroup(new AuthenticatedGroupParticipantsRequest
             {
                 AuthenticationToken = model.AuthenticationToken,
-                CorrelationToken = new Guid().ToString(),
-                Payload = new GroupParticipants
-                {
-                    GroupId = model.GroupId,
-                    ParticipantId = model.GroupParticipants
-                }
-            })
+                CorrelationToken = Guid.NewGuid().ToString(),
+                Payload = model.ParticipantIds.ToList(),
+                GroupId = model.GroupId
+            });
             return RedirectToAction("Index");
         }
     }

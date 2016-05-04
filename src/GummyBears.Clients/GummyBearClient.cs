@@ -137,7 +137,7 @@ namespace GummyBears.Clients
         public async Task<Response<IEnumerable<GroupParticipants>>> AddParticipantsInGroup(AuthenticatedGroupParticipantsRequest request)
         {
 
-            HttpRequestMessage httpRequestMessage = BuildRequestMessageWithBody(request, string.Format("groups/{0}/participants", request.Payload.GroupId), HttpMethod.Post);
+            HttpRequestMessage httpRequestMessage = BuildRequestMessageWithBody(request, string.Format("groups/{0}/participants", request.GroupId), HttpMethod.Post);
             httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
 
             return await SendRequestAsync<IEnumerable<GroupParticipants>>(httpRequestMessage);

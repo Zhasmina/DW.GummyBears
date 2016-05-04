@@ -3,97 +3,113 @@
 @{
     ViewBag.Title = "EditProfile";
 }
+@{
+    Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
+}
+ <!--/sidebar-menu-->
+<div class="sidebar-menu">
+    <header class="logo1"><img src="~/img/user-profile.png" style="max-width:170px;" /></header>
+    <div style="border-top:1px ridge rgba(255, 255, 255, 0.15)"></div>
+    <div class="menu">
+        <ul id="menu">
+            <li><a href=""><i class="fa fa-user"></i> <span>My Profile</span></a></li>
+            <li><a href="@Url.Action("GetFeeds", "Home", new { token = Model.Token, userId = Model.Payload.Id })"><i class="fa fa-rss-square"></i> <span>Feeds</span></a></li>
+            <li><a href="@Url.Action("GetGroups", "Home", new { token = Model.Token, userId = Model.Payload.Id })"><i class="fa fa-users"></i> <span>My Groups</span></a></li>
+            <li><a href="@Url.Action( "GetUserCreations", "Home", new { token = Model.Token, userId = Model.Payload.Id })"><i class="fa fa-briefcase"></i> <span>My Creations</span></a></li>
 
-<h2>EditProfile</h2>
-
-<div>
-    <h4>User</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Payload.UserName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Payload.UserName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Payload.FirstName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Payload.FirstName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Payload.LastName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Payload.LastName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Payload.Email)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Payload.Email)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Payload.TelephoneNumber)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Payload.TelephoneNumber)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Payload.DateOfBirth)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Payload.DateOfBirth)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Payload.Description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Payload.Description)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Payload.Country)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Payload.Country)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Payload.ProfilePicturePath)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Payload.ProfilePicturePath)
-        </dd>
-    </dl>
-    @Html.HiddenFor(model => model.Token)
+        </ul>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Payload.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
-<p>
-    @Html.ActionLink("View My Creations", "GetUserCreations", new { token = Model.Token, userId = Model.Payload.Id })
-</p>
-<p>
-    @Html.ActionLink("Feeds", "GetFeeds", new { token = Model.Token, userId = Model.Payload.Id })
-</p>
-<p>
-    @Html.ActionLink("Groups", "GetGroups", new { token = Model.Token, userId = Model.Payload.Id })
-</p>
+<div class="content">
+    <h2>Profile Info</h2>
+    <div>
+      <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Payload.UserName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Payload.UserName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Payload.FirstName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Payload.FirstName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Payload.LastName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Payload.LastName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Payload.Email)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Payload.Email)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Payload.TelephoneNumber)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Payload.TelephoneNumber)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Payload.DateOfBirth)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Payload.DateOfBirth)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Payload.Description)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Payload.Description)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Payload.Country)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Payload.Country)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Payload.ProfilePicturePath)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Payload.ProfilePicturePath)
+            </dd>
+        </dl>
+        @Html.HiddenFor(model => model.Token)
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Payload.Id }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+    <p>
+        @Html.ActionLink("View My Creations", "GetUserCreations", new { token = Model.Token, userId = Model.Payload.Id })
+    </p>
+    <p>
+        @Html.ActionLink("Feeds", "GetFeeds", new { token = Model.Token, userId = Model.Payload.Id })
+    </p>
+    <p>
+        @Html.ActionLink("Groups", "GetGroups", new { token = Model.Token, userId = Model.Payload.Id })
+    </p>
+</div>

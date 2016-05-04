@@ -48,7 +48,7 @@ namespace GummyBears.WebApi.Controllers
             UserEntity author = await DbContext.UsersRepo.GetSingleOrDefaultAsync(creation.UserId);
             var authorString = string.Format("{0} {1}, a.k.a {2}", author.FirstName, author.LastName, author.UserName);
             var fileData = File.ReadAllBytes(creation.CreationPath);
-            var rightCreation = new CreationRightsManager.Creation()
+            var rightCreation = new CreationRightsManager.Creation
             {
                 Author = authorString,
                 Owner = authorString,

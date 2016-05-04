@@ -1,18 +1,34 @@
 ﻿@model GummyBears.Web.Models.TokenResponse<IEnumerable<GummyBears.Contracts.Creation>>
 @{
     ViewBag.Title = "MyCreations";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-@Html.Hidden(Model.Token)
-@Html.Hidden("userId", Model.UserId)
-@foreach(GummyBears.Contracts.Creation item in Model.Payload)
-{
-    @Html.Label(item.CreationName)
-    @Html.Display(item.CreationName)
-    @Html.ActionLink("Delete", "DeleteCreation", new {token = Model.Token, userId = Model.UserId, creationId = item.CreationId})
+@{
+    Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
 }
+<!--/sidebar-menu-->
+<div class="sidebar-menu">
+    <header class="logo1"><img src="~/img/user-profile.png" style="max-width:170px;" /></header>
+    <div style="border-top:1px ridge rgba(255, 255, 255, 0.15)"></div>
+    <div class="menu">
+        <ul id="menu">
+            <li><a href=""><i class="fa fa-user"></i> <span>My Profile</span></a></li>
+            <li><a href="@Url.Action("GetFeeds", "Home", new { token = Model.Token, userId = Model.Payload.Id })"><i class="fa fa-rss-square"></i> <span>Feeds</span></a></li>
+            <li><a href="@Url.Action("Groups", "Home", new { token = Model.Token, userId = Model.Payload.Id })"><i class="fa fa-users"></i> <span>My Groups</span></a></li>
+            <li><a href="@Url.Action( "GetUserCreations", "Home", new { token = Model.Token, userId = Model.Payload.Id })"><i class="fa fa-briefcase"></i> <span>My Creations</span></a></li>
 
-@Html.ActionLink("Add new creation", "AddUserCreations", new { token = Model.Token, userId = Model.UserId })
-<h2>MyCreations</h2>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    @Html.Hidden(Model.Token)
+    @Html.Hidden("userId", Model.UserId)
+    @foreach (GummyBears.Contracts.Creation item in Model.Payload)
+    {
+        @Html.Label(item.CreationName)
+        @Html.Display(item.CreationName)
+        @Html.ActionLink("Delete", "DeleteCreation", new { token = Model.Token, userId = Model.UserId, creationId = item.CreationId })
+    }
 
+    @Html.ActionLink("Add new creation", "AddUserCreations", new { token = Model.Token, userId = Model.UserId })
+    <h2>MyCreations</h2>
+</div>

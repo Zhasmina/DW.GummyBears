@@ -15,7 +15,7 @@ CREATE TABLE [dbo].[Users]
 	[Description] [nvarchar](MAX) NULL,
 	[Country] [nvarchar](100) NULL,
 	[ProfilePicturePath] [nvarchar](MAX) NULL,
-	Role [nvarchar(50)] NULL
+	Role [nvarchar](50) NULL
 )
 
 GO
@@ -53,3 +53,16 @@ GO
 ALTER TABLE [dbo].[Creations]  WITH CHECK ADD FOREIGN KEY([UserId])
 REFERENCES [dbo].[Users] ([Id])
 GO
+
+CREATE TABLE [dbo].[Groups]
+(
+	[Id] [int] NOT NULL PRIMARY KEY IDENTITY,
+	[Name] [nvarchar](MAX) NOT NULL,
+	[AuthorId] [int] NOT NULL
+)
+
+GO	
+
+GroupCreations
+GroupMessages
+UserGroups

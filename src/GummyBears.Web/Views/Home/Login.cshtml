@@ -1,4 +1,7 @@
 ﻿@model GummyBears.Contracts.Credentials
+@{
+    Layout = "~/Views/Shared/_AuthenticationLayout.cshtml";
+}
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
@@ -25,31 +28,9 @@
                             <span class="icon-bar"></span>
                         </button>
                         <div class="navbar-brand">
-                            <a href="#">My Template</a>
+                            <a href="@Url.Action("Index", "Home")">My Template</a>
                         </div>
                     </div>
-                    <!-- Collect the nav links and other content for toggling -->
-                    <div class="collapse navbar-collapse navbar-right" id="dropdown-box-1">
-
-                        <ul class="nav navbar-nav">
-                            <li class="active"><a href="#home">HOME</a></li>
-                            <li><a href="@Url.Action("Register")">JOIN US</a></li>
-                            <li class="dropdown" role="presentation">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    SERVICES <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu bullet fadeIn" role="menu">
-                                    <li><a href="#first">FACILIS EXPEDITA</a></li>
-                                    <li><a href="#second">FACILIS EXPEDITA</a></li>
-                                    <li><a href="#third">FACILIS EXPEDITA</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="#testimonials">TESTIMONIALS</a></li>
-                            <li><a href="#contactus">CONTACT</a></li>
-                        </ul>
-
-                    </div>
-
                 </div> <!-- /.container -->
             </nav> <!-- /.nav -->
         </header>
@@ -63,8 +44,10 @@
         @Html.AntiForgeryToken()
 
         <div class="form-horizontal">
-            <h2>Login</h2>
             <hr />
+            <div class="form-group">
+                <h4>LOG IN WITH YOUR GummyBear ACCOUNT</h4>
+            </div>
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
                 @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })
