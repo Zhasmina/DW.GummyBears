@@ -1,9 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace GummyBears.Contracts
 {
@@ -13,8 +8,11 @@ namespace GummyBears.Contracts
 
         public int CreationId { get; set; }
 
+        [Required]
+        [RegularExpression(@"^[A-Za-z][A-Za-z0-9._]{4,15}$")]
         public string CreationName { get; set; }
 
+        [Required(ErrorMessage ="Missing creation path")]
         public string CreationPath { get; set; }
 
         public string Footprint { get; set; }

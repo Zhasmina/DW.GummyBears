@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace GummyBears.Contracts
 {
@@ -10,6 +6,8 @@ namespace GummyBears.Contracts
     {
         public int GroupId { get; set; }
 
+        [Required]
+        [RegularExpression(@"^[A-Za-z][A-Za-z0-9._]{5,50}$")]
         public string GroupName { get; set; }
 
         public int AuthorId { get; set; }

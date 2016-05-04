@@ -36,7 +36,10 @@ namespace GummyBears.WebApi.Controllers
         public async Task<FeedsPage> GetFeed(int pageNumber = 0, int pageSize = 10)
         {
             Page<FeedsEntity> page = await DbContext.FeedsRepo.PageAsync(pageNumber * pageSize, pageSize).ConfigureAwait(false);
-           
+            var authorsIds = page.Items.Select(i => i.AuthorId).Distinct();
+            var authors = await DbContext.UsersRepo.GetByKeysAsync(authorsIds);
+            var authorIdToNameMapping = authors.ToDictionary(u => u.Id, u => string.Format("{0} {1}", u.FirstName, u.LastName));
+
             var result = new FeedsPage
             {
                 CurrentPage = page.CurrentPage,
@@ -45,7 +48,7 @@ namespace GummyBears.WebApi.Controllers
                     AuthorId = i.AuthorId,
                     Id = i.Id,
                     Text = i.Text,
-                    
+                    AurhorName = authorIdToNameMapping[i.Id]
                 }).ToList(),
                 ItemsPerPage = page.ItemsPerPage,
                 TotalItems = page.TotalItems,

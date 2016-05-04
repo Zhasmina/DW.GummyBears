@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using System.ComponentModel.DataAnnotations;
 namespace GummyBears.Contracts
 {
     public class GroupMessage
@@ -12,8 +8,10 @@ namespace GummyBears.Contracts
 
         public int UserId { get; set; }
 
+        [Required]
         public string Message { get; set; }
 
+        [Required]
         public DateTime SendDate { get; set; }
     }
 }
