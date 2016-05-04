@@ -11,5 +11,7 @@ namespace GummyBears.Web.Models
         public string AuthenticationToken { get; set; }
 
         public int UserId { get; set; }
+
+        public string Username { get; set; }
     }
 }

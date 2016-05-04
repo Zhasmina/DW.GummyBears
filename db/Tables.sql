@@ -63,6 +63,32 @@ CREATE TABLE [dbo].[Groups]
 
 GO	
 
-GroupCreations
-GroupMessages
-UserGroups
+CREATE TABLE [dbo].[GroupCreations]
+(
+	[Id] [int] NOT NULL PRIMARY KEY IDENTITY,
+	[GroupId] [int] NOT NULL FOREIGN KEY(Id) REFERENCES Groups(Id),
+	[CreationId] [int] NOT NULL FOREIGN KEY(Id) REFERENCES Creations(Id)
+)
+
+GO
+
+CREATE TABLE [dbo].[GroupMessages]
+(
+	[Id] [int] NOT NULL PRIMARY KEY IDENTITY,
+	[GroupId] [int] NOT NULL FOREIGN KEY(Id) REFERENCES Groups(Id),
+	[UserId] [int] NOT NULL FOREIGN KEY(Id) REFERENCES Users(Id),
+	[Message] [nvarchar](MAX) NOT NULL,
+	[SendDate] DATETIME NOT NULL
+)
+
+GO
+
+CREATE TABLE [dbo].[UserGroups]
+(
+	[Id] [int] NOT NULL PRIMARY KEY IDENTITY,
+	[GroupId] [int] NOT NULL FOREIGN KEY(Id) REFERENCES Groups(Id),
+	[UserId] [int] NOT NULL FOREIGN KEY(Id) REFERENCES Users(Id),
+	[IsAdmin] [bit] NOT NULL
+)
+
+GO

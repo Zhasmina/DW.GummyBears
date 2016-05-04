@@ -13,5 +13,7 @@ namespace GummyBears.Web.Models
         public List<Group> Groups { get; set; }
 
         public int UserId { get; set; }
+
+        public string Username { get; set; }
     }
 }

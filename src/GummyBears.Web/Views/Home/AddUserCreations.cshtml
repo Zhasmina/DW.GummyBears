@@ -1,19 +1,56 @@
 ﻿@model GummyBears.Web.Models.AuthenticatedUserModel
 @{
     ViewBag.Title = "AddUserCreations";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
 }
-<h2>AddUserCreations</h2>
+<!--/sidebar-menu-->
+<div class="sidebar-menu">
+    <header class="logo1">
+        <img src="~/img/user-profile.png" style="max-width:170px;" />
+        <div class="menu" style="margin-top: 20px;">
+            <a href="@Url.Action("GetUserProfile", "Home", new { token = Model.Token, userId = Model.UserId, username = Model.Username })" style="font-size: 25px; padding-top: 2em;"><i class="fa fa-user"></i> <span>@Model.Username</span></a>
+        </div>
+    </header>
+    <div style="border-top:1px ridge rgba(255, 255, 255, 0.15)"></div>
+    <div class="menu">
+        <ul id="menu">
+            <li><a href="@Url.Action("GetUserProfile", "Home", new { token = Model.Token, userId = Model.UserId, username = Model.Username })"><i class="fa fa-user"></i> <span>My Profile</span></a></li>
+            <li><a href="@Url.Action("GetFeeds", "Home", new { token = Model.Token, userId = Model.UserId, username = Model.Username })"><i class="fa fa-rss-square"></i> <span>Feeds</span></a></li>
+            <li><a href="@Url.Action("GetGroups", "Home", new { token = Model.Token, userId = Model.UserId, username = Model.Username  })"><i class="fa fa-users"></i> <span>My Groups</span></a></li>
+            <li><a href="@Url.Action( "GetUserCreations", "Home", new { token = Model.Token, userId = Model.UserId, username = Model.Username })"><i class="fa fa-briefcase"></i> <span>My Creations</span></a></li>
 
-<form action="" method="post" enctype="multipart/form-data">
-    @Html.Hidden(Model.Token)
-    @Html.Hidden("userId", Model.UserId)
-    <label for="creationName">Creation Name:</label>
-    <input type="text" name="creationName" id="creationName" />
-    <label for="file">File:</label>
-    <input type="file" name="file" id="file" />
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <hr />
+    <h2>AddUserCreations</h2>
 
-    <input type="submit" />
-</form> 
+    <form action="" method="post" enctype="multipart/form-data">
+        @Html.Hidden(Model.Token)
+        @Html.Hidden("userId", Model.UserId)
+        @Html.Hidden("username", Model.Username)
 
+        <div class="form-horizontal">
+            <hr />
+            <div class="form-group">
+                <label for="creationName">Creation Name:</label>
+                <div class="col-md-3">
+                    <input type="text" name="creationName" id="creationName" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="file">File:</label>
+                <div class="col-md-3">
+                    <input type="file" name="file" id="file" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-3">
+                    <input type="submit" value="Create" class="btn btn-success"/>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 

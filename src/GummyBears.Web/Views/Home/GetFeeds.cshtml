@@ -6,54 +6,83 @@
 @{
     Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
 }
- <!--/sidebar-menu-->
+<!--/sidebar-menu-->
 <div class="sidebar-menu">
-    <header class="logo1"><img src="~/img/user-profile.png" style="max-width:170px;" /></header>
+    <header class="logo1">
+        <img src="~/img/user-profile.png" style="max-width:170px;" />
+        <div class="menu" style="margin-top: 20px;">
+            <a href="@Url.Action("GetUserProfile", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })" style="font-size: 25px; padding-top: 2em;"><i class="fa fa-user"></i> <span>@Model.Username</span></a>
+        </div>
+    </header>
     <div style="border-top:1px ridge rgba(255, 255, 255, 0.15)"></div>
     <div class="menu">
         <ul id="menu">
-            <li><a href=""><i class="fa fa-user"></i> <span>My Profile</span></a></li>
-            <li><a href="@Url.Action("GetFeeds", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId })"><i class="fa fa-rss-square"></i> <span>Feeds</span></a></li>
-            <li><a href="@Url.Action("GetGroups", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId })"><i class="fa fa-users"></i> <span>My Groups</span></a></li>
-            <li><a href="@Url.Action( "GetUserCreations", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId })"><i class="fa fa-briefcase"></i> <span>My Creations</span></a></li>
+            <li><a href="@Url.Action("GetUserProfile", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-user"></i> <span>My Profile</span></a></li>
+            <li><a href="@Url.Action("GetFeeds", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-rss-square"></i> <span>Feeds</span></a></li>
+            <li><a href="@Url.Action("GetGroups", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username  })"><i class="fa fa-users"></i> <span>My Groups</span></a></li>
+            <li><a href="@Url.Action( "GetUserCreations", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-briefcase"></i> <span>My Creations</span></a></li>
 
         </ul>
     </div>
 </div>
 <div class="content">
-    <h2>GetFeeds</h2>
+    <hr/>
+    @Html.Hidden("CurrentPage", Model.CurrentPage)
+    @Html.Hidden("ItemsPerPage", Model.ItemsPerPage)
+    @Html.Hidden("TotalItems", Model.TotalItems)
+    @Html.Hidden("TotalPages", Model.TotalPages)
 
     <p>
-        @Html.ActionLink("Post message", "CreatePostInFeed", new { token = Model.AuthenticationToken, userId = Model.UserId })
+        @Html.ActionLink("Post message", "CreatePostInFeed", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })
     </p>
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CurrentPage)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ItemsPerPage)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalItems)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalPages)
-            </th>
-            <th></th>
-        </tr>
-
-        @foreach (var item in Model.Items)
-        {
+    @using (Html.BeginForm("GetFeeds", "Home", FormMethod.Post))
+    {
+        <table class="table">
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>
+                        <span>Author <i>@item.AurhorName</i> with id <b>@item.AuthorId</b> wrote:</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Text)
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                </tr>
+            }
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Text)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AuthorId)
+                <td colspan="4">
+                    @if (Model.TotalPages > 1)
+                    {
+                        for (var i = 0; i < Model.TotalPages; i++)
+                        {
+                            if (i == Model.CurrentPage)
+                            {
+                                <span>@(i + 1)</span>
+                            }
+                            else
+                            {
+                                <a href="#" data-pageindex="@i"
+                                   class="pager">@(i + 1)</a>
+                            }
+                        }
+                    }
                 </td>
             </tr>
-        }
-
-    </table>
+        </table>
+    }
 </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".pager").click(function (evt) {
+            var pageindex = $(evt.target).data("pageindex");
+            $("#CurrentPage").val(pageindex);
+            evt.preventDefault();
+            $("form").submit();
+        });
+    });
+</script>

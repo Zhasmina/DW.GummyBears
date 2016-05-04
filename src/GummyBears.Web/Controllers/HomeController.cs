@@ -81,11 +81,18 @@ namespace GummyBears.Web.Controllers
                     return View(credentials);
                 }
 
-                return RedirectToAction("GetUserProfile", new { token = response.Payload.Token, userId = response.Payload.UserId });
+                return RedirectToAction("GetFeeds",
+                    new
+                    {
+                        token = response.Payload.Token,
+                        userId = response.Payload.UserId,
+                        username = response.Payload.Username
+                    });
             }
             return View();
         }
-        [HttpGet]
+
+        [HttpPost]
         public ActionResult Logout()
         {
             return View();
@@ -99,14 +106,14 @@ namespace GummyBears.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetUserProfile(string token, int userId)
+        public async Task<ActionResult> GetUserProfile(string token, int userId, string username)
         {
             Response<UserProfile> response = await _gummyBearClient.GetUserAsync(new UserProfileRequest()
-             {
-                 AuthenticationToken = token,
-                 CorrelationToken = Guid.NewGuid().ToString(),
-                 UserId = userId
-             }).ConfigureAwait(false);
+            {
+                AuthenticationToken = token,
+                CorrelationToken = Guid.NewGuid().ToString(),
+                UserId = userId
+            }).ConfigureAwait(false);
 
             if (response.Status == Status.Failed)
             {
@@ -116,7 +123,8 @@ namespace GummyBears.Web.Controllers
             {
                 Payload = response.Payload,
                 Token = token,
-                UserId = response.Payload.Id
+                UserId = response.Payload.Id,
+                Username = username
             };
             return View("EditProfile", tokenResponse);
         }
@@ -125,7 +133,7 @@ namespace GummyBears.Web.Controllers
 
         #region creations
         [HttpGet]
-        public async Task<ActionResult> GetUserCreations(string token, int userId)
+        public async Task<ActionResult> GetUserCreations(string token, int userId, string username)
         {
             Response<IEnumerable<Creation>> response = await _gummyBearClient.GetUserCreations(new UserProfileRequest()
             {
@@ -143,20 +151,21 @@ namespace GummyBears.Web.Controllers
             {
                 Payload = response.Payload,
                 Token = token,
-                UserId = userId
+                UserId = userId,
+                Username = username
             };
 
             return View("MyCreations", model: tokenResponse);
         }
 
         [HttpGet]
-        public ActionResult AddUserCreations(string token, int userId)
+        public ActionResult AddUserCreations(string token, int userId, string username)
         {
-            return View(model: new AuthenticatedUserModel() { Token = token, UserId = userId });
+            return View(model: new AuthenticatedUserModel() { Token = token, UserId = userId, Username = username });
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddUserCreations(string token, string creationName, int userId, HttpPostedFileBase file)
+        public async Task<ActionResult> AddUserCreations(string token, string creationName, int userId, string username, HttpPostedFileBase file)
         {
             if (file.ContentLength > 0)
             {
@@ -165,16 +174,16 @@ namespace GummyBears.Web.Controllers
                 file.SaveAs(path);
 
                 var response = await _gummyBearClient.CreateUserCreations(new AuthenticatedCreationRequest()
-                 {
-                     AuthenticationToken = token,
-                     CorrelationToken = Guid.NewGuid().ToString(),
-                     Payload = new Creation()
-                     {
-                         CreationPath = path,
-                         CreationName = creationName,
-                         UserId = userId
-                     }
-                 }).ConfigureAwait(false);
+                {
+                    AuthenticationToken = token,
+                    CorrelationToken = Guid.NewGuid().ToString(),
+                    Payload = new Creation()
+                    {
+                        CreationPath = path,
+                        CreationName = creationName,
+                        UserId = userId
+                    }
+                }).ConfigureAwait(false);
 
                 if (response.Status == Status.Failed)
                 {
@@ -182,30 +191,35 @@ namespace GummyBears.Web.Controllers
                 }
             }
 
-            return RedirectToAction("GetUserCreations", new { token = token, userId = userId });
+            return RedirectToAction("GetUserCreations", new { token = token, userId = userId, username = username });
         }
 
-        public async Task<ActionResult> DeleteCreation(string token, int creationId, int userId)
+        public async Task<ActionResult> DeleteCreation(string token, int creationId, int userId, string username)
         {
             var response = await _gummyBearClient.DeleteCreation(new AuthenticatedCreationRequest()
-             {
-                 AuthenticationToken = token,
-                 CorrelationToken = Guid.NewGuid().ToString(),
-                 Payload = new Creation
-                 {
-                     CreationId = creationId,
-                     UserId = userId
-                 }
-             }).ConfigureAwait(false);
+            {
+                AuthenticationToken = token,
+                CorrelationToken = Guid.NewGuid().ToString(),
+                Payload = new Creation
+                {
+                    CreationId = creationId,
+                    UserId = userId
+                }
+            }).ConfigureAwait(false);
 
-            return RedirectToAction("GetUserCreations", new { token = token, userId = userId });
+            return RedirectToAction("GetUserCreations", new { token = token, userId = userId, username = username });
+        }
+
+        public FileResult DownloadCreation(string token, int userId, string username, string filePath)
+        {
+            byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet);
         }
 
         #endregion
 
         #region feed
-        [HttpGet]
-        public async Task<ActionResult> GetFeeds(string token, int userId)
+        public async Task<ActionResult> GetFeeds(string token, int userId, string username)
         {
             var response = await _gummyBearClient.GetFeeds(new PagedRequest()
             {
@@ -218,10 +232,12 @@ namespace GummyBears.Web.Controllers
                 RedirectToAction("Index");
             }
 
+
             return View(new AuthenticatedFeedsPageModel
             {
                 AuthenticationToken = token,
                 UserId = userId,
+                Username = username,
                 CurrentPage = response.Payload.CurrentPage,
                 Items = response.Payload.Items,
                 ItemsPerPage = response.Payload.ItemsPerPage,
@@ -231,12 +247,13 @@ namespace GummyBears.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult CreatePostInFeed(string token, int userId)
+        public ActionResult CreatePostInFeed(string token, int userId, string username)
         {
-            return View(new AuthenticatedFeedModel()
+            return View(new AuthenticatedFeedModel
             {
                 AuthenticationToken = token,
-                UserId = userId
+                UserId = userId,
+                Username = username
             });
         }
         [HttpPost]
@@ -246,19 +263,26 @@ namespace GummyBears.Web.Controllers
             {
                 AuthenticationToken = authenticatedFeedModel.AuthenticationToken,
                 CorrelationToken = Guid.NewGuid().ToString(),
-                Payload = new Feed()
+                Payload = new Feed
                 {
                     AuthorId = authenticatedFeedModel.UserId,
                     Text = authenticatedFeedModel.MessageText
                 }
             }).ConfigureAwait(false);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("GetFeeds",
+                    new
+                    {
+                        token = authenticatedFeedModel.AuthenticationToken,
+                        userId = authenticatedFeedModel.UserId,
+                        username = authenticatedFeedModel.Username
+                    });
         }
         #endregion
 
+        #region groups
         [HttpGet]
-        public async Task<ActionResult> GetGroups(string token, int userId)
+        public async Task<ActionResult> GetGroups(string token, int userId, string username)
         {
             var response = await _gummyBearClient.GetAllUserGroups(new UserProfileRequest
             {
@@ -276,7 +300,8 @@ namespace GummyBears.Web.Controllers
             {
                 AuthenticationToken = token,
                 UserId = userId,
-                Groups = response.Payload
+                Groups = response.Payload,
+                Username = username
             });
         }
 
@@ -294,15 +319,15 @@ namespace GummyBears.Web.Controllers
         public async Task<ActionResult> CreateGroup(AuthenticatedGroupModel model)
         {
             Response<Group> response = await _gummyBearClient.CreateGroup(new AuthenticatedGroupRequest()
-             {
-                 AuthenticationToken = model.AuthenticationToken,
-                 CorrelationToken = Guid.NewGuid().ToString(),
-                 Payload = new Group()
-                 {
-                     AuthorId = model.UserId,
-                     GroupName = model.GroupName
-                 }
-             }).ConfigureAwait(false);
+            {
+                AuthenticationToken = model.AuthenticationToken,
+                CorrelationToken = Guid.NewGuid().ToString(),
+                Payload = new Group()
+                {
+                    AuthorId = model.UserId,
+                    GroupName = model.GroupName
+                }
+            }).ConfigureAwait(false);
 
             if (response.Status == Status.Failed)
             {
@@ -316,11 +341,11 @@ namespace GummyBears.Web.Controllers
         public async Task<ActionResult> GetMessagesInGroup(string token, int userId, int groupId)
         {
             Response<IEnumerable<GroupMessage>> response = await _gummyBearClient.GetMessagesInGroup(new GroupMessagesRequest()
-             {
-                 AuthenticationToken = token,
-                 CorrelationToken = Guid.NewGuid().ToString(),
-                 GroupId = groupId
-             }).ConfigureAwait(false);
+            {
+                AuthenticationToken = token,
+                CorrelationToken = Guid.NewGuid().ToString(),
+                GroupId = groupId
+            }).ConfigureAwait(false);
 
             if (response.Status == Status.Failed)
             {
@@ -339,14 +364,14 @@ namespace GummyBears.Web.Controllers
         public async Task<ActionResult> GetGroupParticipants(string token, int userId, int groupId)
         {
             Response<IEnumerable<GroupParticipants>> groupParticipatsResponse = await _gummyBearClient.GetParticipantsInGroup(new AuthenticatedGroupRequest
-              {
-                  AuthenticationToken = token,
-                  CorrelationToken = Guid.NewGuid().ToString(),
-                  Payload = new Group
-                  {
-                      GroupId = groupId
-                  }
-              });
+            {
+                AuthenticationToken = token,
+                CorrelationToken = Guid.NewGuid().ToString(),
+                Payload = new Group
+                {
+                    GroupId = groupId
+                }
+            });
 
             if (groupParticipatsResponse.Status == Status.Failed)
             {
@@ -354,12 +379,12 @@ namespace GummyBears.Web.Controllers
             }
 
             return View(new AuthenticatedGroupParticipantsModel
-              {
-                  AuthenticationToken = token,
-                  GroupId = groupId,
-                  UserId = userId,
-                  ParticipantIds = groupParticipatsResponse.Payload.Select(gp => gp.ParticipantId).ToList()
-              });
+            {
+                AuthenticationToken = token,
+                GroupId = groupId,
+                UserId = userId,
+                ParticipantIds = groupParticipatsResponse.Payload.Select(gp => gp.ParticipantId).ToList()
+            });
         }
 
         [HttpGet]
@@ -385,5 +410,6 @@ namespace GummyBears.Web.Controllers
             });
             return RedirectToAction("Index");
         }
+        #endregion
     }
 }

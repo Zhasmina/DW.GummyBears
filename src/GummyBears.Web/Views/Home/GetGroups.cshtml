@@ -8,14 +8,19 @@
 }
 <!--/sidebar-menu-->
 <div class="sidebar-menu">
-    <header class="logo1"><img src="~/img/user-profile.png" style="max-width:170px;" /></header>
+    <header class="logo1">
+        <img src="~/img/user-profile.png" style="max-width:170px;" />
+        <div class="menu" style="margin-top: 20px;">
+            <a href="@Url.Action("GetUserProfile", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })" style="font-size: 25px; padding-top: 2em;"><i class="fa fa-user"></i> <span>@Model.Username</span></a>
+        </div>
+    </header>
     <div style="border-top:1px ridge rgba(255, 255, 255, 0.15)"></div>
     <div class="menu">
         <ul id="menu">
-            <li><a href=""><i class="fa fa-user"></i> <span>My Profile</span></a></li>
-            <li><a href="@Url.Action("GetFeeds", "Home", new { token = Model.Token, userId = Model.Payload.Id })"><i class="fa fa-rss-square"></i> <span>Feeds</span></a></li>
-            <li><a href="@Url.Action("Groups", "Home", new { token = Model.Token, userId = Model.Payload.Id })"><i class="fa fa-users"></i> <span>My Groups</span></a></li>
-            <li><a href="@Url.Action( "GetUserCreations", "Home", new { token = Model.Token, userId = Model.Payload.Id })"><i class="fa fa-briefcase"></i> <span>My Creations</span></a></li>
+            <li><a href="@Url.Action("GetUserProfile", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-user"></i> <span>My Profile</span></a></li>
+            <li><a href="@Url.Action("GetFeeds", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-rss-square"></i> <span>Feeds</span></a></li>
+            <li><a href="@Url.Action("Groups", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-users"></i> <span>My Groups</span></a></li>
+            <li><a href="@Url.Action( "GetUserCreations", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-briefcase"></i> <span>My Creations</span></a></li>
 
         </ul>
     </div>
@@ -53,4 +58,4 @@
         }
 
     </table>
-    </div>
+</div>
