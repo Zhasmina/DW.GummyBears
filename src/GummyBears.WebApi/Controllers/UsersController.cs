@@ -41,10 +41,11 @@ namespace GummyBears.WebApi.Controllers
 
             UserEntity createdUser = await DbContext.UsersRepo.CreateAsync(user.ToEntity());
 
-            return createdUser.ToModel();
+            return createdUser.ToStrippedModel();
         }
 
         [HttpPut, Route("{userId:int}")]
+        [AuthenticationTokenFilter]
         public async Task<UserProfile> UpdateUser(int userId, [FromBody]User user)
         {
             if (user.Id != 0 && user.Id != userId)
@@ -77,7 +78,7 @@ namespace GummyBears.WebApi.Controllers
                 transactionScope.Complete();
             }
 
-            return updatedUser.ToModel();
+            return updatedUser.ToStrippedModel();
         }
 
         [HttpGet, Route("{userId:int}")]
@@ -91,7 +92,7 @@ namespace GummyBears.WebApi.Controllers
                 ThrowHttpResponseException(HttpStatusCode.NotFound, string.Format("User with id '{0}' not found.", userId));
             }
             
-            return userEntity.ToModel();
+            return userEntity.ToStrippedModel();
         }
 
         [HttpGet, Route("{userId}/groups")]

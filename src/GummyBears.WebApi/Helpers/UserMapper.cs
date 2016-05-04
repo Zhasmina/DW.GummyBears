@@ -27,20 +27,17 @@ namespace GummyBears.WebApi.Helpers
             };
         }
 
-        public static User ToModel(this UserEntity user)
+        public static User ToStrippedModel(this UserEntity user)
         {
             return new User
             {
                 Country = user.Country,
                 DateOfBirth = user.DateOfBirth,
                 Description = user.Description,
-                Email = user.Email,
                 FirstName = user.FirstName,
-                Id = user.Id,
                 LastName = user.LastName,
-                Password = user.Password,
+                Id = user.Id,
                 ProfilePicturePath = user.ProfilePicturePath,
-                TelephoneNumber = user.TelephoneNumber,
                 UserName = user.UserName
             };
         }
