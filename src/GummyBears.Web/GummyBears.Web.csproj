@@ -310,6 +310,7 @@
     <Content Include="Views\Home\AddParticipant.cshtml" />
     <Content Include="Views\Shared\_AuthenticationLayout.cshtml" />
     <Content Include="Views\Shared\_AuthenticatedLayout.cshtml" />
+    <Content Include="Views\Home\CreateGroup.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

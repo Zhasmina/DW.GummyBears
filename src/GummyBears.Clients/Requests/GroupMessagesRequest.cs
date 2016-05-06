@@ -13,5 +13,7 @@ namespace GummyBears.Clients.Requests
         public string CorrelationToken { get; set; }
 
         public int GroupId { get; set; }
+
+        public int UserId { get; set; }
     }
 }

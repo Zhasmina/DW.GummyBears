@@ -48,7 +48,7 @@ namespace GummyBears.WebApi.Controllers
                     AuthorId = i.AuthorId,
                     Id = i.Id,
                     Text = i.Text,
-                    AurhorName = authorIdToNameMapping[i.Id]
+                    AurhorName = authorIdToNameMapping[i.AuthorId]
                 }).ToList(),
                 ItemsPerPage = page.ItemsPerPage,
                 TotalItems = page.TotalItems,

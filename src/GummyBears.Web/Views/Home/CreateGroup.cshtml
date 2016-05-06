@@ -1,8 +1,4 @@
-﻿@model GummyBears.Web.Models.AuthenticatedUserGroupsModel
-
-@{
-    ViewBag.Title = "GetGroups";
-}
+﻿@model GummyBears.Web.Models.AuthenticatedGroupModel
 @{
     Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
 }
@@ -19,42 +15,31 @@
         <ul id="menu">
             <li><a href="@Url.Action("GetUserProfile", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-user"></i> <span>My Profile</span></a></li>
             <li><a href="@Url.Action("GetFeeds", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-rss-square"></i> <span>Feeds</span></a></li>
-            <li><a href="@Url.Action("Groups", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-users"></i> <span>My Groups</span></a></li>
+            <li><a href="@Url.Action("GetGroups", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username  })"><i class="fa fa-users"></i> <span>My Groups</span></a></li>
             <li><a href="@Url.Action( "GetUserCreations", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-briefcase"></i> <span>My Creations</span></a></li>
-
         </ul>
     </div>
 </div>
 <div class="content">
-    <h2>GetGroups</h2>
+    <hr />
+    <form action="" method="post" enctype="multipart/form-data">
+        @Html.Hidden("authenticationToken", Model.AuthenticationToken)
+        @Html.Hidden("userId", Model.UserId)
+        @Html.Hidden("username", Model.Username)
 
-    <p>
-        <a href="@Url.Action("CreateGroup", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-plus-square-o"></i><span> Add new</span></a>
-    </p>
-
-    @Html.HiddenFor(m => m.UserId)
-    @Html.HiddenFor(m => m.AuthenticationToken)
-    @Html.HiddenFor(m => m.Username)
-    <table class="table">
-        <tr>
-            <th>
-            </th>
-            <th>
-                @Html.Label("GroupName")
-            </th>
-        </tr>
-
-        @foreach (var item in Model.Groups)
-        {
-            <tr>
-                <td>
-                    <a href="@Url.Action("GetMessagesInGroup", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username, groupId = item.GroupId })"><i class="fa fa-eye"></i><span>View</span></a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.GroupName)
-                </td>
-            </tr>
-        }
-
-    </table>
+        <div class="form-horizontal">
+            <hr />
+            <div class="form-group">
+                <label for="groupName">Group Name:</label>
+                <div class="col-md-5">
+                    <input type="text" name="groupName" id="groupName" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-3">
+                    <input type="submit" value="Create" class="btn btn-success" />
+                </div>
+            </div>
+        </div>
+    </form>
 </div>

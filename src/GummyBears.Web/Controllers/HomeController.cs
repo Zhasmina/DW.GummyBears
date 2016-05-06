@@ -306,12 +306,13 @@ namespace GummyBears.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult CreateGroup(string token, int userId)
+        public ActionResult CreateGroup(string token, int userId, string username)
         {
-            return View(model: new AuthenticatedGroupModel()
+            return View(new AuthenticatedGroupModel()
             {
                 AuthenticationToken = token,
-                UserId = userId
+                UserId = userId,
+                Username = username
             });
         }
 
@@ -334,17 +335,18 @@ namespace GummyBears.Web.Controllers
                 return RedirectToAction("Index");
             }
 
-            return RedirectToAction("GetGroups", new { token = model.AuthenticationToken, userId = model.UserId });
+            return RedirectToAction("GetGroups", new { token = model.AuthenticationToken, userId = model.UserId, username = model.Username });
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetMessagesInGroup(string token, int userId, int groupId)
+        public async Task<ActionResult> GetMessagesInGroup(string token, int userId, int groupId, string username)
         {
             Response<IEnumerable<GroupMessage>> response = await _gummyBearClient.GetMessagesInGroup(new GroupMessagesRequest()
             {
                 AuthenticationToken = token,
                 CorrelationToken = Guid.NewGuid().ToString(),
-                GroupId = groupId
+                GroupId = groupId,
+                UserId = userId
             }).ConfigureAwait(false);
 
             if (response.Status == Status.Failed)
@@ -356,7 +358,9 @@ namespace GummyBears.Web.Controllers
             {
                 AuthenticationToken = token,
                 UserId = userId,
-                GroupMessages = response.Payload
+                GroupMessages = response.Payload,
+                Username = username,
+                GroupId = groupId
             });
         }
 

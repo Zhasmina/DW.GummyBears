@@ -128,7 +128,7 @@ namespace GummyBears.Clients
 
         public async Task<Response<IEnumerable<GroupMessage>>> GetMessagesInGroup(GroupMessagesRequest request)
         {
-            HttpRequestMessage httpRequestMessage = BuildRequestMessage(request, string.Format("groups/{0}", request.GroupId), HttpMethod.Get);
+            HttpRequestMessage httpRequestMessage = BuildRequestMessage(request, string.Format("groups/{0}?userId={1}", request.GroupId, request.UserId), HttpMethod.Get);
             httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
 
             return await SendRequestAsync<IEnumerable<GroupMessage>>(httpRequestMessage);

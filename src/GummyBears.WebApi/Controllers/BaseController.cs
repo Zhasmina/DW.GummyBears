@@ -12,6 +12,7 @@ namespace GummyBears.WebApi.Controllers
     public class BaseController : ApiController 
     {
         protected IDbContext DbContext;
+
         protected string AuthenticationToken;
         public BaseController(IDbContext dbContext)
         {
