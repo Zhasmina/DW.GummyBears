@@ -6,7 +6,7 @@ namespace GummyBears.Contracts
     {
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Text field is empty"]
         public string Text { get; set; }
 
         public int AuthorId { get; set; }
