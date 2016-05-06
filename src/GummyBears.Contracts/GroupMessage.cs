@@ -8,6 +8,8 @@ namespace GummyBears.Contracts
 
         public int UserId { get; set; }
 
+        public string Username { get; set; }
+
         [Required(ErrorMessage ="Message is empty")]
         public string Message { get; set; }
 
