@@ -15,5 +15,9 @@ namespace GummyBears.Contracts
 
         [Required(ErrorMessage = "Send date not populated")]
         public DateTime SendDate { get; set; }
+
+        public string AuthorName { get; set; }
+
+        public string Username { get; set; }
     }
 }

@@ -38,9 +38,21 @@ namespace GummyBears.WebApi.Controllers
                 ThrowHttpResponseException(System.Net.HttpStatusCode.NotFound, string.Format("Group with id {0} was not found.", groupId));
             }
 
-            IEnumerable<GroupMessageEntity> messages = await DbContext.GroupMessagesRepo.GetGroupMessages(groupId);
+            IEnumerable<GroupMessageEntity> dbMessages = await DbContext.GroupMessagesRepo.GetGroupMessages(groupId);
+            var authorsIds = dbMessages.Select(i => i.UserId).Distinct();
+            var authors = await DbContext.UsersRepo.GetByKeysAsync(authorsIds);
+            var authorIdToNameMapping = authors.ToDictionary(u => u.Id, u => string.Format("{0} {1}", u.FirstName, u.LastName));
+            var authorIdToUsernameMapping = authors.ToDictionary(u => u.Id, u => u.UserName);
 
-            return messages.Select(m => m.ToContract()).ToList();
+            return dbMessages.Select(m =>
+            {
+                var contract = m.ToContract();
+                contract.AuthorName = authorIdToNameMapping[m.UserId];
+                contract.Username = authorIdToUsernameMapping[m.UserId];
+
+                return contract;
+            }).ToList();
+
         }
 
         [HttpPost]
