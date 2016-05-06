@@ -8,10 +8,10 @@ namespace GummyBears.Contracts
 
         public int UserId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="Message is empty")]
         public string Message { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Send date not populated")]
         public DateTime SendDate { get; set; }
     }
 }
