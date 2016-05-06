@@ -8,7 +8,6 @@ namespace GummyBears.Contracts
 
         public int CreationId { get; set; }
 
-        [Required]
         [RegularExpression(@"^[A-Za-z][A-Za-z0-9._]{3,100}$",
             ErrorMessage = "Creation name can contain only letters, digits, dots and down slashes. Length of the name must be between 3 and 100 characters")]
         public string CreationName { get; set; }
