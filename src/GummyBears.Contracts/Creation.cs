@@ -15,6 +15,10 @@ namespace GummyBears.Contracts
         [Required(ErrorMessage ="Missing creation path")]
         public string CreationPath { get; set; }
 
+        public string Author { get; set; }
+
+        public string Owner { get; set; }
+
         public string Footprint { get; set; }
 
         public string Signature { get; set; }

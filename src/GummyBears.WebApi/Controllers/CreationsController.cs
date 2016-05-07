@@ -30,12 +30,6 @@ namespace GummyBears.WebApi.Controllers
         [AuthenticationTokenFilter]
         public async Task<List<Contracts.Creation>> GetAllUserCreations([FromUri]int userId)
         {
-            UserEntity user = await DbContext.UsersRepo.GetSingleOrDefaultAsync(userId);
-            if (user == null)
-            {
-                ThrowHttpResponseException(HttpStatusCode.NotFound, string.Format("User with id '{0}' not found.", userId));
-            }
-
             IEnumerable<CreationEntity> creations = await DbContext.CreationsRepo.GetUserCreations(userId);
 
             return creations.Select(c => c.ToContract()).ToList();
@@ -43,9 +37,12 @@ namespace GummyBears.WebApi.Controllers
 
         [HttpPost, Route("{userId:int}/creations")]
         [AuthenticationTokenFilter]
-        public async Task<Contracts.Creation> AddCreation(Contracts.Creation creation)
+        public async Task<Contracts.Creation> AddCreation([FromUri]int userId, [FromBody]Contracts.Creation creation)
         {
-            UserEntity author = await DbContext.UsersRepo.GetSingleOrDefaultAsync(creation.UserId);
+            if (userId == creation.UserId)
+                ThrowHttpResponseException(HttpStatusCode.Unauthorized, "Cannot add creation for different user");
+
+            UserEntity author = await DbContext.UsersRepo.GetSingleOrDefaultAsync(userId);
             var authorString = string.Format("{0} {1}, a.k.a {2}", author.FirstName, author.LastName, author.UserName);
             var fileData = File.ReadAllBytes(creation.CreationPath);
             var rightCreation = new CreationRightsManager.Creation
@@ -55,12 +52,15 @@ namespace GummyBears.WebApi.Controllers
                 TimeOfCreation = DateTime.UtcNow,
                 Data = new MemoryStream(fileData)
             };
+            creation.Author = creation.Owner = authorString;
 
             CreationCertificateData cert = _creationRightsManager.Register(rightCreation);
             creation.Footprint = cert.CreationFootprint;
             creation.Signature = cert.Signature;
 
-            var savedCreation = await DbContext.CreationsRepo.CreateAsync(creation.ToEntity());
+            var entity = creation.ToEntity();
+            entity.TimeOfCreation = cert.TimeOfCreation;
+            var savedCreation = await DbContext.CreationsRepo.CreateAsync(entity);
             creation.CreationId = savedCreation.Id;
 
             return creation;
@@ -70,23 +70,50 @@ namespace GummyBears.WebApi.Controllers
         [AuthenticationTokenFilter]
         public async Task<EmptyResponse> DeleteCreation(int userId, int creationId)
         {
-            UserEntity user = await DbContext.UsersRepo.GetSingleOrDefaultAsync(userId);
-
-            if (user == null)
-            {
-                ThrowHttpResponseException(HttpStatusCode.NotFound, string.Format("User with id '{0}' not found.", userId));
-            }
-
-            var creation = await DbContext.CreationsRepo.GetSingleOrDefaultAsync(creationId).ConfigureAwait(false);
-
-            if (creation == null)
-            {
-                ThrowHttpResponseException(HttpStatusCode.NotFound, string.Format("Creation with id '{0}' not found.", creationId));
-            }
+            await ValidateCreation(creationId, userId);
 
             await DbContext.CreationsRepo.DeleteAsync(creationId).ConfigureAwait(false);
 
             return new EmptyResponse();
+        }
+
+        [HttpPut, Route("{userId:int}/creations/{creationId:int}/owner")]
+        [AuthenticationTokenFilter]
+        public async Task<Contracts.Creation> ChangeOwner([FromUri]int userId, [FromUri]int creationId, [FromBody]string newOwner)
+        {
+            CreationEntity entity = await ValidateCreation(creationId, userId);
+            Contracts.Creation contractFromEntity = entity.ToContract();
+            contractFromEntity.Owner = newOwner;
+
+            var fileData = File.ReadAllBytes(entity.FilePath);
+            var rightCreation = new CreationRightsManager.Creation
+            {
+                Author = contractFromEntity.Author,
+                Owner = contractFromEntity.Owner,
+                TimeOfCreation = entity.TimeOfCreation,
+                Data = new MemoryStream(fileData)
+            };
+            CreationCertificateData cert = _creationRightsManager.Register(rightCreation);
+            contractFromEntity.Footprint = cert.CreationFootprint;
+            contractFromEntity.Signature = cert.Signature;
+
+            await DbContext.CreationsRepo.UpdateAsync(contractFromEntity.ToEntity());
+
+            return contractFromEntity;
+        }
+
+
+        private async Task<CreationEntity> ValidateCreation(int creationId, int userId)
+        {
+            var creation = await DbContext.CreationsRepo.GetSingleOrDefaultAsync(creationId).ConfigureAwait(false);
+
+            if (creation == null)
+                ThrowHttpResponseException(HttpStatusCode.NotFound, string.Format("Creation with id '{0}' not found.", creationId));
+
+            if (creation.UserId != userId)
+                ThrowHttpResponseException(HttpStatusCode.Unauthorized, string.Format("Creation with id {0} is not owned by user with id {1}", creationId, userId));
+
+            return creation;
         }
     }
 }

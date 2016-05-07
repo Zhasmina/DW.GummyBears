@@ -24,5 +24,14 @@ namespace GummyBears.Entities
 
         [Column("CreationFootprint")]
         public string CreationFootprint { get; set; }
+
+        [Column("Author")]
+        public string Author { get; set; }
+
+        [Column("Owner")]
+        public string Owner { get; set; }
+
+        [Column("TimeOfCreation")]
+        public DateTime TimeOfCreation { get; set; }
     }
 }

@@ -18,7 +18,9 @@ namespace GummyBears.WebApi.Helpers
                 Id = creation.CreationId,
                 UserId = creation.UserId,
                 Signiture = creation.Signature,
-                CreationFootprint = creation.Footprint
+                CreationFootprint = creation.Footprint,
+                Author = creation.Author,
+                Owner = creation.Owner
             };
         }
 
@@ -29,7 +31,11 @@ namespace GummyBears.WebApi.Helpers
                 CreationId = creation.Id,
                 CreationName = creation.Name,
                 CreationPath = creation.FilePath,
-                UserId = creation.UserId
+                UserId = creation.UserId,
+                Author = creation.Author,
+                Owner = creation.Owner,
+                Footprint = creation.CreationFootprint,
+                Signature = creation.Signiture
             };
         }
     }
