@@ -102,7 +102,6 @@ namespace GummyBears.WebApi.Controllers
             return contractFromEntity;
         }
 
-
         private async Task<CreationEntity> ValidateCreation(int creationId, int userId)
         {
             var creation = await DbContext.CreationsRepo.GetSingleOrDefaultAsync(creationId).ConfigureAwait(false);

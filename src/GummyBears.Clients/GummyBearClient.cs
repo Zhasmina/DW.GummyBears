@@ -151,7 +151,7 @@ namespace GummyBears.Clients
             return await SendRequestAsync<IEnumerable<GroupParticipants>>(httpRequestMessage);
         }
 
-        public async Task<Response<GroupCreation>> AttackFileToGroup(AuthenticatedGroupCreationsRequest request)
+        public async Task<Response<GroupCreation>> AttatchFileToGroup(AuthenticatedGroupCreationsRequest request)
         {
 
             HttpRequestMessage httpRequestMessage = BuildRequestMessageWithBody(request, string.Format("groups/{0}/files", request.Payload.GroupId), HttpMethod.Post);

@@ -30,7 +30,7 @@ namespace GummyBears.Clients
 
         Task<Response<IEnumerable<GroupParticipants>>> GetParticipantsInGroup(AuthenticatedGroupRequest request);
 
-        Task<Response<GroupCreation>> AttackFileToGroup(AuthenticatedGroupCreationsRequest request);
+        Task<Response<GroupCreation>> AttatchFileToGroup(AuthenticatedGroupCreationsRequest request);
 
         Task<Response<IEnumerable<Creation>>> GetAttachedFilesInGroup(AuthenticatedGroupCreationsRequest request);
     }
