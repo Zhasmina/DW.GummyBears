@@ -41,7 +41,10 @@ CREATE TABLE [dbo].[Creations](
 	[Name] [nvarchar](max) NOT NULL,
 	[FilePath] [nvarchar](max) NOT NULL,
 	[Signiture] [nvarchar](max) NOT NULL,
-	[CreationFootprint] [nvarchar](max) NOT NULL
+	[CreationFootprint] [nvarchar](max) NOT NULL,
+	[Author] [nvarchar](40) NOT NULL,
+	[Owner] [nvarchar] (40) NOT NULL,
+	[TimeOfCreation] DATETIME NOT NULL
 PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
