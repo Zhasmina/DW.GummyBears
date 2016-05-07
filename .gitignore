@@ -35,3 +35,4 @@ build/raw/*
 *.ncrunch*
 0l1j25m1.jnd.txt
 /src/GummyBears.Web/App_Data/Uploads
+/src/.vs/

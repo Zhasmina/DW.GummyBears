@@ -2,6 +2,8 @@ CREATE DATABASE GummyBears
 
 GO
 
+USE GummyBears
+
 CREATE TABLE [dbo].[Users]
 (
 	[Id] [int] NOT NULL PRIMARY KEY IDENTITY,
