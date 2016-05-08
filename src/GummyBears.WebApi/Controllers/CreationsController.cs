@@ -79,11 +79,13 @@ namespace GummyBears.WebApi.Controllers
 
         [HttpPut, Route("{userId:int}/creations/{creationId:int}/owner")]
         [AuthenticationTokenFilter]
-        public async Task<Contracts.Creation> ChangeOwner([FromUri]int userId, [FromUri]int creationId, [FromBody]string newOwner)
+        public async Task<Contracts.Creation> ChangeOwner([FromUri]int userId, [FromUri]int creationId, [FromBody]int newOwnerId)
         {
             CreationEntity entity = await ValidateCreation(creationId, userId);
+            UserEntity newOwner = await DbContext.UsersRepo.GetSingleOrDefaultAsync(newOwnerId);
+            var newOwnerString = string.Format("{0} {1}, a.k.a {2}", newOwner.FirstName, newOwner.LastName, newOwner.UserName);
             Contracts.Creation contractFromEntity = entity.ToContract();
-            contractFromEntity.Owner = newOwner;
+            contractFromEntity.Owner = newOwnerString;
 
             var fileData = File.ReadAllBytes(entity.FilePath);
             var rightCreation = new CreationRightsManager.Creation
