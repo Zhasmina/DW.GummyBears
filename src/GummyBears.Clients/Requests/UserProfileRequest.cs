@@ -9,5 +9,6 @@ namespace GummyBears.Clients.Requests
     public class UserProfileRequest : AuthenticationTokenRequest
     {
         public int UserId { get; set; }
+        public string Username { get; set; }
     }
 }

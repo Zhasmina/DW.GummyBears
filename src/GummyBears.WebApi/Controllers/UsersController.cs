@@ -18,7 +18,7 @@ namespace GummyBears.WebApi.Controllers
     public class UsersController : BaseController
     {
         public UsersController(IDbContext dbContext)
-            :base(dbContext)
+            : base(dbContext)
         {
         }
 
@@ -87,11 +87,25 @@ namespace GummyBears.WebApi.Controllers
         {
             UserEntity userEntity = await DbContext.UsersRepo.GetSingleOrDefaultAsync(userId);
 
-            if(userEntity == null)
+            if (userEntity == null)
             {
                 ThrowHttpResponseException(HttpStatusCode.NotFound, string.Format("User with id '{0}' not found.", userId));
             }
-            
+
+            return userEntity.ToStrippedModel();
+        }
+
+        [HttpGet, Route("{username:string}", Order = 1)]
+        [AuthenticationTokenFilter]
+        public async Task<UserProfile> GetUser(string username)
+        {
+            UserEntity userEntity = await DbContext.UsersRepo.GetByUserName(username);
+
+            if (userEntity == null)
+            {
+                ThrowHttpResponseException(HttpStatusCode.NotFound, string.Format("User with username '{0}' not found.", username));
+            }
+
             return userEntity.ToStrippedModel();
         }
 
@@ -99,15 +113,15 @@ namespace GummyBears.WebApi.Controllers
         [AuthenticationTokenFilter]
         public async Task<List<Group>> GetAllUserGroups([FromUri]int userId)
         {
-           UserEntity user = await DbContext.UsersRepo.GetSingleOrDefaultAsync(userId);
-           if (user == null)
-           {
-               ThrowHttpResponseException(HttpStatusCode.NotFound, string.Format("User with id '{0}' not found.", userId));
-           }
+            UserEntity user = await DbContext.UsersRepo.GetSingleOrDefaultAsync(userId);
+            if (user == null)
+            {
+                ThrowHttpResponseException(HttpStatusCode.NotFound, string.Format("User with id '{0}' not found.", userId));
+            }
 
-           IEnumerable<GroupEntity> groups = await DbContext.GroupsRepo.GetUserGroups(userId);
+            IEnumerable<GroupEntity> groups = await DbContext.GroupsRepo.GetUserGroups(userId);
 
-           return groups.Select(g => g.ToContract()).ToList();
+            return groups.Select(g => g.ToContract()).ToList();
         }
     }
 }

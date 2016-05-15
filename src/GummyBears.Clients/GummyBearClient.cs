@@ -33,7 +33,7 @@ namespace GummyBears.Clients
             return await SendRequestAsync<User>( httpRequestMessage);
         }
 
-        public async Task<Response<UserProfile>> UpdateUserAsync(AuthenticatedUserRequest request)
+        public async Task<Response<UserProfile>> UpdateUserByIdAsync(AuthenticatedUserRequest request)
         {
             HttpRequestMessage httpRequestMessage = BuildRequestMessageWithBody(request, string.Format("users/{0}", request.Payload.Id), HttpMethod.Post);
             httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
@@ -41,11 +41,19 @@ namespace GummyBears.Clients
             return await SendRequestAsync<UserProfile>(httpRequestMessage);
         }
 
-        public async Task<Response<UserProfile>> GetUserAsync(UserProfileRequest request)
+        public async Task<Response<UserProfile>> GetUserByIdAsync(UserProfileRequest request)
         {
             HttpRequestMessage httpRequestMessage = BuildRequestMessage(request, string.Format("users/{0}", request.UserId), HttpMethod.Get);
             httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
             
+            return await SendRequestAsync<UserProfile>(httpRequestMessage);
+        }
+
+        public async Task<Response<UserProfile>> GetUserByUsernameAsync(UserProfileRequest request)
+        {
+            HttpRequestMessage httpRequestMessage = BuildRequestMessage(request, string.Format("users/{0}", request.Username), HttpMethod.Get);
+            httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
+
             return await SendRequestAsync<UserProfile>(httpRequestMessage);
         }
 
