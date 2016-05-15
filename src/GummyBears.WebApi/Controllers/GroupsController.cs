@@ -169,6 +169,27 @@ namespace GummyBears.WebApi.Controllers
             return creations.Select(c => c.ToContract()).ToList();
         }
 
-        //POST MESSAGE
+        [HttpPost]
+        [Route("{groupId:int}/messages/{userId:int}")]
+        [AuthenticationTokenFilter]
+        public async Task<GroupMessage> CreateMessageInGroup(int groupId, int userId, [FromBody]GroupMessage message)
+        {
+            GroupUserEntity userGroup = await DbContext.GroupsUsersRepo.GetByUserIdAndGroupId(userId, groupId);
+
+            if (userGroup == null)
+            {
+                ThrowHttpResponseException(System.Net.HttpStatusCode.Unauthorized, "Access is denied.");
+            }
+
+            GroupEntity group = await DbContext.GroupsRepo.GetSingleOrDefaultAsync(groupId);
+
+            if (group == null)
+            {
+                ThrowHttpResponseException(System.Net.HttpStatusCode.NotFound, string.Format("Group with id {0} was not found.", groupId));
+            }
+
+            GroupMessageEntity entity = await DbContext.GroupMessagesRepo.CreateAsync(message.ToEntity());
+            return entity.ToContract();
+        }
     }
 }
