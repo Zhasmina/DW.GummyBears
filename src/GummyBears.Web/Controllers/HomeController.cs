@@ -365,7 +365,7 @@ namespace GummyBears.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetGroupParticipants(string token, int userId, int groupId)
+        public async Task<ActionResult> GetGroupParticipants(string token, int userId, int groupId, string username)
         {
             Response<IEnumerable<GroupParticipants>> groupParticipatsResponse = await _gummyBearClient.GetParticipantsInGroup(new AuthenticatedGroupRequest
             {
@@ -387,6 +387,7 @@ namespace GummyBears.Web.Controllers
                 AuthenticationToken = token,
                 GroupId = groupId,
                 UserId = userId,
+                Username = username,
                 ParticipantIds = groupParticipatsResponse.Payload.Select(gp => gp.ParticipantId).ToList()
             });
         }
@@ -414,6 +415,7 @@ namespace GummyBears.Web.Controllers
             });
             return RedirectToAction("Index");
         }
+     
         #endregion
     }
 }

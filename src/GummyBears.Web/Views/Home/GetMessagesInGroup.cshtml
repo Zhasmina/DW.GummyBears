@@ -2,9 +2,10 @@
 
 @{
     ViewBag.Title = "GetMessagesInGroup";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@{
+    Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
+}
 <!--/sidebar-menu-->
 <div class="sidebar-menu">
     <header class="logo1">
@@ -20,7 +21,8 @@
             <li><a href="@Url.Action("GetFeeds", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-rss-square"></i> <span>Feeds</span></a></li>
             <li><a href="@Url.Action("Groups", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-users"></i> <span>My Groups</span></a></li>
             <li><a href="@Url.Action( "GetUserCreations", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-briefcase"></i> <span>My Creations</span></a></li>
-
+            <li><a href="@Url.Action( "GetGroupParticipants", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-snapchat-ghost"></i> <span>View Participants</span></a></li>
+            <li><a href="@Url.Action( "GetGroupCreations", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-briefcase"></i><i class="fa fa-users"></i> <span>View Group Creations</span></a></li>
         </ul>
     </div>
 </div>
@@ -29,39 +31,22 @@
     <p>
         @Html.ActionLink("Create New", "Create")
     </p>
+
     @Html.HiddenFor(model => model.AuthenticationToken)
     @Html.HiddenFor(model => model.UserId)
     @Html.HiddenFor(model => model.GroupId)
 
     <table class="table">
-        <tr>
-            <th>
-                @Html.Label("Message")
-            </th>
-            <th>
-                @Html.Label("Author")
-            </th>
-            <th>
-                @Html.Label("Sent Date")
-            </th>
-        </tr>
-
         @foreach (var item in Model.GroupMessages)
         {
             <tr>
                 <td>
-                    <span>Author <i>@item.</i> with id <b>@item.AuthorId</b> wrote:</span>
+                    <span>User <i>@item.Username</i> with id <b>@item.UserId</b> wrote on @item.SendDate.ToString("dd/MM/yyyy"):</span>
                 </td>
                 </tr>
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Message)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UserId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SendDate)
                 </td>
             </tr>
         }

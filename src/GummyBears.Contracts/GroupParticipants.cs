@@ -5,5 +5,7 @@
         public int GroupId { get; set; }
 
         public int ParticipantId { get; set; }
+
+        public string ParticipantName { get; set; }
     }
 }
