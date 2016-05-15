@@ -26,6 +26,7 @@ namespace GummyBears.Clients
         Task<Response<Group>> CreateGroup(AuthenticatedGroupRequest request);
 
         Task<Response<IEnumerable<GroupMessage>>> GetMessagesInGroup(GroupMessagesRequest request);
+        Task<Response<GroupMessage>> CreateMessagesInGroup(CreateGroupMessageRequest request);
 
         Task<Response<IEnumerable<GroupParticipants>>> AddParticipantsInGroup(AuthenticatedGroupParticipantsRequest request);
 

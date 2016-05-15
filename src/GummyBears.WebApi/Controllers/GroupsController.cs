@@ -170,7 +170,7 @@ namespace GummyBears.WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("{groupId:int}/messages/{userId:int}")]
+        [Route("{groupId:int}/users/{userId:int}/messages")]
         [AuthenticationTokenFilter]
         public async Task<GroupMessage> CreateMessageInGroup(int groupId, int userId, [FromBody]GroupMessage message)
         {
