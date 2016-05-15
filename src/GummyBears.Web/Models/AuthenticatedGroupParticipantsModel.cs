@@ -1,8 +1,4 @@
-﻿using GummyBears.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace GummyBears.Web.Models
 {
@@ -11,6 +7,8 @@ namespace GummyBears.Web.Models
         public string AuthenticationToken { get; set; }
 
         public int UserId { get; set; }
+
+        public string Username { get; set; }
 
         public int GroupId { get; set; }
 

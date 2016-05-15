@@ -83,7 +83,7 @@ namespace GummyBears.Clients
 
         public async Task<Response<string>> Logout(AuthenticationTokenRequest request)
         {
-            HttpRequestMessage message = BuildRequestMessage(request, "usercredentials", HttpMethod.Post);
+            HttpRequestMessage message = BuildRequestMessage(request, "usercredentials", HttpMethod.Delete);
             return await SendRequestAsync<string>(message);
         }
 
