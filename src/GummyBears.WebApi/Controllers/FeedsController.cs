@@ -25,6 +25,7 @@ namespace GummyBears.WebApi.Controllers
         [AuthenticationTokenFilter]
         public async Task<Feed> CreateFeed([FromBody]Feed feed)
         {
+            ValidateUserAsAuthenticated(feed.AuthorId);
             var createdFeed = await DbContext.FeedsRepo.CreateAsync(feed.ToEntity());
             feed.Id = createdFeed.Id;
 
@@ -62,7 +63,9 @@ namespace GummyBears.WebApi.Controllers
         [AuthenticationTokenFilter]
         public async Task DeleteFeed(int feedId)
         {
+            ValidateUserAsAdmin();
             await DbContext.FeedsRepo.DeleteAsync(feedId);
+            FeedsEntity entity = await DbContext.FeedsRepo.GetSingleOrDefaultAsync(feedId);
         }
     }
 }

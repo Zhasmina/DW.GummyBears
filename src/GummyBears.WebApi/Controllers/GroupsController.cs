@@ -60,6 +60,7 @@ namespace GummyBears.WebApi.Controllers
         [AuthenticationTokenFilter]
         public async Task<Group> CreateGroup([FromBody]Group group)
         {
+            ValidateUserAsAuthenticated(group.AuthorId);
             using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 var createdGroup = await DbContext.GroupsRepo.CreateAsync(group.ToEntity());
@@ -87,6 +88,7 @@ namespace GummyBears.WebApi.Controllers
             {
                 ThrowHttpResponseException(System.Net.HttpStatusCode.BadRequest, string.Format("Group with id {0} not exists.", groupId));
             }
+            ValidateUserAsAuthenticated(group.AuthorId);
 
             AuthenticationEntity authentication = await DbContext.AuthenticationRepo.GetSingleOrDefaultAsync(AuthenticationToken);
 
@@ -105,17 +107,9 @@ namespace GummyBears.WebApi.Controllers
         public async Task<IEnumerable<GroupParticipants>> GetParticipants(int groupId)
         {
             GroupEntity group = await DbContext.GroupsRepo.GetSingleOrDefaultAsync(groupId);
-
             if (group == null)
             {
                 ThrowHttpResponseException(System.Net.HttpStatusCode.BadRequest, string.Format("Group with id {0} not exists.", groupId));
-            }
-
-            AuthenticationEntity authentication = await DbContext.AuthenticationRepo.GetSingleOrDefaultAsync(AuthenticationToken);
-
-            if (authentication == null || authentication.UserId != group.AuthorId)
-            {
-                ThrowHttpResponseException(System.Net.HttpStatusCode.Unauthorized, "Wrong authentication token.");
             }
 
             IEnumerable<GroupUserEntity> groupUsers = await DbContext.GroupsUsersRepo.GetByGroupId(groupId);
@@ -123,23 +117,24 @@ namespace GummyBears.WebApi.Controllers
         }
 
         [HttpPut]
-        [Route("{groupId:int}/files")]
+        [Route("{groupId:int}/users/{userId:int}/files")]
         [AuthenticationTokenFilter]
-        public async Task<GroupCreation> AttachFile(GroupCreation groupCreation)
+        public async Task<GroupCreation> AttachFile(int groupId, int userId, GroupCreation groupCreation)
         {
-            CreationEntity creation = await DbContext.CreationsRepo.GetSingleOrDefaultAsync(groupCreation.CreationId).ConfigureAwait(false);
+            GroupUserEntity userGroup = await DbContext.GroupsUsersRepo.GetByUserIdAndGroupId(userId, groupId);
+
+            if (userGroup == null)
+            {
+                ThrowHttpResponseException(System.Net.HttpStatusCode.Unauthorized, "Access is denied.");
+            }
+
+            ValidateUserAsAuthenticated(userGroup.UserId);
+            
+            CreationEntity creation = await DbContext.CreationsRepo.GetSingleOrDefaultAsync(groupCreation.CreationId);
 
             if (creation == null)
             {
                 ThrowHttpResponseException(System.Net.HttpStatusCode.NotFound, string.Format("Creation with id {0} not found.", groupCreation.CreationId));
-
-            }
-
-            AuthenticationEntity authentication = await DbContext.AuthenticationRepo.GetSingleOrDefaultAsync(AuthenticationToken);
-
-            if (authentication == null || authentication.UserId != creation.Id)
-            {
-                ThrowHttpResponseException(System.Net.HttpStatusCode.Unauthorized, "Wrong authentication token.");
             }
 
             GroupCreationEntity groupCreationEntity = await DbContext.GroupCreationsRepo.CreateAsync(
@@ -180,6 +175,7 @@ namespace GummyBears.WebApi.Controllers
             {
                 ThrowHttpResponseException(System.Net.HttpStatusCode.Unauthorized, "Access is denied.");
             }
+            ValidateUserAsAuthenticated(userId);
 
             GroupEntity group = await DbContext.GroupsRepo.GetSingleOrDefaultAsync(groupId);
 

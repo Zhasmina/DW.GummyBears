@@ -10,5 +10,6 @@ namespace GummyBears.Clients.Requests
     public class AuthenticatedGroupCreationsRequest : RequestBase<GroupCreation>
     {
         public string AuthenticationToken { get; set; }
+        public int UserId { get; set; }
     }
 }

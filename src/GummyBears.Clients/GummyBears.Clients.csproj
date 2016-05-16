@@ -101,6 +101,7 @@
     <Compile Include="Requests\AuthenticatedUserRequest.cs" />
     <Compile Include="Requests\AuthenticationRequest.cs" />
     <Compile Include="Requests\AuthenticationTokenRequest.cs" />
+    <Compile Include="Requests\CreateGroupMessageRequest.cs" />
     <Compile Include="Requests\GroupMessagesRequest.cs" />
     <Compile Include="Requests\PagedRequest.cs" />
     <Compile Include="Requests\UserProfileRequest.cs" />
