@@ -27,5 +27,12 @@ namespace GummyBears.WebApi.Controllers
 
             throw new HttpResponseException(response);
         }
+
+        protected void ValidateUserAsAuthenticated(int userId)
+        {
+            int authUserId = ((SimpleIdentity)((SimplePrincipal)ActionContext.RequestContext.Principal).Identity).Id;
+            if (userId != authUserId)
+                ThrowHttpResponseException(HttpStatusCode.Unauthorized, "Logged as different user");
+        }
     }
 }

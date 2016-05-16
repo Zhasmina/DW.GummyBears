@@ -25,7 +25,7 @@ namespace GummyBears.WebApi.Controllers
         [AuthenticationTokenFilter]
         public async Task<Feed> CreateFeed([FromBody]Feed feed)
         {
-            int authUserId = ((SimpleIdentity)((SimplePrincipal)ActionContext.RequestContext.Principal).Identity).Id;
+            ValidateUserAsAuthenticated(feed.AuthorId);
             var createdFeed = await DbContext.FeedsRepo.CreateAsync(feed.ToEntity());
             feed.Id = createdFeed.Id;
 

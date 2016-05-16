@@ -48,11 +48,12 @@ namespace GummyBears.WebApi.Controllers
         [AuthenticationTokenFilter]
         public async Task<UserProfile> UpdateUser(int userId, [FromBody]User user)
         {
+            ValidateUserAsAuthenticated(userId);
             if (user.Id != 0 && user.Id != userId)
             {
                 ThrowHttpResponseException(HttpStatusCode.BadRequest, "User Id change is not allowed.");
             }
-
+            
             user.Id = userId;
 
             UserEntity updatedUser;

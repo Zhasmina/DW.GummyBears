@@ -39,6 +39,7 @@ namespace GummyBears.WebApi.Controllers
         [AuthenticationTokenFilter]
         public async Task<Contracts.Creation> AddCreation([FromUri]int userId, [FromBody]Contracts.Creation creation)
         {
+            ValidateUserAsAuthenticated(userId);
             if (userId == creation.UserId)
                 ThrowHttpResponseException(HttpStatusCode.Unauthorized, "Cannot add creation for different user");
 
@@ -70,6 +71,7 @@ namespace GummyBears.WebApi.Controllers
         [AuthenticationTokenFilter]
         public async Task<EmptyResponse> DeleteCreation(int userId, int creationId)
         {
+            ValidateUserAsAuthenticated(userId);
             await ValidateCreation(creationId, userId);
 
             await DbContext.CreationsRepo.DeleteAsync(creationId).ConfigureAwait(false);
@@ -81,6 +83,7 @@ namespace GummyBears.WebApi.Controllers
         [AuthenticationTokenFilter]
         public async Task<Contracts.Creation> ChangeOwner([FromUri]int userId, [FromUri]int creationId, [FromBody]int newOwnerId)
         {
+            ValidateUserAsAuthenticated(userId);
             CreationEntity entity = await ValidateCreation(creationId, userId);
             UserEntity newOwner = await DbContext.UsersRepo.GetSingleOrDefaultAsync(newOwnerId);
             var newOwnerString = string.Format("{0} {1}, a.k.a {2}", newOwner.FirstName, newOwner.LastName, newOwner.UserName);
