@@ -108,7 +108,7 @@ namespace GummyBears.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> GetUserProfile(string token, int userId, string username)
         {
-            Response<UserProfile> response = await _gummyBearClient.GetUserAsync(new UserProfileRequest()
+            Response<UserProfile> response = await _gummyBearClient.GetUserByIdAsync(new UserProfileRequest()
             {
                 AuthenticationToken = token,
                 CorrelationToken = Guid.NewGuid().ToString(),

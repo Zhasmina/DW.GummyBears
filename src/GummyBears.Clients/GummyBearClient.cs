@@ -33,7 +33,7 @@ namespace GummyBears.Clients
             return await SendRequestAsync<User>( httpRequestMessage);
         }
 
-        public async Task<Response<UserProfile>> UpdateUserAsync(AuthenticatedUserRequest request)
+        public async Task<Response<UserProfile>> UpdateUserByIdAsync(AuthenticatedUserRequest request)
         {
             HttpRequestMessage httpRequestMessage = BuildRequestMessageWithBody(request, string.Format("users/{0}", request.Payload.Id), HttpMethod.Post);
             httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
@@ -41,11 +41,19 @@ namespace GummyBears.Clients
             return await SendRequestAsync<UserProfile>(httpRequestMessage);
         }
 
-        public async Task<Response<UserProfile>> GetUserAsync(UserProfileRequest request)
+        public async Task<Response<UserProfile>> GetUserByIdAsync(UserProfileRequest request)
         {
             HttpRequestMessage httpRequestMessage = BuildRequestMessage(request, string.Format("users/{0}", request.UserId), HttpMethod.Get);
             httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
             
+            return await SendRequestAsync<UserProfile>(httpRequestMessage);
+        }
+
+        public async Task<Response<UserProfile>> GetUserByUsernameAsync(UserProfileRequest request)
+        {
+            HttpRequestMessage httpRequestMessage = BuildRequestMessage(request, string.Format("users/{0}", request.Username), HttpMethod.Get);
+            httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
+
             return await SendRequestAsync<UserProfile>(httpRequestMessage);
         }
 
@@ -132,6 +140,14 @@ namespace GummyBears.Clients
             httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
 
             return await SendRequestAsync<IEnumerable<GroupMessage>>(httpRequestMessage);
+        }
+
+        public async Task<Response<GroupMessage>> CreateMessagesInGroup(CreateGroupMessageRequest request)
+        {
+            HttpRequestMessage httpRequestMessage = BuildRequestMessage(request, string.Format("groups/{0}/users/{1}/messages", request.GroupId, request.UserId), HttpMethod.Post);
+            httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
+
+            return await SendRequestAsync<GroupMessage>(httpRequestMessage);
         }
 
         public async Task<Response<IEnumerable<GroupParticipants>>> AddParticipantsInGroup(AuthenticatedGroupParticipantsRequest request)

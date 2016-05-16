@@ -13,6 +13,7 @@ namespace GummyBears.WebApi.Helpers
         {
             return new GroupMessageEntity
             {
+                Id = groupMessage.Id,
                 GroupId = groupMessage.GroupId,
                 Message = groupMessage.Message,
                 SendDate = groupMessage.SendDate
@@ -23,6 +24,7 @@ namespace GummyBears.WebApi.Helpers
         {
             return new GroupMessage
             {
+                Id = groupMessageEntity.Id,
                 GroupId = groupMessageEntity.GroupId,
                 Message = groupMessageEntity.Message,
                 SendDate = groupMessageEntity.SendDate

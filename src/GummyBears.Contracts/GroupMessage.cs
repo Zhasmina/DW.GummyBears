@@ -4,6 +4,8 @@ namespace GummyBears.Contracts
 {
     public class GroupMessage
     {
+        public int Id { get; set; }
+
         public int GroupId { get; set; }
 
         public int UserId { get; set; }
