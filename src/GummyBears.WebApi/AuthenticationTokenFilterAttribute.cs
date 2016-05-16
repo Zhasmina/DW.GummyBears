@@ -46,6 +46,8 @@ namespace GummyBears.WebApi
                 throw new HttpResponseException(actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized));
             }
 
+            actionContext.RequestContext.Principal = new SimplePrincipal(user.UserName, user.Id, "user");
+
             base.OnActionExecuting(actionContext);
         }
     }

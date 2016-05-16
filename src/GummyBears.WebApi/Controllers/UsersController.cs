@@ -95,7 +95,7 @@ namespace GummyBears.WebApi.Controllers
             return userEntity.ToStrippedModel();
         }
 
-        [HttpGet, Route("{username:string}", Order = 1)]
+        [HttpGet, Route("{username}", Order = 1)]
         [AuthenticationTokenFilter]
         public async Task<UserProfile> GetUser(string username)
         {

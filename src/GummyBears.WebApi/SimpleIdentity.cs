@@ -8,9 +8,10 @@ namespace GummyBears.WebApi
 {
     public class SimpleIdentity : IIdentity
     {
-        public SimpleIdentity(string name)
+        public SimpleIdentity(string name, int id)
         {
             Name = name;
+            Id = id;
         }
 
         public string AuthenticationType
@@ -30,5 +31,7 @@ namespace GummyBears.WebApi
         }
 
         public string Name { get; private set; }
+
+        public int Id { get; private set; }
     }
 }

@@ -12,9 +12,9 @@ namespace GummyBears.WebApi
 
         public IIdentity Identity { get; private set; }
 
-        public SimplePrincipal(string username, string role)
+        public SimplePrincipal(string username, int id, string role)
         {
-            Identity = new SimpleIdentity(username);
+            Identity = new SimpleIdentity(username, id);
             _role = role;
         }
 
