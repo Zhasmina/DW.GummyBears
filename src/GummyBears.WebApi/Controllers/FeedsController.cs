@@ -57,5 +57,12 @@ namespace GummyBears.WebApi.Controllers
 
             return result;
         }
+
+        [HttpDelete]
+        [AuthenticationTokenFilter]
+        public async Task DeleteFeed(int feedId)
+        {
+            await DbContext.FeedsRepo.DeleteAsync(feedId);
+        }
     }
 }

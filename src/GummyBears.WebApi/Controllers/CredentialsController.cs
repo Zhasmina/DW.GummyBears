@@ -52,7 +52,7 @@ namespace GummyBears.WebApi.Controllers
 
         [HttpDelete]
         [Route("")]
-        [Authorize(Roles = "User")]
+        [AuthenticationTokenFilter]
         public async Task<string> Logout()
         {
             AuthenticationEntity authentication = await DbContext.AuthenticationRepo.GetSingleOrDefaultAsync(AuthenticationToken);
