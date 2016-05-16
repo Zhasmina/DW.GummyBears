@@ -34,5 +34,12 @@ namespace GummyBears.WebApi.Controllers
             if (userId != authUserId)
                 ThrowHttpResponseException(HttpStatusCode.Unauthorized, "Logged as different user");
         }
+
+        protected void ValidateUserAsAdmin()
+        {
+            bool isAdmin = ((SimplePrincipal)ActionContext.RequestContext.Principal).IsInRole("admin");
+            if (!isAdmin)
+                ThrowHttpResponseException(HttpStatusCode.Unauthorized, "Not logged as admin");
+        }
     }
 }
