@@ -144,7 +144,7 @@ namespace GummyBears.Clients
 
         public async Task<Response<GroupMessage>> CreateMessagesInGroup(CreateGroupMessageRequest request)
         {
-            HttpRequestMessage httpRequestMessage = BuildRequestMessage(request, string.Format("groups/{0}/users/{1}/messages", request.GroupId, request.UserId), HttpMethod.Post);
+            HttpRequestMessage httpRequestMessage = BuildRequestMessageWithBody(request, string.Format("groups/{0}/users/{1}/messages", request.GroupId, request.UserId), HttpMethod.Post);
             httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
 
             return await SendRequestAsync<GroupMessage>(httpRequestMessage);
@@ -170,7 +170,7 @@ namespace GummyBears.Clients
         public async Task<Response<GroupCreation>> AttatchFileToGroup(AuthenticatedGroupCreationsRequest request)
         {
 
-            HttpRequestMessage httpRequestMessage = BuildRequestMessageWithBody(request, string.Format("groups/{0}/files", request.Payload.GroupId), HttpMethod.Post);
+            HttpRequestMessage httpRequestMessage = BuildRequestMessageWithBody(request, string.Format("groups/{0}/users/{1}/files", request.Payload.GroupId, request.userId), HttpMethod.Post);
             httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
 
             return await SendRequestAsync<GroupCreation>(httpRequestMessage);
