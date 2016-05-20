@@ -2,6 +2,7 @@
 using GummyBears.Contracts;
 using GummyBears.Entities;
 using GummyBears.Repository;
+using GummyBears.WebApi.Filters;
 using System;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -21,6 +22,7 @@ namespace GummyBears.WebApi.Controllers
 
         [HttpPost]
         [Route("")]
+        [ApiErrorFilter]
         public async Task<AuthenticationData> Login([FromBody]Credentials credentials)
         {
             UserEntity user = await DbContext.UsersRepo.GetByUserName(credentials.Username);

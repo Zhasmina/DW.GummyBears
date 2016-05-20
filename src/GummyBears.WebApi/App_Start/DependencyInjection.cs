@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Autofac;
+﻿using Autofac;
 using Autofac.Integration.WebApi;
 using System.Web.Http;
-using System.Web.Http.Dependencies;
 using GummyBears.Repository;
 using Dapperer.DbFactories;
 using Dapperer.QueryBuilders.MsSql;
 using Dapperer;
 using GummyBears.WebApi.Controllers;
 using GummyBears.Common;
+using GummyBears.WebApi.Filters;
 
 namespace GummyBears.WebApi.App_Start
 {
@@ -22,6 +18,11 @@ namespace GummyBears.WebApi.App_Start
             var builder = new ContainerBuilder();
 
             builder.RegisterApiControllers(typeof(BaseController).Assembly);
+            builder.RegisterType<ModelValidationFilter>().As<ModelValidationFilter>();
+            builder.RegisterType<ModelValidationFilter>().AsWebApiActionFilterFor<BaseController>();
+            builder.RegisterType<ApiErrorFilter>().As<ApiErrorFilter>();
+            builder.RegisterType<ApiErrorFilter>().AsWebApiExceptionFilterFor<ApiController>();
+
             // Repository
             builder.RegisterType<SqlQueryBuilder>().As<IQueryBuilder>().SingleInstance();
             builder.RegisterType<SqlDbFactory>().As<IDbFactory>();

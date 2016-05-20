@@ -9,7 +9,6 @@
 <!--/sidebar-menu-->
 <div class="sidebar-menu">
     <header class="logo1">
-        <img src="~/img/user-profile.png" style="max-width:170px;" />
         <div class="menu" style="margin-top: 20px;">
             <a href="@Url.Action("GetUserProfile", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })" style="font-size: 25px; padding-top: 2em;"><i class="fa fa-user"></i> <span>@Model.Username</span></a>
         </div>
@@ -21,12 +20,13 @@
             <li><a href="@Url.Action("GetFeeds", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-rss-square"></i> <span>Feeds</span></a></li>
             <li><a href="@Url.Action("Groups", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-users"></i> <span>My Groups</span></a></li>
             <li><a href="@Url.Action( "GetUserCreations", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-briefcase"></i> <span>My Creations</span></a></li>
-
+            <li><a href="@Url.Action( "Logout", "Home", new { token = Model.AuthenticationToken })"><i class="fa fa-sign-out"></i> <span>Logout</span></a></li>
         </ul>
     </div>
 </div>
+
 <div class="content">
-    <h2>GetGroups</h2>
+    <h2>My Groups</h2>
 
     <p>
         <a href="@Url.Action("CreateGroup", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-plus-square-o"></i><span> Add new</span></a>
@@ -36,21 +36,13 @@
     @Html.HiddenFor(m => m.AuthenticationToken)
     @Html.HiddenFor(m => m.Username)
     <table class="table">
-        <tr>
-            <th>
-            </th>
-            <th>
-                @Html.Label("GroupName")
-            </th>
-        </tr>
-
         @foreach (var item in Model.Groups)
         {
             <tr>
-                <td>
-                    <a href="@Url.Action("GetMessagesInGroup", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username, groupId = item.GroupId })"><i class="fa fa-eye"></i><span>View</span></a>
+                <td class="even">
+                    <a href="@Url.Action("GetMessagesInGroup", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username, groupId = item.GroupId, groupName = item.GroupName })"><i class="fa fa-eye"></i><span>View</span></a>
                 </td>
-                <td>
+                <td class="even">
                     @Html.DisplayFor(modelItem => item.GroupName)
                 </td>
             </tr>

@@ -12,6 +12,8 @@ namespace GummyBears.Web.Models
 
         public int GroupId { get; set; }
 
-        public IEnumerable<int> ParticipantIds { get; set; }
+        public string GroupName { get; set; }
+
+        public List<Participant> Participants { get; set; }
     }
 }

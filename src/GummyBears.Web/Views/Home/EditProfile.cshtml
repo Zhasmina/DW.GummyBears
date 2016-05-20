@@ -6,10 +6,9 @@
 @{
     Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
 }
- <!--/sidebar-menu-->
+<!--/sidebar-menu-->
 <div class="sidebar-menu">
     <header class="logo1">
-    <img src="~/img/user-profile.png" style="max-width:170px;" />
         <div class="menu" style="margin-top: 20px;">
             <a href="@Url.Action("GetUserProfile", "Home", new { token = Model.Token, userId = Model.Payload.Id, username = Model.Payload.UserName })" style="font-size: 25px; padding-top: 2em;"><i class="fa fa-user"></i> <span>@Model.Username</span></a>
         </div>
@@ -21,86 +20,67 @@
             <li><a href="@Url.Action("GetFeeds", "Home", new { token = Model.Token, userId = Model.Payload.Id, username = Model.Payload.UserName })"><i class="fa fa-rss-square"></i> <span>Feeds</span></a></li>
             <li><a href="@Url.Action("GetGroups", "Home", new { token = Model.Token, userId = Model.Payload.Id, username = Model.Payload.UserName  })"><i class="fa fa-users"></i> <span>My Groups</span></a></li>
             <li><a href="@Url.Action("GetUserCreations", "Home", new { token = Model.Token, userId = Model.Payload.Id, username = Model.Payload.UserName })"><i class="fa fa-briefcase"></i> <span>My Creations</span></a></li>
+            <li><a href="@Url.Action( "Logout", "Home", new { token = Model.Token })"><i class="fa fa-sign-out"></i> <span>Logout</span></a></li>
         </ul>
     </div>
 </div>
+
 <div class="content">
-    <h2>Profile Info</h2>
-    <div>
-      <hr />
-        <dl class="dl-horizontal">
-            <dt>
-                @if (!string.IsNullOrEmpty(Model.Payload.ProfilePicturePath))
-                {
-                    <img src="@Model.Payload.ProfilePicturePath" />
-                }
-            </dt>
-            <dd>
-                <a href="@Url.Action("EditUserProfile", "Home", new { userProfile = Model.Payload })"><i class="fa fa-pencil"></i><span>Edit</span></a>
-            </dd>
-            <dt>
-                @Html.Label("Username")
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Payload.UserName)
-            </dd>
-
-            <dt>
-                @Html.Label("First Name")
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Payload.FirstName)
-            </dd>
-
-            <dt>
-                @Html.Label("Last Name")
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Payload.LastName)
-            </dd>
-
-            <dt>
-                @Html.Label("Email")
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Payload.Email)
-            </dd>
-
-            <dt>
-                @Html.Label("Phone Number")
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Payload.TelephoneNumber)
-            </dd>
-
-            <dt>
-                @Html.Label("Date of birth")
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Payload.DateOfBirth)
-            </dd>
-
-            <dt>
-                @Html.Label("Description")
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Payload.Description)
-            </dd>
-
-            <dt>
-                @Html.Label("Country")
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Payload.Country)
-            </dd>
-        </dl>
-        @Html.HiddenFor(model => model.Token)
+    <h2>My Profile</h2>
+<hr />
+    <div style="float:right">
+        <a href="@Url.Action("EditUserProfile", "Home", new { userProfile = Model.Payload })"><i class="fa fa-pencil"></i><span> Edit</span></a>
+    </div>
+    <hr/>
+    <div id="profile" class="profileSection">
+        <hr />
+        <div class="column col5 pl-50">
+            @if (!string.IsNullOrEmpty(Model.Payload.ProfilePicturePath))
+            {
+                <img src="@Model.Payload.ProfilePicturePath" />
+            }
+            else
+            {
+                <img src="~/img/user-profile.png" />
+            }
+            <p><i>"@Model.Payload.Description"</i></p>
+        </div>
+        <div class="column col3">
+            <table id="bioinfo">
+                <tbody>
+                    <tr>
+                        <td class="odd">First Name</td>
+                        <td class="even">@Html.DisplayFor(model => model.Payload.FirstName)</td>
+                    </tr>
+                    <tr>
+                        <td class="odd">Last Name</td>
+                        <td class="even">@Html.DisplayFor(model => model.Payload.LastName)</td>
+                    </tr>
+                    <tr>
+                        <td class="odd">Date of birth</td>
+                        <td class="even">@Html.DisplayFor(model => model.Payload.DateOfBirth)</td>
+                    </tr>
+                    <tr>
+                        <td class="odd">Country</td>
+                        <td class="even">@Html.DisplayFor(model => model.Payload.Country)</td>
+                    </tr>
+                    <tr>
+                        <td class="odd">Phone</td>
+                        <td class="even">@Html.DisplayFor(model => model.Payload.TelephoneNumber)</td>
+                    </tr>
+                    <tr>
+                        <td class="odd">Email</td>
+                        <td class="even">@Html.DisplayFor(model => model.Payload.Email)</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <ul class="social">
+                <li><a href="http://gmail.com/" class="external"><img src="~/img/icons/gplus.png" alt="Google Plus" /></a></li>
+                <li><a href="http://facebook.com/" class="external"><img src="~/img/icons/facebook.png" alt="Facebook" /></a></li>
+                <li><a href="http://twitter.com/" class="external"><img src="~/img/icons/twitter.png" alt="Twitter" /></a></li>
+                <li><a href="http://linkedin.com/" class="external"><img src="~/img/icons/linkedin.png" alt="Linkedin" /></a></li>
+            </ul>
+        </div>
     </div>
 </div>

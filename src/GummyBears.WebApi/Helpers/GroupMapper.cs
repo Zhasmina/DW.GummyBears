@@ -15,6 +15,7 @@ namespace GummyBears.WebApi.Helpers
             {
                 Id = group.GroupId,
                 Name = group.GroupName,
+                AuthorId = group.AuthorId
             };
         }
 

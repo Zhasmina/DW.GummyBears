@@ -6,10 +6,10 @@
 @{
     Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
 }
+
 <!--/sidebar-menu-->
 <div class="sidebar-menu">
     <header class="logo1">
-        <img src="~/img/user-profile.png" style="max-width:170px;" />
         <div class="menu" style="margin-top: 20px;">
             <a href="@Url.Action("GetUserProfile", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })" style="font-size: 25px; padding-top: 2em;"><i class="fa fa-user"></i> <span>@Model.Username</span></a>
         </div>
@@ -21,13 +21,13 @@
             <li><a href="@Url.Action("GetFeeds", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-rss-square"></i> <span>Feeds</span></a></li>
             <li><a href="@Url.Action("GetGroups", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username  })"><i class="fa fa-users"></i> <span>My Groups</span></a></li>
             <li><a href="@Url.Action( "GetUserCreations", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-briefcase"></i> <span>My Creations</span></a></li>
-
+            <li><a href="@Url.Action( "Logout", "Home", new { token = Model.AuthenticationToken })"><i class="fa fa-sign-out"></i> <span>Logout</span></a></li>
         </ul>
     </div>
 </div>
 
 <div class="content">
-    <h2>CreatePostInFeed</h2>
+    <h2>Post Message</h2>
 
     @using (Html.BeginForm())
     {

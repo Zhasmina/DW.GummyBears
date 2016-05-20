@@ -1,0 +1,10 @@
+D:\Git Projects\DW.GummyBears\src\GummyBears.CreationRightsManager\bin\Debug\GummyBears.CreationRightsManager.dll
+D:\Git Projects\DW.GummyBears\src\GummyBears.CreationRightsManager\bin\Debug\GummyBears.CreationRightsManager.pdb
+D:\Git Projects\DW.GummyBears\src\GummyBears.CreationRightsManager\obj\Debug\GummyBears.CreationRightsManager.csprojResolveAssemblyReference.cache
+D:\Git Projects\DW.GummyBears\src\GummyBears.CreationRightsManager\obj\Debug\GummyBears.CreationRightsManager.dll
+D:\Git Projects\DW.GummyBears\src\GummyBears.CreationRightsManager\obj\Debug\GummyBears.CreationRightsManager.pdb
+E:\Git Projects\DW.GummyBears\src\GummyBears.CreationRightsManager\bin\Debug\GummyBears.CreationRightsManager.dll
+E:\Git Projects\DW.GummyBears\src\GummyBears.CreationRightsManager\bin\Debug\GummyBears.CreationRightsManager.pdb
+E:\Git Projects\DW.GummyBears\src\GummyBears.CreationRightsManager\obj\Debug\GummyBears.CreationRightsManager.csprojResolveAssemblyReference.cache
+E:\Git Projects\DW.GummyBears\src\GummyBears.CreationRightsManager\obj\Debug\GummyBears.CreationRightsManager.dll
+E:\Git Projects\DW.GummyBears\src\GummyBears.CreationRightsManager\obj\Debug\GummyBears.CreationRightsManager.pdb

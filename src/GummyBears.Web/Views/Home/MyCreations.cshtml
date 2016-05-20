@@ -6,7 +6,6 @@
 <!--/sidebar-menu-->
 <div class="sidebar-menu">
     <header class="logo1">
-        <img src="~/img/user-profile.png" style="max-width:170px;" />
         <div class="menu" style="margin-top: 20px;">
             <a href="@Url.Action("GetUserProfile", "Home", new { token = Model.Token, userId = Model.UserId, username = Model.Username })" style="font-size: 25px; padding-top: 2em;"><i class="fa fa-user"></i> <span>@Model.Username</span></a>
         </div>
@@ -18,30 +17,27 @@
             <li><a href="@Url.Action("GetFeeds", "Home", new { token = Model.Token, userId = Model.UserId, username = Model.Username })"><i class="fa fa-rss-square"></i> <span>Feeds</span></a></li>
             <li><a href="@Url.Action("GetGroups", "Home", new { token = Model.Token, userId = Model.UserId, username = Model.Username })"><i class="fa fa-users"></i> <span>My Groups</span></a></li>
             <li><a href="@Url.Action("GetUserCreations", "Home", new { token = Model.Token, userId = Model.UserId, username = Model.Username })"><i class="fa fa-briefcase"></i> <span>My Creations</span></a></li>
+            <li><a href="@Url.Action( "Logout", "Home", new { token = Model.Token })"><i class="fa fa-sign-out"></i> <span>Logout</span></a></li>
         </ul>
     </div>
 </div>
 
 <div class="content">
+    <h2>My Creations</h2>
     <hr />
+    <div style="float:left">
+        <a href="@Url.Action("AddUserCreations", new { token = Model.Token, userId = Model.UserId, username = Model.Username })"><i class="fa fa-plus-square-o"></i><span> Add new creation</span></a>
+    </div>
     @Html.Hidden(Model.Token)
     @Html.Hidden("userId", Model.UserId)
 
-    <table class="table">
-        <tr>
-            <td></td>
-            <td></td>
-            <td>
-                <a href="@Url.Action("AddUserCreations", new { token = Model.Token, userId = Model.UserId })"><i class="fa fa-plus-square-o"></i><span> Add new</span></a>
-            </td>
-            <td></td>
-        </tr>
+    <table id="bioinfo" class="table">
         @foreach (GummyBears.Contracts.Creation item in Model.Payload)
         {
             <tr>
-                <td>@Html.Label(item.CreationName)</td>
-                <td>@Html.Display(item.CreationName)</td>
-                <td>
+                <td class="odd">@Html.Label(item.CreationName)</td>
+                <td class="odd">@Html.Display(item.CreationName)</td>
+                <td class="even">
                     <a href="@Url.Action("DeleteCreation", "Home", new { token = Model.Token, userId = Model.UserId, username = Model.Username, creationId = item.CreationId })"><i class="fa fa-trash-o"></i> <span> Delete</span></a>
                     <span>  </span>
                     <a href="@Url.Action("DownloadCreation", "Home", new { token = Model.Token, userId = Model.UserId, username = Model.Username, filePath = item.CreationPath })"><i class="fa fa-download"></i> <span> Download</span></a>

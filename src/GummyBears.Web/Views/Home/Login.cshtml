@@ -42,12 +42,12 @@
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-
         <div class="form-horizontal">
             <hr />
             <div class="form-group">
-                <h4>LOG IN WITH YOUR GummyBear ACCOUNT</h4>
+                <h4>LOG IN WITH YOUR The BU Tone ACCOUNT</h4>
             </div>
+            @Html.ValidationMessage("ServerError", new { @class = "text-danger" })
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
                 @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })

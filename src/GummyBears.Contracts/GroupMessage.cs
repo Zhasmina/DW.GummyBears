@@ -19,5 +19,7 @@ namespace GummyBears.Contracts
         public DateTime SendDate { get; set; }
 
         public string AuthorName { get; set; }
+
+        public int AuthorId { get; set; }
     }
 }

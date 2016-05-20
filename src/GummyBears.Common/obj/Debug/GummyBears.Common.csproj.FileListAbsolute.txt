@@ -1,0 +1,15 @@
+D:\FMI\Diplom work\GummyBears\GummyBears.Common\obj\Debug\GummyBears.Common.csprojResolveAssemblyReference.cache
+D:\FMI\Diplom work\GummyBears\GummyBears.Common\bin\Debug\GummyBears.Common.dll
+D:\FMI\Diplom work\GummyBears\GummyBears.Common\bin\Debug\GummyBears.Common.pdb
+D:\FMI\Diplom work\GummyBears\GummyBears.Common\obj\Debug\GummyBears.Common.dll
+D:\FMI\Diplom work\GummyBears\GummyBears.Common\obj\Debug\GummyBears.Common.pdb
+D:\Git Projects\DW.GummyBears\src\GummyBears.Common\bin\Debug\GummyBears.Common.dll
+D:\Git Projects\DW.GummyBears\src\GummyBears.Common\bin\Debug\GummyBears.Common.pdb
+D:\Git Projects\DW.GummyBears\src\GummyBears.Common\obj\Debug\GummyBears.Common.dll
+D:\Git Projects\DW.GummyBears\src\GummyBears.Common\obj\Debug\GummyBears.Common.pdb
+D:\Git Projects\DW.GummyBears\src\GummyBears.Common\obj\Debug\GummyBears.Common.csprojResolveAssemblyReference.cache
+E:\Git Projects\DW.GummyBears\src\GummyBears.Common\bin\Debug\GummyBears.Common.dll
+E:\Git Projects\DW.GummyBears\src\GummyBears.Common\bin\Debug\GummyBears.Common.pdb
+E:\Git Projects\DW.GummyBears\src\GummyBears.Common\obj\Debug\GummyBears.Common.csprojResolveAssemblyReference.cache
+E:\Git Projects\DW.GummyBears\src\GummyBears.Common\obj\Debug\GummyBears.Common.dll
+E:\Git Projects\DW.GummyBears\src\GummyBears.Common\obj\Debug\GummyBears.Common.pdb

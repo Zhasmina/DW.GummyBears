@@ -165,6 +165,8 @@
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Scripts\jquery-1.11.2.min.js" />
+    <Content Include="Scripts\jquery-ui.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\jquery.easing.min.js" />
     <Content Include="Scripts\jquery.min.js" />
     <Content Include="Scripts\jquery.scrollTo.js" />
@@ -199,11 +201,15 @@
     </Compile>
     <Compile Include="Models\AuthenticatedFeedModel.cs" />
     <Compile Include="Models\AuthenticatedFeedsPageModel.cs" />
+    <Compile Include="Models\AuthenticatedGroupCreationsModel.cs" />
+    <Compile Include="Models\AuthenticatedGroupMessageModel.cs" />
     <Compile Include="Models\AuthenticatedGroupMessagesModel.cs" />
     <Compile Include="Models\AuthenticatedGroupModel.cs" />
     <Compile Include="Models\AuthenticatedGroupParticipantsModel.cs" />
+    <Compile Include="Models\AuthenticatedOtherProfileModel.cs" />
     <Compile Include="Models\AuthenticatedUserGroupsModel.cs" />
     <Compile Include="Models\AuthenticatedUserModel.cs" />
+    <Compile Include="Models\Participant.cs" />
     <Compile Include="Models\TokenResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -311,6 +317,8 @@
     <Content Include="Views\Shared\_AuthenticationLayout.cshtml" />
     <Content Include="Views\Shared\_AuthenticatedLayout.cshtml" />
     <Content Include="Views\Home\CreateGroup.cshtml" />
+    <Content Include="Views\Home\PostMessageInGroup.cshtml" />
+    <Content Include="Views\Home\GetOtherUserProfile.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

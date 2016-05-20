@@ -1,0 +1,15 @@
+D:\FMI\Diplom work\GummyBears\GummyBears.Contracts\bin\Debug\GummyBears.Contracts.dll
+D:\FMI\Diplom work\GummyBears\GummyBears.Contracts\bin\Debug\GummyBears.Contracts.pdb
+D:\FMI\Diplom work\GummyBears\GummyBears.Contracts\obj\Debug\GummyBears.Contracts.csprojResolveAssemblyReference.cache
+D:\FMI\Diplom work\GummyBears\GummyBears.Contracts\obj\Debug\GummyBears.Contracts.dll
+D:\FMI\Diplom work\GummyBears\GummyBears.Contracts\obj\Debug\GummyBears.Contracts.pdb
+D:\Git Projects\DW.GummyBears\src\GummyBears.Contracts\bin\Debug\GummyBears.Contracts.dll
+D:\Git Projects\DW.GummyBears\src\GummyBears.Contracts\bin\Debug\GummyBears.Contracts.pdb
+D:\Git Projects\DW.GummyBears\src\GummyBears.Contracts\obj\Debug\GummyBears.Contracts.dll
+D:\Git Projects\DW.GummyBears\src\GummyBears.Contracts\obj\Debug\GummyBears.Contracts.pdb
+D:\Git Projects\DW.GummyBears\src\GummyBears.Contracts\obj\Debug\GummyBears.Contracts.csprojResolveAssemblyReference.cache
+E:\Git Projects\DW.GummyBears\src\GummyBears.Contracts\bin\Debug\GummyBears.Contracts.dll
+E:\Git Projects\DW.GummyBears\src\GummyBears.Contracts\bin\Debug\GummyBears.Contracts.pdb
+E:\Git Projects\DW.GummyBears\src\GummyBears.Contracts\obj\Debug\GummyBears.Contracts.csprojResolveAssemblyReference.cache
+E:\Git Projects\DW.GummyBears\src\GummyBears.Contracts\obj\Debug\GummyBears.Contracts.dll
+E:\Git Projects\DW.GummyBears\src\GummyBears.Contracts\obj\Debug\GummyBears.Contracts.pdb

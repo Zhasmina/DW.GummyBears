@@ -6,8 +6,10 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Register Page</title>
+    <title>Authentication Page</title>
     <script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/jquery-ui.min.js"></script>
+
     <script src="/Scripts/bootstrap.min.js"></script>
     <script src="/Scripts/moment.js"></script>
     <script src="/Scripts/bootstrap-datetimepicker.min.js"></script>
@@ -30,39 +32,6 @@
     <link href="~/Styles/style.css" rel="stylesheet">
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav"></ul>
-            </div>
-            <header id="header-banner">
-                <nav class="navbar navbar-default navbar-fixed-top fadeIn" role="navigation">
-                    <div class="container">
-
-                        <!-- Brand and toggle get grouped for better mobile display -->
-                        <div class="navbar-header">
-                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#dropdown-box-1">
-                                <span class="sr-only">Toggle navigation</span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                            </button>
-                            <div class="navbar-brand">
-                                <a href="@Url.Action("Index", "Home")">My Template</a>
-                            </div>
-                        </div>
-                    </div> <!-- /.container -->
-                </nav> <!-- /.nav -->
-            </header>
-        </div>
-    </div>
     @RenderBody()
     @RenderSection("Scripts", false)
     <div>

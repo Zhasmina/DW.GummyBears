@@ -13,6 +13,20 @@ namespace GummyBears.Web.App_Start
     public class DependencyInjection
     {
         public static void ConfigureContainer()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         {
             var builder = new ContainerBuilder();
 

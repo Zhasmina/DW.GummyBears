@@ -40,8 +40,10 @@ namespace GummyBears.WebApi.Controllers
         public async Task<Contracts.Creation> AddCreation([FromUri]int userId, [FromBody]Contracts.Creation creation)
         {
             ValidateUserAsAuthenticated(userId);
-            if (userId == creation.UserId)
+            if (userId != creation.UserId)
+            {
                 ThrowHttpResponseException(HttpStatusCode.Unauthorized, "Cannot add creation for different user");
+            }
 
             UserEntity author = await DbContext.UsersRepo.GetSingleOrDefaultAsync(userId);
             var authorString = string.Format("{0} {1}, a.k.a {2}", author.FirstName, author.LastName, author.UserName);

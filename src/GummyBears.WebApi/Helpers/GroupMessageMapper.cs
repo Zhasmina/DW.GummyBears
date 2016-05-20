@@ -16,7 +16,8 @@ namespace GummyBears.WebApi.Helpers
                 Id = groupMessage.Id,
                 GroupId = groupMessage.GroupId,
                 Message = groupMessage.Message,
-                SendDate = groupMessage.SendDate
+                SendDate = groupMessage.SendDate,
+                UserId = groupMessage.UserId
             };
         }
 

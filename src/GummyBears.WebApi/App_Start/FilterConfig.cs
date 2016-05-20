@@ -7,7 +7,8 @@ namespace GummyBears.WebApi
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            filters.Add(new WebApi.Filters.ApiErrorFilter());
+           // filters.Add(new HandleErrorAttribute());
         }
     }
 }

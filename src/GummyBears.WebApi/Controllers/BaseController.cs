@@ -6,6 +6,8 @@ using System.Net;
 using System.Web.Http;
 using System.Net.Http;
 using GummyBears.Repository;
+using GummyBears.WebApi.Filters;
+using GummyBears.Contracts;
 
 namespace GummyBears.WebApi.Controllers
 {
@@ -18,11 +20,12 @@ namespace GummyBears.WebApi.Controllers
         {
             DbContext = dbContext;
         }
+
         protected void ThrowHttpResponseException(HttpStatusCode statusCode, string message)
         {
             var response = new HttpResponseMessage(statusCode)
             {
-                Content = new StringContent(message)
+                Content = new ObjectContent<Error[]>(new[] { new Error(message)}, new System.Net.Http.Formatting.JsonMediaTypeFormatter())
             };
 
             throw new HttpResponseException(response);

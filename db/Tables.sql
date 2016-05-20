@@ -71,8 +71,8 @@ GO
 CREATE TABLE [dbo].[GroupCreations]
 (
 	[Id] [int] NOT NULL PRIMARY KEY IDENTITY,
-	[GroupId] [int] NOT NULL FOREIGN KEY(Id) REFERENCES Groups(Id),
-	[CreationId] [int] NOT NULL FOREIGN KEY(Id) REFERENCES Creations(Id)
+	[GroupId] [int] NOT NULL FOREIGN KEY(GroupId) REFERENCES Groups(Id),
+	[CreationId] [int] NOT NULL FOREIGN KEY(CreationId) REFERENCES Creations(Id)
 )
 
 GO
@@ -80,8 +80,8 @@ GO
 CREATE TABLE [dbo].[GroupMessages]
 (
 	[Id] [int] NOT NULL PRIMARY KEY IDENTITY,
-	[GroupId] [int] NOT NULL FOREIGN KEY(Id) REFERENCES Groups(Id),
-	[UserId] [int] NOT NULL FOREIGN KEY(Id) REFERENCES Users(Id),
+	[GroupId] [int] NOT NULL FOREIGN KEY(GroupId) REFERENCES Groups(Id),
+	[UserId] [int] NOT NULL FOREIGN KEY(UserId) REFERENCES Users(Id),
 	[Message] [nvarchar](MAX) NOT NULL,
 	[SendDate] DATETIME NOT NULL
 )
@@ -91,8 +91,8 @@ GO
 CREATE TABLE [dbo].[UserGroups]
 (
 	[Id] [int] NOT NULL PRIMARY KEY IDENTITY,
-	[GroupId] [int] NOT NULL FOREIGN KEY(Id) REFERENCES Groups(Id),
-	[UserId] [int] NOT NULL FOREIGN KEY(Id) REFERENCES Users(Id),
+	[GroupId] [int] NOT NULL FOREIGN KEY(GroupId) REFERENCES Groups(Id),
+	[UserId] [int] NOT NULL FOREIGN KEY(UserId) REFERENCES Users(Id),
 	[IsAdmin] [bit] NOT NULL
 )
 

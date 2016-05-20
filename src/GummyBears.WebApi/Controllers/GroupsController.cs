@@ -49,6 +49,8 @@ namespace GummyBears.WebApi.Controllers
                 var contract = m.ToContract();
                 contract.AuthorName = authorIdToNameMapping[m.UserId];
                 contract.Username = authorIdToUsernameMapping[m.UserId];
+                contract.AuthorId = m.UserId;
+                contract.UserId = m.UserId;
 
                 return contract;
             }).ToList();
@@ -61,18 +63,14 @@ namespace GummyBears.WebApi.Controllers
         public async Task<Group> CreateGroup([FromBody]Group group)
         {
             ValidateUserAsAuthenticated(group.AuthorId);
-            using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-            {
-                var createdGroup = await DbContext.GroupsRepo.CreateAsync(group.ToEntity());
-                await DbContext.GroupsUsersRepo.CreateAsync(new GroupUserEntity
-                {
-                    GroupId = createdGroup.Id,
-                    UserId = group.AuthorId,
-                    IsAdmin = true
-                });
 
-                transactionScope.Complete();
-            }
+            var createdGroup = await DbContext.GroupsRepo.CreateAsync(group.ToEntity());
+            await DbContext.GroupsUsersRepo.CreateAsync(new GroupUserEntity
+            {
+                GroupId = createdGroup.Id,
+                UserId = group.AuthorId,
+                IsAdmin = true
+            });
 
             return group;
         }
@@ -113,7 +111,20 @@ namespace GummyBears.WebApi.Controllers
             }
 
             IEnumerable<GroupUserEntity> groupUsers = await DbContext.GroupsUsersRepo.GetByGroupId(groupId);
-            return groupUsers.Select(gm => gm.ToContract()).ToList();
+
+            var authorsIds = groupUsers.Select(i => i.UserId).Distinct();
+            var authors = await DbContext.UsersRepo.GetByKeysAsync(authorsIds);
+            var authorIdToNameMapping = authors.ToDictionary(u => u.Id, u => string.Format("{0} {1}", u.FirstName, u.LastName));
+            var authorIdToUsernameMapping = authors.ToDictionary(u => u.Id, u => u.UserName);
+
+            return groupUsers.Select(m =>
+            {
+                var contract = m.ToContract();
+                contract.ParticipantName = authorIdToNameMapping[m.UserId];
+                contract.ParticipantId = m.UserId;
+
+                return contract;
+            }).ToList();
         }
 
         [HttpPut]
@@ -129,7 +140,7 @@ namespace GummyBears.WebApi.Controllers
             }
 
             ValidateUserAsAuthenticated(userGroup.UserId);
-            
+
             CreationEntity creation = await DbContext.CreationsRepo.GetSingleOrDefaultAsync(groupCreation.CreationId);
 
             if (creation == null)

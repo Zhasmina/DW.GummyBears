@@ -14,6 +14,8 @@ namespace GummyBears.Web.Models
 
         public int GroupId { get; set; }
 
+        public string GroupName { get; set; }
+
         public string Username { get; set; }
    
         public IEnumerable<GroupMessage> GroupMessages { get; set; }

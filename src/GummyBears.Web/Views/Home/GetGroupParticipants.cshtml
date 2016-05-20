@@ -8,7 +8,6 @@
 <!--/sidebar-menu-->
 <div class="sidebar-menu">
     <header class="logo1">
-        <img src="~/img/user-profile.png" style="max-width:170px;" />
         <div class="menu" style="margin-top: 20px;">
             <a href="@Url.Action("GetUserProfile", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })" style="font-size: 25px; padding-top: 2em;"><i class="fa fa-user"></i> <span>@Model.Username</span></a>
         </div>
@@ -20,31 +19,29 @@
             <li><a href="@Url.Action("GetFeeds", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-rss-square"></i> <span>Feeds</span></a></li>
             <li><a href="@Url.Action("Groups", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-users"></i> <span>My Groups</span></a></li>
             <li><a href="@Url.Action( "GetUserCreations", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-briefcase"></i> <span>My Creations</span></a></li>
-            <li><a href="@Url.Action( "GetGroupParticipants", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-snapchat-ghost"></i> <span>View Participants</span></a></li>
+            <li><a href="@Url.Action( "GetGroupParticipants", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-link"></i> <span>View Participants</span></a></li>
             <li><a href="@Url.Action( "GetGroupCreations", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-briefcase"></i><i class="fa fa-users"></i> <span>View Group Creations</span></a></li>
+            <li><a href="@Url.Action( "Logout", "Home", new { token = Model.AuthenticationToken })"><i class="fa fa-sign-out"></i> <span>Logout</span></a></li>
         </ul>
     </div>
 </div>
+
 <div class="content">
-    <hr />
-    <h2>GetGroupParticipants</h2>
-
-    <div>
-        <h4>AuthenticatedGroupParticipantsModel</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            @foreach(var participant in Model.ParticipantIds)
-             <dt>
-                @Html.DisplayNameFor(model => model.UserId)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.UserId)
-            </dd>
-        </dl>
+    
+    <h2>Participants in group @Model.GroupName</h2>
+    <div style="float:left">
+        <a href="@Url.Action("AddParticipant", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username, groupId = Model.GroupId, groupName = Model.GroupName })"><i class="fa fa-comments"></i><span> Add new user</span></a>
     </div>
-    <p>
-        @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-        @Html.ActionLink("Back to List", "Index")
-    </p>
+    <hr />
+    <div>
+        <table id="bioinfo" class="table">
+            @foreach (var participant in Model.Participants)
+            {
+               <tr>
+                   <td>@participant.Name</td>
+                   <td><button>View Profile</button></td>
+               </tr>
+            }
+        </table>
+    </div>
 </div>

@@ -9,6 +9,9 @@ namespace GummyBears.WebApi
     {
         public static void Register(HttpConfiguration config)
         {
+            config.Filters.Add(new Filters.ApiErrorFilter());
+            config.Filters.Add(new Filters.ModelValidationFilter());
+
             // Web API configuration and services
 
             // Web API routes
