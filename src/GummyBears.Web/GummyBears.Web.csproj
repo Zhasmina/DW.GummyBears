@@ -319,6 +319,7 @@
     <Content Include="Views\Home\CreateGroup.cshtml" />
     <Content Include="Views\Home\PostMessageInGroup.cshtml" />
     <Content Include="Views\Home\GetOtherUserProfile.cshtml" />
+    <Content Include="Views\Home\GetCreationsInGroup.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

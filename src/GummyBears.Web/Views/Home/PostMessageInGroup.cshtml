@@ -20,7 +20,7 @@
             <li><a href="@Url.Action("GetGroups", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-users"></i> <span>My Groups</span></a></li>
             <li><a href="@Url.Action( "GetUserCreations", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-briefcase"></i> <span>My Creations</span></a></li>
             <li><a href="@Url.Action( "GetGroupParticipants", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-link"></i> <span>View Participants</span></a></li>
-            <li><a href="@Url.Action( "GetGroupCreations", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-briefcase"></i><i class="fa fa-users"></i> <span>View Group Creations</span></a></li>
+            <li><a href="@Url.Action( "GetCreationsInGroup", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-briefcase"></i><i class="fa fa-users"></i> <span>View Group Creations</span></a></li>
             <li><a href="@Url.Action( "Logout", "Home", new { token = Model.AuthenticationToken })"><i class="fa fa-sign-out"></i> <span>Logout</span></a></li>
          </ul>
     </div>

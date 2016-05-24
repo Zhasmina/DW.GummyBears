@@ -580,7 +580,7 @@ namespace GummyBears.Web.Controllers
             return View(new AuthenticatedGroupCreationsModel
             {
                 AuthenticationToken = token,
-                Creations = response.Payload.ToList(),
+                CreationSelectedList = ToSelectList(response.Payload),
                 GroupId = groupId,
                 GroupName = groupName,
                 UserId = userId,
@@ -619,7 +619,26 @@ namespace GummyBears.Web.Controllers
                     username = model.Username,
                     groupName = model.GroupName
                 });
-        } 
+        }
+
+        private List<SelectListItem> ToSelectList(IEnumerable<Creation> creations)
+        {
+            List<SelectListItem> items = new List<SelectListItem>();
+
+            foreach (var creation in creations)
+            {
+                var selectItem = new SelectListItem
+                {
+                    Selected = false,
+                    Text = creation.CreationName,
+                    Value = creation.CreationId.ToString()
+                };
+                items.Add(selectItem);
+            }
+
+            return items;
+        }
+        
         #endregion
     }
 }

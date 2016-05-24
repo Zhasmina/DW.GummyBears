@@ -1,6 +1,7 @@
-﻿@model GummyBears.Web.Models.AuthenticatedGroupMessagesModel
+﻿@model GummyBears.Web.Models.AuthenticatedGroupCreationsModel
 
 @{
+    ViewBag.Title = "MyCreations";
     Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
 }
 <!--/sidebar-menu-->
@@ -16,7 +17,7 @@
             <li><a href="@Url.Action("GetUserProfile", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-user"></i> <span>My Profile</span></a></li>
             <li><a href="@Url.Action("GetFeeds", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-rss-square"></i> <span>Feeds</span></a></li>
             <li><a href="@Url.Action("GetGroups", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-users"></i> <span>My Groups</span></a></li>
-            <li><a href="@Url.Action( "GetUserCreations", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username, groupId = Model.GroupId, groupName = Model.GroupName })"><i class="fa fa-briefcase"></i> <span>My Creations</span></a></li>
+            <li><a href="@Url.Action("GetUserCreations", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-briefcase"></i> <span>My Creations</span></a></li>
             <li><a href="@Url.Action( "GetGroupParticipants", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username, groupId = Model.GroupId, groupName = Model.GroupName })"><i class="fa fa-link"></i> <span>View Participants</span></a></li>
             <li><a href="@Url.Action( "GetCreationsInGroup", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username, groupId = Model.GroupId, groupName = Model.GroupName })"><i class="fa fa-briefcase"></i><i class="fa fa-users"></i> <span>View Group Creations</span></a></li>
             <li><a href="@Url.Action( "Logout", "Home", new { token = Model.AuthenticationToken })"><i class="fa fa-sign-out"></i> <span>Logout</span></a></li>
@@ -25,29 +26,24 @@
 </div>
 
 <div class="content">
-    <hr/>
-    <div style="float:right">
-        <a href="@Url.Action("PostMessageInGroup", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username, groupId = Model.GroupId, groupName = Model.GroupName })"><i class="fa fa-comments"></i><span> Post message</span></a>
+    <h2>Creations in group @Model.GroupName</h2>
+    <hr />
+    <div style="float:left">
+        <a href="@Url.Action("AddCreationToGroup", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username, groupId = Model.GroupId, groupName = Model.GroupName })"><i class="fa fa-plus-square-o"></i><span> Add new creation</span></a>
     </div>
+    @Html.Hidden(Model.AuthenticationToken)
+    @Html.Hidden("userId", Model.UserId)
 
-    @Html.HiddenFor(model => model.AuthenticationToken)
-    @Html.HiddenFor(model => model.UserId)
-    @Html.HiddenFor(model => model.GroupId)
-
-    <table  id="bioinfo" class="table">
-        @foreach (var item in Model.GroupMessages)
+    <table id="bioinfo" class="table">
+        @foreach (GummyBears.Contracts.Creation item in Model.Creations)
         {
             <tr>
-                <td class="odd">
-                    <span><a href="@Url.Action("GetOtherUserProfile", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username, targetUserId= item.AuthorId })"><i>@item.AuthorName</i></a> wrote on @item.SendDate.ToString("dd/MM/yyyy"):</span>
-                </td>
-                </tr>
-            <tr>
+                <td class="odd">@Html.Label(item.CreationName)</td>
+                <td class="odd">@Html.Display(item.CreationName)</td>
                 <td class="even">
-                    @Html.DisplayFor(modelItem => item.Message)
+                    <a href="@Url.Action("DownloadCreation", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username, filePath = item.CreationPath })"><i class="fa fa-download"></i> <span> Download</span></a>
                 </td>
             </tr>
         }
-
     </table>
-    </div>
+</div>
