@@ -107,9 +107,53 @@ namespace GummyBears.Web.Controllers
         #endregion
 
         #region profile
-        public ActionResult EditUserProfile(UserProfile userProfile)
+        [HttpGet]
+        public async Task<ActionResult> EditUserProfile(string token, int userId, string username)
         {
-            return View(userProfile);
+            Response<UserProfile> response = await _gummyBearClient.GetUserByIdAsync(new UserProfileRequest()
+            {
+                AuthenticationToken = token,
+                CorrelationToken = Guid.NewGuid().ToString(),
+                UserId = userId
+            }).ConfigureAwait(false);
+
+            return View(new TokenResponse<UserProfile>
+            {
+                Payload = response.Payload,
+                Token = token,
+                UserId = userId,
+                Username = username
+            });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> EditUserProfile(TokenResponse<UserProfile> profile)
+        {
+            var response = await _gummyBearClient.UpdateUserByIdAsync(
+                new AuthenticatedUserRequest
+                {
+                    AuthenticationToken = profile.Token,
+                    CorrelationToken = Guid.NewGuid().ToString(),
+                    Payload = new Contracts.User
+                    {
+                        Country = profile.Payload.Country,
+                        DateOfBirth = profile.Payload.DateOfBirth,
+                        Description = profile.Payload.Description,
+                        Email = profile.Payload.Email,
+                        FirstName = profile.Payload.FirstName,
+                        Id = profile.Payload.Id,
+                        LastName = profile.Payload.LastName,
+                        TelephoneNumber = profile.Payload.TelephoneNumber,
+                        UserName = profile.Payload.UserName
+                    }
+                });
+
+            if (response.Status == Status.Failed)
+            {
+                ModelState.AddModelError("ServerError", "Update of profile failed.");
+            }
+
+            return RedirectToAction("GetUserProfile", new { token = profile.Token, userId = profile.UserId, username = profile.Username });
         }
 
         [HttpGet]
@@ -124,6 +168,7 @@ namespace GummyBears.Web.Controllers
 
             if (response.Status == Status.Failed)
             {
+
                 return RedirectToAction("Login");
             }
             TokenResponse<UserProfile> tokenResponse = new TokenResponse<UserProfile>()
@@ -139,7 +184,7 @@ namespace GummyBears.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> GetOtherUserProfile(string token, int userId, string username, int targetUserId)
         {
-           Response<UserProfile> response = await _gummyBearClient.GetUserByIdAsync(new UserProfileRequest
+            Response<UserProfile> response = await _gummyBearClient.GetUserByIdAsync(new UserProfileRequest
             {
                 AuthenticationToken = token,
                 CorrelationToken = Guid.NewGuid().ToString(),
@@ -502,30 +547,49 @@ namespace GummyBears.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult AddParticipant(string token, int userId, int groupId, string username, string groupName)
+        public async Task<ActionResult> AddParticipant(string token, int userId, int groupId, string username, string groupName)
         {
+            var users = await _gummyBearClient.GetAllUsers(new AuthenticationTokenRequest
+            {
+                AuthenticationToken = token,
+                CorrelationToken = Guid.NewGuid().ToString()
+            });
+
             return View(new AuthenticatedGroupParticipantsModel
             {
                 AuthenticationToken = token,
                 GroupId = groupId,
                 UserId = userId,
                 Username = username,
-                GroupName = groupName
+                GroupName = groupName,
+                ParticipantSelectListItems = ToSelectList(userId, users.Payload)
             });
         }
 
         [HttpPost]
         public async Task<ActionResult> AddParticipant(AuthenticatedGroupParticipantsModel model)
         {
-            await _gummyBearClient.AddParticipantsInGroup(new AuthenticatedGroupParticipantsRequest
+            if (ModelState.IsValid)
             {
-                AuthenticationToken = model.AuthenticationToken,
-                CorrelationToken = Guid.NewGuid().ToString(),
-                Payload = model.Participants.Select(p => p.Id).ToList(),
-                GroupId = model.GroupId
-            });
+                var response = await _gummyBearClient.AddParticipantsInGroup(new AuthenticatedGroupParticipantsRequest
+                {
+                    AuthenticationToken = model.AuthenticationToken,
+                    CorrelationToken = Guid.NewGuid().ToString(),
+                    Payload = model.ParticipantId,
+                    GroupId = model.GroupId
+                });
 
-            return RedirectToAction("Index");
+                if (response.Status == Status.Failed)
+                {
+                    ModelState.AddModelError("ServerError", string.Format("Add of partiipant failed. {0}", string.Join(" ,", response.Errors)));
+                    return View(model);
+                }
+
+                return RedirectToAction("GetMessagesInGroup", new { token = model.AuthenticationToken, userId = model.UserId, groupId = model.GroupId, username = model.Username, groupName = model.GroupName });
+            }
+
+            ModelState.AddModelError("ServerError", "Add of partiipant failed.");
+            return View(model);
         }
 
         [HttpGet]
@@ -554,7 +618,7 @@ namespace GummyBears.Web.Controllers
                 AuthenticationToken = token,
                 GroupId = groupId,
                 GroupName = groupName,
-                UserId = userId, 
+                UserId = userId,
                 Username = username,
                 Creations = response.Payload.ToList()
             });
@@ -563,15 +627,15 @@ namespace GummyBears.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> AddCreationToGroup(string token, int userId, int groupId, string username, string groupName)
         {
-           var response = await _gummyBearClient.GetUserCreations(new UserProfileRequest
+            var response = await _gummyBearClient.GetUserCreations(new UserProfileRequest
             {
-               AuthenticationToken = token,
-               CorrelationToken = Guid.NewGuid().ToString(),
-               UserId = userId,
-               Username = username
+                AuthenticationToken = token,
+                CorrelationToken = Guid.NewGuid().ToString(),
+                UserId = userId,
+                Username = username
             });
 
-            if(response.Status == Status.Failed)
+            if (response.Status == Status.Failed)
             {
                 ModelState.AddModelError("ServerError", string.Format("Getting user creations failed. {0}", string.Join(" ,", response.Errors)));
                 return RedirectToAction("GetGroups", new { token = token, userId = userId, username = username });
@@ -594,17 +658,17 @@ namespace GummyBears.Web.Controllers
             Response<GroupCreation> response = await _gummyBearClient.AttatchFileToGroup(
                 new AuthenticatedGroupCreationsRequest
                 {
-                AuthenticationToken = model.AuthenticationToken,
-                CorrelationToken = Guid.NewGuid().ToString(),
-                UserId = model.UserId,
-                Payload = new GroupCreation
-                {
-                    CreationId = model.CreationId,
-                    GroupId = model.GroupId,
-                }
-            });
+                    AuthenticationToken = model.AuthenticationToken,
+                    CorrelationToken = Guid.NewGuid().ToString(),
+                    UserId = model.UserId,
+                    Payload = new GroupCreation
+                    {
+                        CreationId = model.CreationId,
+                        GroupId = model.GroupId,
+                    }
+                });
 
-            if(response.Status == Status.Failed)
+            if (response.Status == Status.Failed)
             {
                 ModelState.AddModelError("ServerError", string.Format("Getting user creations failed. {0}", string.Join(" ,", response.Errors)));
                 return View("AddCreationToGroup", model);
@@ -638,7 +702,29 @@ namespace GummyBears.Web.Controllers
 
             return items;
         }
-        
+
+        private List<SelectListItem> ToSelectList(int currenctUseId, IEnumerable<UserProfileBrief> users)
+        {
+            List<SelectListItem> items = new List<SelectListItem>();
+
+            foreach (var user in users)
+            {
+                if (user.Id != currenctUseId)
+                {
+                    var selectItem = new SelectListItem
+                    {
+                        Selected = false,
+                        Text = user.FirstName + " " + user.LastName,
+                        Value = user.Id.ToString()
+                    };
+
+                    items.Add(selectItem);
+                }
+            }
+
+            return items;
+        }
+
         #endregion
     }
 }

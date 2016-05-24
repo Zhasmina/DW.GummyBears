@@ -150,13 +150,13 @@ namespace GummyBears.Clients
             return await SendRequestAsync<GroupMessage>(httpRequestMessage);
         }
 
-        public async Task<Response<IEnumerable<GroupParticipants>>> AddParticipantsInGroup(AuthenticatedGroupParticipantsRequest request)
+        public async Task<Response<GroupParticipants>> AddParticipantsInGroup(AuthenticatedGroupParticipantsRequest request)
         {
 
             HttpRequestMessage httpRequestMessage = BuildRequestMessageWithBody(request, string.Format("groups/{0}/participants", request.GroupId), HttpMethod.Post);
             httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
 
-            return await SendRequestAsync<IEnumerable<GroupParticipants>>(httpRequestMessage);
+            return await SendRequestAsync<GroupParticipants>(httpRequestMessage);
         }
 
         public async Task<Response<IEnumerable<GroupParticipants>>> GetParticipantsInGroup(AuthenticatedGroupRequest request)
@@ -170,7 +170,7 @@ namespace GummyBears.Clients
         public async Task<Response<GroupCreation>> AttatchFileToGroup(AuthenticatedGroupCreationsRequest request)
         {
 
-            HttpRequestMessage httpRequestMessage = BuildRequestMessageWithBody(request, string.Format("groups/{0}/users/{1]}/files", request.Payload.GroupId, request.UserId), HttpMethod.Post);
+            HttpRequestMessage httpRequestMessage = BuildRequestMessageWithBody(request, string.Format("groups/{0}/users/{1}/files", request.Payload.GroupId, request.UserId), HttpMethod.Post);
             httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
 
             return await SendRequestAsync<GroupCreation>(httpRequestMessage);
@@ -182,6 +182,14 @@ namespace GummyBears.Clients
             httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
 
             return await SendRequestAsync<IEnumerable<Creation>>(httpRequestMessage);
+        }
+
+        public async Task<Response<List<UserProfileBrief>>> GetAllUsers(AuthenticationTokenRequest request)
+        {
+            HttpRequestMessage httpRequestMessage = BuildRequestMessage(request, "users", HttpMethod.Get);
+            httpRequestMessage.Headers.Add("Authorization-Token", request.AuthenticationToken);
+
+            return await SendRequestAsync<List<UserProfileBrief>>(httpRequestMessage);
         }
 
         private async Task<Response<TResponse>> SendRequestAsync<TResponse>(HttpRequestMessage requestMessage)

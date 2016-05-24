@@ -39,7 +39,7 @@
             {
                <tr>
                    <td>@participant.Name</td>
-                   <td><button>View Profile</button></td>
+                   <td><a class="btn btn-success" href="@Url.Action("GetOtherUserProfile", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username, targetUserId= participant.Id })"><i>View Profile</i></a></td>
                </tr>
             }
         </table>

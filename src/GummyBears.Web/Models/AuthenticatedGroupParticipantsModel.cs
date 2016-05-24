@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace GummyBears.Web.Models
 {
@@ -14,6 +15,10 @@ namespace GummyBears.Web.Models
 
         public string GroupName { get; set; }
 
+        public List<SelectListItem> ParticipantSelectListItems { get; set; }
+
         public List<Participant> Participants { get; set; }
+
+        public int ParticipantId { get; set; }
     }
 }

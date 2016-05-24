@@ -4,45 +4,53 @@
     ViewBag.Title = "AddParticipant";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h2>AddParticipant</h2>
-
-@using (Html.BeginForm()) 
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>AuthenticatedGroupParticipantsModel</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.AuthenticationToken, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.AuthenticationToken, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.AuthenticationToken, "", new { @class = "text-danger" })
-            </div>
+<!--/sidebar-menu-->
+<div class="sidebar-menu">
+    <header class="logo1">
+        <div class="menu" style="margin-top: 20px;">
+            <a href="@Url.Action("GetUserProfile", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })" style="font-size: 25px; padding-top: 2em;"><i class="fa fa-user"></i> <span>@Model.Username</span></a>
         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.UserId, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.UserId, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.GroupId, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.GroupId, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.GroupId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
+    </header>
+    <div style="border-top:1px ridge rgba(255, 255, 255, 0.15)"></div>
+    <div class="menu">
+        <ul id="menu">
+            <li><a href="@Url.Action("GetUserProfile", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-user"></i> <span>My Profile</span></a></li>
+            <li><a href="@Url.Action("GetFeeds", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-rss-square"></i> <span>Feeds</span></a></li>
+            <li><a href="@Url.Action("GetGroups", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username })"><i class="fa fa-users"></i> <span>My Groups</span></a></li>
+            <li><a href="@Url.Action( "GetUserCreations", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username, groupId = Model.GroupId, groupName = Model.GroupName })"><i class="fa fa-briefcase"></i> <span>My Creations</span></a></li>
+            <li><a href="@Url.Action( "GetGroupParticipants", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username, groupId = Model.GroupId, groupName = Model.GroupName })"><i class="fa fa-link"></i> <span>View Participants</span></a></li>
+            <li><a href="@Url.Action( "GetCreationsInGroup", "Home", new { token = Model.AuthenticationToken, userId = Model.UserId, username = Model.Username, groupId = Model.GroupId, groupName = Model.GroupName })"><i class="fa fa-briefcase"></i><i class="fa fa-users"></i> <span>View Group Creations</span></a></li>
+            <li><a href="@Url.Action( "Logout", "Home", new { token = Model.AuthenticationToken })"><i class="fa fa-sign-out"></i> <span>Logout</span></a></li>
+        </ul>
     </div>
-}
+</div>
+
+<div class="content">
+    <h2>Add participant to group @Model.GroupName</h2>
+    <hr />
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.Hidden("AuthenticationToken", Model.AuthenticationToken)
+        @Html.Hidden("userId", Model.UserId)
+        @Html.Hidden("username", Model.Username)
+        @Html.Hidden("groupId", Model.GroupId)
+        @Html.Hidden("groupName", Model.GroupName)
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.ValidationMessage("ServerError", new { @class = "text-danger" })
+            <div class="form-group">
+                <label for="creationName">Choose participant:</label>
+                <div class="col-md-3">
+                    @Html.DropDownList("participantId", Model.ParticipantSelectListItems)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Add" class="btn btn-success" />
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -53,7 +53,7 @@ namespace GummyBears.WebApi.Controllers
             {
                 ThrowHttpResponseException(HttpStatusCode.BadRequest, "User Id change is not allowed.");
             }
-            
+
             user.Id = userId;
 
             UserEntity updatedUser;
@@ -108,6 +108,15 @@ namespace GummyBears.WebApi.Controllers
             }
 
             return userEntity.ToStrippedModel();
+        }
+
+        [HttpGet, Route("")]
+        [AuthenticationTokenFilter]
+        public async Task<List<UserProfileBrief>> GetAllUsers()
+        {
+            var users = await DbContext.UsersRepo.GetAllAsync();
+
+            return users.Select(u => u.ToBriefModel()).ToList();
         }
 
         [HttpGet, Route("{userId}/groups")]

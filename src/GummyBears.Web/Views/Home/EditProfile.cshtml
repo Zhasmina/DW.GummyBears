@@ -1,8 +1,4 @@
 ﻿@model GummyBears.Web.Models.TokenResponse<GummyBears.Contracts.UserProfile>
-
-@{
-    ViewBag.Title = "EditProfile";
-}
 @{
     Layout = "~/Views/Shared/_AuthenticatedLayout.cshtml";
 }
@@ -28,9 +24,9 @@
 <div class="content">
     <h2>My Profile</h2>
 <hr />
-    <div style="float:right">
-        <a href="@Url.Action("EditUserProfile", "Home", new { userProfile = Model.Payload })"><i class="fa fa-pencil"></i><span> Edit</span></a>
-    </div>
+    @*<div style="float:right">
+        <a href="@Url.Action("EditUserProfile", "Home",  new { token = Model.Token, userId = Model.Payload.Id, username = Model.Payload.UserName })"><i class="fa fa-pencil"></i><span> Edit</span></a>
+    </div>*@
     <hr/>
     <div id="profile" class="profileSection">
         <hr />

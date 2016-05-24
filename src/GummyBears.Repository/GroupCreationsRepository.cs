@@ -25,7 +25,7 @@ namespace GummyBears.Repository
             const string sql = @"
                 SELECT c.* FROM GroupCreations gc
                 JOIN Creations c ON c.Id = gc.CreationId
-                WHERE gc.Id = @GroupId";
+                WHERE gc.GroupId = @GroupId";
 
             using (IDbConnection connection = CreateConnection())
             {

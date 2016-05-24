@@ -78,7 +78,7 @@ namespace GummyBears.WebApi.Controllers
         [HttpPost]
         [Route("{groupId:int}/participants")]
         [AuthenticationTokenFilter]
-        public async Task<IEnumerable<GroupParticipants>> AddParticipants(int groupId, [FromBody]GroupParticipants groupParticipants)
+        public async Task<GroupParticipants> AddParticipants(int groupId, [FromBody]int participantId)
         {
             GroupEntity group = await DbContext.GroupsRepo.GetSingleOrDefaultAsync(groupId);
 
@@ -86,17 +86,17 @@ namespace GummyBears.WebApi.Controllers
             {
                 ThrowHttpResponseException(System.Net.HttpStatusCode.BadRequest, string.Format("Group with id {0} not exists.", groupId));
             }
+
             ValidateUserAsAuthenticated(group.AuthorId);
 
-            AuthenticationEntity authentication = await DbContext.AuthenticationRepo.GetSingleOrDefaultAsync(AuthenticationToken);
-
-            if (authentication == null || authentication.UserId != group.AuthorId)
+            GroupUserEntity participant = await DbContext.GroupsUsersRepo.CreateAsync(new GroupUserEntity
             {
-                ThrowHttpResponseException(System.Net.HttpStatusCode.Unauthorized, "Wrong authentication token.");
-            }
+                GroupId = groupId,
+                UserId = participantId,
+                IsAdmin = false
+            });
 
-            IEnumerable<GroupUserEntity> groupUsers = await DbContext.GroupsUsersRepo.GetByGroupId(groupId);
-            return groupUsers.Select(gm => gm.ToContract()).ToList();
+            return participant.ToContract();
         }
 
         [HttpGet]
@@ -127,7 +127,7 @@ namespace GummyBears.WebApi.Controllers
             }).ToList();
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("{groupId:int}/users/{userId:int}/files")]
         [AuthenticationTokenFilter]
         public async Task<GroupCreation> AttachFile(int groupId, int userId, GroupCreation groupCreation)

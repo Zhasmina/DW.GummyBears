@@ -28,12 +28,14 @@ namespace GummyBears.Clients
         Task<Response<IEnumerable<GroupMessage>>> GetMessagesInGroup(GroupMessagesRequest request);
         Task<Response<GroupMessage>> CreateMessagesInGroup(CreateGroupMessageRequest request);
 
-        Task<Response<IEnumerable<GroupParticipants>>> AddParticipantsInGroup(AuthenticatedGroupParticipantsRequest request);
+        Task<Response<GroupParticipants>> AddParticipantsInGroup(AuthenticatedGroupParticipantsRequest request);
 
         Task<Response<IEnumerable<GroupParticipants>>> GetParticipantsInGroup(AuthenticatedGroupRequest request);
 
         Task<Response<GroupCreation>> AttatchFileToGroup(AuthenticatedGroupCreationsRequest request);
 
         Task<Response<IEnumerable<Creation>>> GetAttachedFilesInGroup(AuthenticatedGroupCreationsRequest request);
+
+        Task<Response<List<UserProfileBrief>>> GetAllUsers(AuthenticationTokenRequest request);
     }
 }

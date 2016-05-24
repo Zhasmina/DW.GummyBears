@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GummyBears.Clients.Requests
 {
-    public class AuthenticatedGroupParticipantsRequest : RequestBase<List<int>>
+    public class AuthenticatedGroupParticipantsRequest : RequestBase<int>
     {
         public string AuthenticationToken { get; set; }
         public int GroupId { get; set; }

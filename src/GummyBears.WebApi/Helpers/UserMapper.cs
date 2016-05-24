@@ -41,5 +41,15 @@ namespace GummyBears.WebApi.Helpers
                 UserName = user.UserName
             };
         }
+
+        public static UserProfileBrief ToBriefModel(this UserEntity user)
+        {
+            return new UserProfileBrief
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName
+            };
+        }
     }
 }

@@ -301,11 +301,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <None Include="Properties\PublishProfiles\SiteLocal.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\EditProfile.cshtml" />
-    <Content Include="Views\Home\EditUserProfie.cshtml" />
+    <Content Include="Views\Home\EditUserProfile.cshtml" />
     <Content Include="Views\Home\MyCreations.cshtml" />
     <Content Include="Views\Home\AddUserCreations.cshtml" />
     <Content Include="Views\Home\GetFeeds.cshtml" />
@@ -320,6 +321,7 @@
     <Content Include="Views\Home\PostMessageInGroup.cshtml" />
     <Content Include="Views\Home\GetOtherUserProfile.cshtml" />
     <Content Include="Views\Home\GetCreationsInGroup.cshtml" />
+    <Content Include="Views\Home\AddCreationToGroup.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
