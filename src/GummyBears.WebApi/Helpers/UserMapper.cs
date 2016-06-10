@@ -38,7 +38,9 @@ namespace GummyBears.WebApi.Helpers
                 LastName = user.LastName,
                 Id = user.Id,
                 ProfilePicturePath = user.ProfilePicturePath,
-                UserName = user.UserName
+                UserName = user.UserName,
+                Email = user.Email,
+                TelephoneNumber = user.TelephoneNumber
             };
         }
 
